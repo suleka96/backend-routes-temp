@@ -285,7 +285,10 @@ app.post("/profiles/send", function (req, res) {
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
   .exec(
     function(err, record){
-      if (err) res.json("Error in retrieving");
+      if (err){
+        res.json("Error in retrieving");
+        console.log("Error in sending profiles");
+      } 
       res.json(record.profiles);
     });
 
