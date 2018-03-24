@@ -270,6 +270,8 @@ app.post("/profiles/send", function (req, res) {
   //Received request body that is encrypted
   var uidEncripted = req.body;
 
+  console.log(req.body);
+
   //Request body is decrypted
   var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'my key is 123');
 
