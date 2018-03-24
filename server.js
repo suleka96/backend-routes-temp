@@ -184,12 +184,6 @@ app.use(bodyParser.urlencoded({extended:false}));
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
-//Test POST request handler
-app.post("/test", function(req, res) {
-    res.json("Got your message, Dillon!");
-    console.log(req.body);
-});
-
 //POST request handler for register route
 app.post("/register", function(req, res) {
   console.log("Registration process has started...");
@@ -206,7 +200,7 @@ app.post("/register", function(req, res) {
 
   //Request body is parsed to a JSON Object
   var regObj = JSON.parse(plaintext);
-  
+
   console.log(regObj);
 
   admin.auth().createUser({
@@ -226,39 +220,28 @@ app.post("/register", function(req, res) {
 });
 
 //POST request handler for login button
-app.post("/login", function(req, res) {
-  console.log("Login is being validated in the server...");
-  if (!req.body) return res.sendStatus(400); 
+// app.post("/login", function(req, res) {
+//   console.log("Login is being validated in the server...");
+//   if (!req.body) return res.sendStatus(400); 
 
-  var uid;
-  var displayName;
+//   var uid;
+//   var displayName;
 
-  admin.auth().verifyIdToken(String(req.body.token)).then(function(decodedToken) {
-      uid = decodedToken.uid;
-      displayName = decodedToken.displayName;
-    })
-    .catch(function(error) {
-      console.log(error);
-      //console.log("Could not resolve Login ID Token from Client!");
-  });
+//   admin.auth().verifyIdToken(String(req.body.token)).then(function(decodedToken) {
+//       uid = decodedToken.uid;
+//       displayName = decodedToken.displayName;
+//     })
+//     .catch(function(error) {
+//       console.log(error);
+//       //console.log("Could not resolve Login ID Token from Client!");
+//   });
 
-  console.log(displayName);
-  res.json("Hello!");
-});
-
-//POST request handler for storing requests
-app.post("/storeRequest", function(req, res) {
-    console.log("Storing requests...");
-    if (!req.body) return res.sendStatus(400);
-    var loginInfo = req.body;
-    res.sendStatus(200);
-    res.send(req.body);
-    console.log(loginInfo);
-  });
-
+//   console.log(displayName);
+//   res.json("Hello!");
+// });
 
 //POST request handler for creating profiles
-app.post("/createprofile", function(req, res) {
+app.post("/profiles/create", function(req, res) {
     console.log("inside createProfile route");
 
     var uid = decodedToken.uid;
@@ -309,7 +292,7 @@ app.post("/createprofile", function(req, res) {
 });
 
 //POST request handler for storing requests
-app.post("/storerequest", function(req, res) {
+app.post("/device/requests/store", function(req, res) {
     console.log("inside storeRequest route");
     if (!req.body) return res.sendStatus(400);
 
