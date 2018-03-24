@@ -6,6 +6,7 @@
 
 const express = require("express");
 const path = require("path");
+var CryptoJS = require("crypto-js");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
@@ -195,20 +196,24 @@ app.post("/register", function(req, res) {
   if (!req.body) return res.sendStatus(400);
   var registerInfo = req.body;
 
-  admin.auth().createUser({
-      uid: registerInfo.uuid,
-      email: registerInfo.email,
-      password: registerInfo.password,
-      displayName: registerInfo.fName + " " + registerInfo.lName
-    })
-    .then(function(userRecord) {
-      // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);      
-      res.json(registerInfo);
-    })
-    .catch(function(error) {
-      console.log("Error creating new user:", error);
-    });   
+  var bytes  = CryptoJS.AES.decrypt((registerInfo.uuid).toString(), 'my key is 123');
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  console.log(plaintext);
+
+  // admin.auth().createUser({
+  //     uid: plaintext,
+  //     email: registerInfo.email,
+  //     password: registerInfo.password,
+  //     displayName: registerInfo.fName + " " + registerInfo.lName
+  //   })
+  //   .then(function(userRecord) {
+  //     // See the UserRecord reference doc for the contents of userRecord.
+  //     console.log("Successfully created new user:", userRecord.displayName);      
+  //     res.json(registerInfo);
+  //   })
+  //   .catch(function(error) {
+  //     console.log("Error creating new user:", error);
+  //   });   
 });
 
 //POST request handler for login button
