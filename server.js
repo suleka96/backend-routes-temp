@@ -232,16 +232,23 @@ app.post("/storeRequest", jsonParser, function(req, res) {
 app.post("/createprofile", jsonParser, function(req, res) {
     console.log("inside createProfile route");
 
+    var uid = decodedToken.uid;
+
     if (!req.body){
         return res.sendStatus(400);
     } 
 
     else{
 
-        //get profile id from auth token
+        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
+            uid = decodedToken.uid;
+          })
+          .catch(function(error) {
+            console.log("Could not resolve Login ID Token from Client!");
+          });
 
         var profile = new Profile({
-            profileId: "auth token extract id",
+            profileId: uid,
             profileName: req.body.profileName,
             mobileNo: req.body.mobileNo,
             dateOfBirth:  req.body.dateOfBirth,
@@ -261,13 +268,13 @@ app.post("/createprofile", jsonParser, function(req, res) {
             }
         });
         
-        User.findOne({fName: 'Raneesh'}).then(function(record) {
+        User.findOne({userId: uid}).then(function(record) {
             record.profiles.push(profile);
             record.save();
+            console.log("saved profile in document");
+            res.json(req.body);
         });
-
-        res.sendStatus(200).send(req.body);
-        // console.log(loginInfo);
+        
     }
 });
 
@@ -275,6 +282,7 @@ app.post("/createprofile", jsonParser, function(req, res) {
 app.post("/storerequest", jsonParser, function(req, res) {
     console.log("inside storeRequest route");
     if (!req.body) return res.sendStatus(400);
+
     var loginInfo = req.body;
     res.sendStatus(200).send(req.body);
     console.log(loginInfo);
