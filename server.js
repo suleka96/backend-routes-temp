@@ -195,7 +195,7 @@ app.post("/register", function(req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
   var registerInfo = req.body;
-
+  console.log(registerInfo);
   var bytes  = CryptoJS.AES.decrypt((registerInfo).toString(), 'my key is 123');
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
   console.log(plaintext);
