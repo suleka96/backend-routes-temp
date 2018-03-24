@@ -254,7 +254,7 @@ app.post("/profiles/create", function(req, res) {
       var profileInfo = req.body;
 
       //Request body is decrypted
-      var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+      var bytes  = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
 
       //Decrypted request body is converted to plain text
       var plaintext = bytes.toString(CryptoJS.enc.Utf8);
