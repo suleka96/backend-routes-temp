@@ -128,46 +128,12 @@ var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema)
 var User = mongoose.model("users", usersSchema);
 var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 
-//var user1 = new User({
-//   userId: "konnect123",
-//   fName: "Raneesh",
-//   lName: "Gomez",
-//   bio: "Bla bla bla",
-//   profilePic: "base64",
-//   profiles: [],
-//   requests: [],
-//   receivedProfiles: []
-// });
-
-// user1.save(function(err) {
-//     if (err) console.log('Database Error: ' + err);
-// });
-
-// var profile1 = new Profile({
-//   profileId: "profile123",
-//   mobileNo: "07777777777",
-//   dateOfBirth: new Date,
-//   homeAddress: "478/35 aluthmawatha",
-//   links: {
-//     facebookURL: "facebook",
-//     twitterURL: "twitter",
-//     linkedinURL: "linkedin",
-//     blogURL: "blog"
-//   },
-//   work: {
-//     companyName: "some company",
-//     companyWebsite: "www.company.com",
-//     workAddress: "23/4 company road, colombo",
-//     workEmail: "company@company.com",
-//     designation: "companist"
-//   }
-// });
 
 /*******************************************************************************************************************************/
 
 /*
 ******************************************************* 
-* DEFINE ROUTES
+* GLOBALLY DECLARE BODY PARSER 
 *******************************************************
 */
 
@@ -212,34 +178,33 @@ app.post("/register", function (req, res) {
   })
     .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);
-      res.json(regObj);
+      console.log("Successfully created new user:", userRecord.displayName); 
+      
+      //Create new user document
+      var user = new User({
+        userId: regObj.uuid,
+        fName: regObj.fName,
+        lName: regObj.lName,
+        bio: regObj.bio,
+        profilePic: "",
+        profiles: [],
+        requests: [],
+        receivedProfiles: []
+      });
+      
+      //Save created user document
+      user.save(function(err) {
+          if (err) console.log('Database Error: ' + err);
+      }).then(function() {
+        console.log("User document has been created successfully!");
+      });
+      
+      res.json("User has been registered and document created successfully");
     })
     .catch(function (error) {
       console.log("Error creating new user:", error);
     });
 });
-
-//POST request handler for login button
-// app.post("/login", function(req, res) {
-//   console.log("Login is being validated in the server...");
-//   if (!req.body) return res.sendStatus(400); 
-
-//   var uid;
-//   var displayName;
-
-//   admin.auth().verifyIdToken(String(req.body.token)).then(function(decodedToken) {
-//       uid = decodedToken.uid;
-//       displayName = decodedToken.displayName;
-//     })
-//     .catch(function(error) {
-//       console.log(error);
-//       //console.log("Could not resolve Login ID Token from Client!");
-//   });
-
-//   console.log(displayName);
-//   res.json("Hello!");
-// });
 
 //POST request handler for creating profiles
 app.post("/profiles/create", function (req, res) {
