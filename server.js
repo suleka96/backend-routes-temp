@@ -261,7 +261,7 @@ app.post("/profiles/create", function (req, res) {
 
     //Request body is parsed to a JSON Object
     // var profObj = JSON.parse(plaintext);
-    var profObj = req.body;
+    var profObj = JSON.parse(req.body);
 
     //populating a new profile
     var profile = new Profile({
