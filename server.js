@@ -278,7 +278,7 @@ app.post("/profiles/send", function (req, res) {
   //Decrypted request body is converted to plain text
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
-  console.log(uid);
+  console.log("Error fuck"+uid);
 
   //creating jason array to store all the profile information 
   User.findOne({userId: uid})
