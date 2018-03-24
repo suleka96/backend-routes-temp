@@ -194,26 +194,35 @@ app.post("/test", function(req, res) {
 app.post("/register", function(req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
-  var registerInfo = req.body;
-  console.log(registerInfo);
-  var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
-  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-  console.log(plaintext);
 
-  // admin.auth().createUser({
-  //     uid: plaintext,
-  //     email: registerInfo.email,
-  //     password: registerInfo.password,
-  //     displayName: registerInfo.fName + " " + registerInfo.lName
-  //   })
-  //   .then(function(userRecord) {
-  //     // See the UserRecord reference doc for the contents of userRecord.
-  //     console.log("Successfully created new user:", userRecord.displayName);      
-  //     res.json(registerInfo);
-  //   })
-  //   .catch(function(error) {
-  //     console.log("Error creating new user:", error);
-  //   });   
+  //Received request body is encrypted
+  var registerInfo = req.body;
+
+  //Request body is decrypted
+  var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var regObj = JSON.parse(plaintext);
+  
+  console.log(regObj);
+
+  admin.auth().createUser({
+      uid: regObj.uuid,
+      email: regObj.email,
+      password: regObj.password,
+      displayName: regObj.fName + " " + regObj.lName
+    })
+    .then(function(userRecord) {
+      // See the UserRecord reference doc for the contents of userRecord.
+      console.log("Successfully created new user:", userRecord.displayName);      
+      res.json(regObj);
+    })
+    .catch(function(error) {
+      console.log("Error creating new user:", error);
+    });   
 });
 
 //POST request handler for login button
