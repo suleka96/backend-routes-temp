@@ -290,6 +290,7 @@ app.post("/profiles/send", function (req, res) {
         console.log("Error in sending profiles");
       } 
       res.json(record.profiles);
+      console.log(record.profiles);
     });
 
 
