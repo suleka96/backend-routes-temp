@@ -10,8 +10,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const admin = require("firebase-admin");
 const serviceAccount = require("./admin/konnect-ionic-auth-firebase-adminsdk-s951b-aabc7ba7c0.json");
-
-//var cors = require('cors');
+var cors = require('cors');
 
 /*******************************************************************************************************************************/
 
@@ -32,17 +31,6 @@ admin.initializeApp({
 
 /*
 ******************************************************* 
-* SET PORT
-*******************************************************
-*/
-
-const PORT = process.env.PORT || 5000; //Port is assigned at runtime by Heroku or 5000 by default
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-/*******************************************************************************************************************************/
-
-/*
-******************************************************* 
 * DEFINE PATHS
 *******************************************************
 */
@@ -50,7 +38,18 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 app.use(express.static(path.join(__dirname, "public"))); //Define path for static assets
 app.set("views", path.join(__dirname, "views")); //Define path for views
 app.set("view engine", "ejs"); //Define view engine as EJS
-//app.use(cors());
+app.use(cors());
+
+/*******************************************************************************************************************************/
+
+/*
+******************************************************* 
+* SET PORT
+*******************************************************
+*/
+
+const PORT = process.env.PORT || 5000; //Port is assigned at runtime by Heroku or 5000 by default
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 /*******************************************************************************************************************************/
 
@@ -125,6 +124,7 @@ var Profile = mongoose.model("profiles", profilesSchema);
 var Request = mongoose.model("requests", requestsSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 var User = mongoose.model("users", usersSchema);
+var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 
 //var user1 = new User({
 //   userId: "konnect123",
@@ -169,17 +169,28 @@ var User = mongoose.model("users", usersSchema);
 *******************************************************
 */
 
-//Create application/json parser
-var jsonParser = bodyParser.json();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
 
-//Create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+/*******************************************************************************************************************************/
+
+/*
+******************************************************* 
+* DEFINE ROUTES
+*******************************************************
+*/
 
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
+//Test POST request handler
+app.post("/test", function(req, res) {
+    res.json("Got your message, Dillon!");
+    console.log(req.body);
+});
+
 //POST request handler for register route
-app.post("/register", jsonParser, function(req, res) {
+app.post("/register", function(req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
   var registerInfo = req.body;
@@ -192,60 +203,66 @@ app.post("/register", jsonParser, function(req, res) {
     })
     .then(function(userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);
+      console.log("Successfully created new user:", userRecord.displayName);      
+      res.json(registerInfo);
     })
     .catch(function(error) {
       console.log("Error creating new user:", error);
-    });
-
-  res.sendStatus(200).send(req.body);  
+    });   
 });
 
 //POST request handler for login button
-app.post("/login", jsonParser, function(req, res) {
+app.post("/login", function(req, res) {
   console.log("Login is being validated in the server...");
-  if (!req.body) return res.sendStatus(400);
-  var loginInfo = req.body;
+  if (!req.body) return res.sendStatus(400); 
 
-  admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
-      var uid = decodedToken.uid;
-      var displayName = decodedToken.displayName;
+  var uid;
+  var displayName;
+
+  admin.auth().verifyIdToken(String(req.body.token)).then(function(decodedToken) {
+      uid = decodedToken.uid;
+      displayName = decodedToken.displayName;
     })
     .catch(function(error) {
-      console.log("Could not resolve Login ID Token from Client!");
-    });
+      console.log(error);
+      //console.log("Could not resolve Login ID Token from Client!");
+  });
 
-  res.sendStatus(200).send(req.body);
+  console.log(displayName);
+  res.json("Hello!");
 });
 
 //POST request handler for storing requests
-app.post("/storeRequest", jsonParser, function(req, res) {
-    console.log("inside login route");
+app.post("/storeRequest", function(req, res) {
+    console.log("Storing requests...");
     if (!req.body) return res.sendStatus(400);
     var loginInfo = req.body;
-    res.sendStatus(200).send(req.body);
+    res.sendStatus(200);
+    res.send(req.body);
     console.log(loginInfo);
   });
 
 
 //POST request handler for creating profiles
-app.post("/createprofile", jsonParser, function(req, res) {
+app.post("/createprofile", function(req, res) {
     console.log("inside createProfile route");
 
     var uid = decodedToken.uid;
 
     if (!req.body){
         return res.sendStatus(400);
-    } 
-
-    else{
+    }
+    else {
+        var uid;
+        var displayName;
 
         admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
             uid = decodedToken.uid;
-          })
-          .catch(function(error) {
+            displayName = decodedToken.displayName;
+        })
+        .catch(function(error) {
             console.log("Could not resolve Login ID Token from Client!");
-          });
+        });
 
         var profile = new Profile({
             profileId: uid,
@@ -268,18 +285,17 @@ app.post("/createprofile", jsonParser, function(req, res) {
             }
         });
         
-        User.findOne({userId: uid}).then(function(record) {
+        User.findOne({profileId: uid}).then(function(record) {
             record.profiles.push(profile);
             record.save();
-            console.log("saved profile in document");
-            res.json(req.body);
-        });
-        
+            console.log("profile saved successfully");
+            res.sendStatus(200).send("success");  
+        });        
     }
 });
 
 //POST request handler for storing requests
-app.post("/storerequest", jsonParser, function(req, res) {
+app.post("/storerequest", function(req, res) {
     console.log("inside storeRequest route");
     if (!req.body) return res.sendStatus(400);
 
