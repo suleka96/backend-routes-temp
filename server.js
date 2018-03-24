@@ -263,6 +263,8 @@ app.post("/profiles/create", function (req, res) {
     // var profObj = JSON.parse(plaintext);
     var profObj = JSON.parse(req.body);
 
+    console.log(profObj);
+
     //populating a new profile
     var profile = new Profile({
       _profileId: mongoose.Types.ObjectId(),
