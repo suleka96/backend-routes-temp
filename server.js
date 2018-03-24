@@ -289,8 +289,10 @@ app.post("/profiles/send", function (req, res) {
         res.json("Error in retrieving");
         console.log("Error in sending profiles");
       } 
-      res.json(record.profiles);
-      console.log(record.profiles);
+      //Request body is parsed to a JSON Object
+      var profObj = JSON.parse(record.profiles);
+      res.json(profObj);
+      console.log(profObj);
     });
 
 
