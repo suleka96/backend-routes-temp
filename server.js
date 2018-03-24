@@ -80,6 +80,7 @@ var profilesSchema = new Schema({
   mobileNo: String,
   dateOfBirth: Date,
   homeAddress: String,
+  email: String,
   links: {
     facebookURL: String,
     twitterURL: String,
@@ -268,6 +269,7 @@ app.post("/profiles/create", function(req, res) {
             mobileNo: profObj.mobileNo,
             dateOfBirth:  profObj.dateOfBirth,
             homeAddress: profObj.homeAddress,
+            email:profObj.email,
             links: {
             facebookURL: profObj.facebookURL,
             twitterURL: profObj.twitterURL,
