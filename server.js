@@ -75,7 +75,7 @@ mongoose.connect(URI); //Connecting to mLab Database
 var Schema = mongoose.Schema;
 
 var profilesSchema = new Schema({
-  profileId: String,
+  _profileId: Schema.Types.ObjectId,
   profileName: String,
   mobileNo: String,
   dateOfBirth: Date,
@@ -195,27 +195,34 @@ app.post("/register", function(req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
 
+  //Received request body is encrypted
   var registerInfo = req.body;
-  console.log(registerInfo);
 
+  //Request body is decrypted
   var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-  console.log(plaintext);
-  var obj = JSON.parse(plaintext);
-  // admin.auth().createUser({
-  //     uid: plaintext,
-  //     email: registerInfo.email,
-  //     password: registerInfo.password,
-  //     displayName: registerInfo.fName + " " + registerInfo.lName
-  //   })
-  //   .then(function(userRecord) {
-  //     // See the UserRecord reference doc for the contents of userRecord.
-  //     console.log("Successfully created new user:", userRecord.displayName);      
-  //     res.json(registerInfo);
-  //   })
-  //   .catch(function(error) {
-  //     console.log("Error creating new user:", error);
-  //   });   
+
+  //Request body is parsed to a JSON Object
+  var regObj = JSON.parse(plaintext);
+  
+  console.log(regObj);
+
+  admin.auth().createUser({
+      uid: regObj.uuid,
+      email: regObj.email,
+      password: regObj.password,
+      displayName: regObj.fName + " " + regObj.lName
+    })
+    .then(function(userRecord) {
+      // See the UserRecord reference doc for the contents of userRecord.
+      console.log("Successfully created new user:", userRecord.displayName);      
+      res.json(regObj);
+    })
+    .catch(function(error) {
+      console.log("Error creating new user:", error);
+    });   
 });
 
 //POST request handler for login button
@@ -255,55 +262,51 @@ app.post("/createprofile", function(req, res) {
   
     console.log("inside createProfile route");
 
-    var uid = decodedToken.uid;
-
     if (!req.body){
         return res.sendStatus(400);
     }
     else {
 
+      //Received request body that is encrypted
+      var profileInfo = req.body;
+
+      //Request body is decrypted
       var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+
+      //Decrypted request body is converted to plain text
       var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-      console.log(plaintext);
-      var obj = JSON.parse(plaintext);
 
-        var uid;
-        var displayName;
+      //Request body is parsed to a JSON Object
+      var profObj = JSON.parse(plaintext);
 
-        admin.auth().verifyIdToken(idToken).then(function(decodedToken) {
-            uid = decodedToken.uid;
-            displayName = decodedToken.displayName;
-        })
-        .catch(function(error) {
-            console.log("Could not resolve Login ID Token from Client!");
-        });
-
+      //populating a new profile
         var profile = new Profile({
-            profileId: uid,
-            profileName: req.body.profileName,
-            mobileNo: req.body.mobileNo,
-            dateOfBirth:  req.body.dateOfBirth,
-            homeAddress: req.body.homeAddress,
+            _profileId: mongoose.Types.ObjectId(),
+            profileName: profObj.profileName,
+            mobileNo: profObj.mobileNo,
+            dateOfBirth:  profObj.dateOfBirth,
+            homeAddress: profObj.homeAddress,
             links: {
-            facebookURL: req.body.facebookURL,
-            twitterURL: req.body.twitterURL,
-            linkedinURL: req.body.linkedinURL,
-            blogURL:  req.body.blogURL
+            facebookURL: profObj.facebookURL,
+            twitterURL: profObj.twitterURL,
+            linkedinURL: profObj.linkedinURL,
+            blogURL:  profObj.blogURL
             },
             work: {
-            companyName: req.body.companyName,
-            companyWebsite: req.body.companyWebsite,
-            workAddress: req.body.workAddress,
-            workEmail: req.body.workEmail,
-            designation: req.body.designation
+            companyName: profObj.companyName,
+            companyWebsite: profObj.companyWebsite,
+            workAddress: profObj.workAddress,
+            workEmail: profObj.workEmail,
+            designation: profObj.designation
             }
         });
         
-        User.findOne({profileId: uid}).then(function(record) {
+        //Querying for the relevant user's document and pushing the profie to the profiles feild 
+        User.findOne({userId: profObj.uid}).then(function(record) {
             record.profiles.push(profile);
             record.save();
             console.log("profile saved successfully");
-            res.sendStatus(200).send("success");  
+            res.json("successful");  
         });        
     }
 });
