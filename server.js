@@ -78,7 +78,7 @@ var profilesSchema = new Schema({
   _profileId: Schema.Types.ObjectId,
   profileName: String,
   mobileNo: String,
-  dateOfBirth: String,
+  dateOfBirth: Date,
   homeAddress: String,
   email: String,
   links: {
