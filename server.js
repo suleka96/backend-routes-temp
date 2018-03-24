@@ -271,17 +271,17 @@ app.post("/profiles/create", function(req, res) {
             homeAddress: profObj.homeAddress,
             email:profObj.email,
             links: {
-            facebookURL: profObj.facebookURL,
-            twitterURL: profObj.twitterURL,
-            linkedinURL: profObj.linkedinURL,
-            blogURL:  profObj.blogURL
+            facebookURL: profObj.links.facebookURL,
+            twitterURL: profObj.links.twitterURL,
+            linkedinURL: profObj.links.linkedinURL,
+            blogURL:  profObj.links.blogURL
             },
             work: {
-            companyName: profObj.companyName,
-            companyWebsite: profObj.companyWebsite,
-            workAddress: profObj.workAddress,
-            workEmail: profObj.workEmail,
-            designation: profObj.designation
+            companyName: profObj.work.companyName,
+            companyWebsite: profObj.work.companyWebsite,
+            workAddress: profObj.work.workAddress,
+            workEmail: profObj.work.workEmail,
+            designation: profObj.work.designation
             }
         });
         
