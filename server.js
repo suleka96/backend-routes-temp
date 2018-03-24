@@ -97,17 +97,17 @@ var profilesSchema = new Schema({
 });
 
 var requestsSchema = new Schema({
-  requesterUserId: String 
+  requesterUserId: String
 });
 
 var connectedUsersSchema = new Schema({
-    connectedUserId: String,
-    sharedProfiles: {type : Array , "default" : []}
+  connectedUserId: String,
+  sharedProfiles: { type: Array, "default": [] }
 });
 
 var receivedProfilesSchema = new Schema({
-    connectionId: String, //Requesters ID
-    receivedProfileId: {type : Array , "default" : []}  
+  connectionId: String, //Requesters ID
+  receivedProfileId: { type: Array, "default": [] }
 });
 
 var usersSchema = new Schema({
@@ -172,7 +172,7 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 */
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 /*******************************************************************************************************************************/
 
@@ -186,7 +186,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.get("/", (req, res) => res.render("pages/index"));
 
 //POST request handler for register route
-app.post("/register", function(req, res) {
+app.post("/register", function (req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
 
@@ -194,7 +194,7 @@ app.post("/register", function(req, res) {
   var registerInfo = req.body;
 
   //Request body is decrypted
-  var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -205,19 +205,19 @@ app.post("/register", function(req, res) {
   console.log(regObj);
 
   admin.auth().createUser({
-      uid: regObj.uuid,
-      email: regObj.email,
-      password: regObj.password,
-      displayName: regObj.fName + " " + regObj.lName
-    })
-    .then(function(userRecord) {
+    uid: regObj.uuid,
+    email: regObj.email,
+    password: regObj.password,
+    displayName: regObj.fName + " " + regObj.lName
+  })
+    .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);      
+      console.log("Successfully created new user:", userRecord.displayName);
       res.json(regObj);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log("Error creating new user:", error);
-    });   
+    });
 });
 
 //POST request handler for login button
@@ -242,69 +242,70 @@ app.post("/register", function(req, res) {
 // });
 
 //POST request handler for creating profiles
-app.post("/profiles/create", function(req, res) {
-    console.log("inside createProfile route");
+app.post("/profiles/create", function (req, res) {
+  console.log("inside createProfile route");
 
-    if (!req.body){
-        return res.sendStatus(400);
-    }
-    else {
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  else {
 
-      //Received request body that is encrypted
-      var profileInfo = req.body;
+    //Received request body that is encrypted
+    var profileInfo = req.body;
 
-      //Request body is decrypted
-      var bytes  = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
+    //Request body is decrypted
+    var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
 
-      //Decrypted request body is converted to plain text
-      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    //Decrypted request body is converted to plain text
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-      //Request body is parsed to a JSON Object
-      var profObj = JSON.parse(plaintext);
+    //Request body is parsed to a JSON Object
+    // var profObj = JSON.parse(plaintext);
+    var profObj = req.body;
 
-      //populating a new profile
-        var profile = new Profile({
-            _profileId: mongoose.Types.ObjectId(),
-            profileName: profObj.profileName,
-            mobileNo: profObj.mobileNo,
-            dateOfBirth:  profObj.dateOfBirth,
-            homeAddress: profObj.homeAddress,
-            email:profObj.email,
-            links: {
-            facebookURL: profObj.links.facebookURL,
-            twitterURL: profObj.links.twitterURL,
-            linkedinURL: profObj.links.linkedinURL,
-            blogURL:  profObj.links.blogURL
-            },
-            work: {
-            companyName: profObj.work.companyName,
-            companyWebsite: profObj.work.companyWebsite,
-            workAddress: profObj.work.workAddress,
-            workEmail: profObj.work.workEmail,
-            designation: profObj.work.designation
-            }
-        });
+    //populating a new profile
+    var profile = new Profile({
+      _profileId: mongoose.Types.ObjectId(),
+      profileName: profObj.profileName,
+      mobileNo: profObj.mobileNo,
+      dateOfBirth: profObj.dateOfBirth,
+      homeAddress: profObj.homeAddress,
+      email: profObj.email,
+      links: {
+        facebookURL: profObj.links.facebookURL,
+        twitterURL: profObj.links.twitterURL,
+        linkedinURL: profObj.links.linkedinURL,
+        blogURL: profObj.links.blogURL
+      },
+      work: {
+        companyName: profObj.work.companyName,
+        companyWebsite: profObj.work.companyWebsite,
+        workAddress: profObj.work.workAddress,
+        workEmail: profObj.work.workEmail,
+        designation: profObj.work.designation
+      }
+    });
 
-        console.log(profile);
-        
-        //Querying for the relevant user's document and pushing the profie to the profiles feild 
-        User.findOne({userId: profObj.uid}).then(function(record) {
-            record.profiles.push(profile);
-            record.save();
-            console.log("profile saved successfully");
-            res.json("successful");  
-        });        
-    }
+    console.log(profile);
+
+    //Querying for the relevant user's document and pushing the profie to the profiles feild 
+    User.findOne({ userId: profObj.uid }).then(function (record) {
+      record.profiles.push(profile);
+      record.save();
+      console.log("profile saved successfully");
+      res.json("successful");
+    });
+  }
 });
 
 //POST request handler for storing requests
-app.post("/device/requests/store", function(req, res) {
-    console.log("inside storeRequest route");
-    if (!req.body) return res.sendStatus(400);
+app.post("/device/requests/store", function (req, res) {
+  console.log("inside storeRequest route");
+  if (!req.body) return res.sendStatus(400);
 
-    var loginInfo = req.body;
-    res.sendStatus(200).send(req.body);
-    console.log(loginInfo);
-  });
+  var loginInfo = req.body;
+  res.sendStatus(200).send(req.body);
+  console.log(loginInfo);
+});
 
 /*******************************************************************************************************************************/
