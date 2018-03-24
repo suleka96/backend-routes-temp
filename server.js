@@ -291,8 +291,8 @@ app.post("/profiles/send", function (req, res) {
       } 
       console.log(record.profiles);
       //Request body is parsed to a JSON Object
-      var profObj = JSON.parse(record.profiles);
-      res.json(profObj);
+      // var profObj = JSON.parse(record.profiles);
+      res.json(record.profiles);
       
     });
 
