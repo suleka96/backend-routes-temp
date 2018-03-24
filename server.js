@@ -284,6 +284,8 @@ app.post("/profiles/create", function(req, res) {
             designation: profObj.work.designation
             }
         });
+
+        console.log(profile);
         
         //Querying for the relevant user's document and pushing the profie to the profiles feild 
         User.findOne({userId: profObj.uid}).then(function(record) {
