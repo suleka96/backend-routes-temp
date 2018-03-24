@@ -194,12 +194,14 @@ app.post("/test", function(req, res) {
 app.post("/register", function(req, res) {
   console.log("Registration process has started...");
   if (!req.body) return res.sendStatus(400);
+
   var registerInfo = req.body;
   console.log(registerInfo);
+
   var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
   console.log(plaintext);
-
+  var obj = JSON.parse(plaintext);
   // admin.auth().createUser({
   //     uid: plaintext,
   //     email: registerInfo.email,
@@ -250,6 +252,7 @@ app.post("/storeRequest", function(req, res) {
 
 //POST request handler for creating profiles
 app.post("/createprofile", function(req, res) {
+  
     console.log("inside createProfile route");
 
     var uid = decodedToken.uid;
@@ -258,6 +261,12 @@ app.post("/createprofile", function(req, res) {
         return res.sendStatus(400);
     }
     else {
+
+      var bytes  = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+      console.log(plaintext);
+      var obj = JSON.parse(plaintext);
+
         var uid;
         var displayName;
 
