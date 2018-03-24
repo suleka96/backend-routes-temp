@@ -245,10 +245,8 @@ app.post("/register", function (req, res) {
 app.post("/profiles/create", function (req, res) {
   console.log("inside createProfile route");
 
-  if (!req.body) {
+  if (!req.body)
     return res.sendStatus(400);
-  }
-  else {
 
     //Received request body that is encrypted
     var profileInfo = req.body;
@@ -297,7 +295,41 @@ app.post("/profiles/create", function (req, res) {
       console.log("profile saved successfully");
       res.json("successful");
     });
-  }
+});
+
+//POST request handler for sending profiles
+app.post("/profiles/send", function (req, res) {
+  console.log("inside sending profiles route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var uidEncripted = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var uid = bytes.toString(CryptoJS.enc.Utf8);
+
+  console.log(uid);
+
+  //creating jason array to store all the profile information 
+  User.findOne({userId: uid})
+  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+  .exec(
+    function(err, record){
+      if (err) res.json("Error in retrieving");
+      res.json(record.profiles);
+    });
+
+
+
+  // User.findOne({ userId: plaintext }).then(function (record) {
+  //   // record.profiles.push(profile);
+  //   // record.save();
+  //   // console.log("profile saved successfully");
+  //   // res.json("successful");
+  // });
 });
 
 //POST request handler for storing requests
