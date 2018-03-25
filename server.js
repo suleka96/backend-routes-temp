@@ -148,26 +148,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
-
-User.findOne({ 'userId': 'konnect123', 'profiles._profileId': 'profile123' }).lean()  
-  .populate('_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
-  .exec(
-    function(err, record){
-      if (err){
-        res.json("Error in retrieving");
-        console.log("Error in sending profiles");
-      } 
-      else{
-      console.log(record.profile);
-      
-      //JS object is turned into a JSON Object
-      var profile = JSON.stringify(record.profiles); 
-      console.log(profiles);
-      res.json(profiles);
-      }
-});
-
-
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
@@ -333,7 +313,23 @@ app.post("/profile/send", function (req, res) {
   var infoObj = JSON.parse(plaintext);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  
+  User.findOne({ userId: infoObj.uid, profiles._profileId: infoObj.profileId }).lean()  
+  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+  .exec(
+    function(err, record){
+      if (err){
+        res.json("Error in retrieving");
+        console.log("Error in sending profiles");
+      } 
+      else{
+      console.log(record.profile);
+      
+      //JS object is turned into a JSON Object
+      var profile = JSON.stringify(record.profiles); 
+      console.log(profiles);
+      res.json(profiles);
+      }
+});
 });
 
 //POST request handler for storing requests
