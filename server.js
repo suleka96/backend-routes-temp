@@ -148,6 +148,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
+
+User.findOne({ userId: 'konnect123', profiles._profileId: 'profile123' }).lean()  
+  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+  .exec(
+    function(err, record){
+      if (err){
+        res.json("Error in retrieving");
+        console.log("Error in sending profiles");
+      } 
+      else{
+      console.log(record.profile);
+      
+      //JS object is turned into a JSON Object
+      var profile = JSON.stringify(record.profiles); 
+      console.log(profiles);
+      res.json(profiles);
+      }
+});
+
+
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
@@ -293,6 +313,27 @@ app.post("/profiles/send", function (req, res) {
       res.json(profiles);
       }
 });
+});
+
+//POST request handler for sending information of a profile
+app.post("/profile/send", function (req, res) {
+  console.log("inside sending profiles route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userProfileInfo = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var infoObj = JSON.parse(plaintext);
+
+  //creating json object from mongoose document that contains information of profiles of a particular user
+  
 });
 
 //POST request handler for storing requests
