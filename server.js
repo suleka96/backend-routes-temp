@@ -129,6 +129,19 @@ var User = mongoose.model("users", usersSchema);
 var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 
 
+User.findOne({userId: 'konnect123'})
+  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+  .exec(
+    function(err, record){
+      if (err){
+        res.json("Error in retrieving");
+        console.log("Error in sending profiles");
+      } 
+      console.log(record.profiles);
+      //Request body is parsed to a JSON Object
+      // var profObj = JSON.parse(record.profiles);    
+});
+
 /*******************************************************************************************************************************/
 
 /*
@@ -270,31 +283,18 @@ app.post("/profiles/send", function (req, res) {
   //Received request body that is encrypted
   var uidEncripted = req.body;
 
-  console.log(req.body);
+  // console.log(req.body);
 
-  //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'my key is 123');
+  // //Request body is decrypted
+  // var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'my key is 123');
 
-  //Decrypted request body is converted to plain text
-  var uid = bytes.toString(CryptoJS.enc.Utf8);
+  // //Decrypted request body is converted to plain text
+  // var uid = bytes.toString(CryptoJS.enc.Utf8);
 
-  console.log("Error fuck"+uid);
+  // console.log("Error fuck"+uid);
 
   //creating jason array to store all the profile information 
-  User.findOne({userId: uid})
-  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
-  .exec(
-    function(err, record){
-      if (err){
-        res.json("Error in retrieving");
-        console.log("Error in sending profiles");
-      } 
-      console.log(record.profiles);
-      //Request body is parsed to a JSON Object
-      // var profObj = JSON.parse(record.profiles);
-      res.send(record.profiles);
-      
-    });
+  
 
 
 
