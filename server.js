@@ -139,6 +139,7 @@ User.findOne({userId: 'konnect123'})
       } 
       console.log(record.profiles);
       //Request body is parsed to a JSON Object
+      console.log(typeof record.profiles);
       var profObj = JSON.parse(record.profiles);    
       console.log(profObj);
 });
