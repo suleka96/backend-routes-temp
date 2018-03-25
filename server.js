@@ -149,7 +149,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 */
 
 
-User.findOne({ userId: 'konnect123', profiles._profileId: 'profile123' }).lean()  
+User.findOne({ userId: 'konnect123', _profileId: 'profile123' }).lean()  
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
   .exec(
     function(err, record){
