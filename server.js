@@ -313,7 +313,7 @@ app.post("/profile/send", function (req, res) {
   var infoObj = JSON.parse(plaintext);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({ userId: infoObj.uid, profiles._profileId: infoObj.profileId }).lean()  
+  User.findOne({ userId: infoObj.uid, _profileId: infoObj.profileId }).lean()  
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
   .exec(
     function(err, record){
@@ -343,3 +343,23 @@ app.post("/device/requests/store", function (req, res) {
 });
 
 /*******************************************************************************************************************************/
+
+
+//creating json object from mongoose document that contains information of profiles of a particular user
+User.findOne({ userId: 'konnect123', _profileId: ObjectId("5ab6390b0ec955000400e67c") }).lean()  
+.populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+.exec(
+  function(err, record){
+    if (err){
+      res.json("Error in retrieving");
+      console.log("Error in sending profiles");
+    } 
+    else{
+    console.log(record.profile);
+    
+    //JS object is turned into a JSON Object
+    var profile = JSON.stringify(record.profiles); 
+    console.log(profile);
+    //res.json(profiles);
+    }
+});
