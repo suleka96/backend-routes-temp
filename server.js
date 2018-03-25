@@ -140,8 +140,8 @@ User.findOne({userId: 'konnect123'}).lean()
       else{
       console.log(record.profiles);
       //Request body is parsed to a JSON Object
-      var profObj = JSON.parse(record.profiles);    
-      console.log(profObj);
+      var myJSON = JSON.stringify(record.profiles); 
+      console.log(myJSON);
       }
 });
 
