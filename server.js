@@ -131,17 +131,19 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 
 User.findOne({userId: 'konnect123'})
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
+  .lean()
   .exec(
     function(err, record){
       if (err){
         res.json("Error in retrieving");
         console.log("Error in sending profiles");
       } 
+      else{
       console.log(record.profiles);
       //Request body is parsed to a JSON Object
-      console.log(typeof record.profiles);
-      var profObj = JSON.parse(record.profiles);    
-      console.log(profObj);
+      // var profObj = JSON.parse(record.profiles);    
+      // console.log(record.profiles);
+      }
 });
 
 /*******************************************************************************************************************************/
