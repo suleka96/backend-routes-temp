@@ -445,6 +445,37 @@ app.post("/profile/send", function (req, res) {
   });
 });
 
+//POST request handler for returning public profile of requests
+app.post("/device/requests/return", function (req, res) {
+  console.log("inside returnRequest route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userProfileInfo = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var infoObj = JSON.parse(plaintext);
+
+  User.findOne({ "userId" : infoObj.uid }, { "requests.$": 1, "_id": 0 }, function(err, requests){
+    if (err) {
+      console.log(err);
+    }
+    else {
+      var profileSent = JSON.stringify(requests);
+      console.log(requests);
+      res.json(requests);
+
+    }
+  });  
+
+});
+
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
