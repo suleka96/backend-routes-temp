@@ -493,5 +493,7 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
     var profileSent = JSON.stringify(requests);
     console.log(requests);
     console.log(profileSent);
+    console.log(requests[0]);
+    console.log(profileSent[0]);
   }
 });
