@@ -367,14 +367,14 @@ app.post("/device/requests/store", function (req, res) {
 //     }
 // });
 
-User.findOne({ 'profiles._profileId': '5ab6390b0ec955000400e67c' }, 'profiles._profileId profiles.profileName', function(err, profile){
+User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1 }, function(err, profile){
   if (err) {
     console.log(err);
   }
   else {
     console.log(profile);
-    if (profile.profiles._profileId === ObjectId("5ab6390b0ec955000400e67c")) {
-      console.log(profile.profiles);
-    }
+    // if (profile.profiles._profileId === ObjectId("5ab6390b0ec955000400e67c")) {
+    //   console.log(profile.profiles);
+    // }
   }
 });
