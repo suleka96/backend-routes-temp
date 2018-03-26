@@ -505,7 +505,7 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
 
     for (i in arr.cars) {
       for (j in arr.cars[i].requesterId) {
-         console.log(arr.cars[i].requesterId[j]);
+         console.log("fuck"+arr.cars[i].requesterId[j]);
       }
   }
 
