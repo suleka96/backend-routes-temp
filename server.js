@@ -348,11 +348,11 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "profiles.links.facebookURL": 1, "profiles.work": 1  }, function(err, profile){
+User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1 }, function(err, profile){
   if (err) {
     console.log(err);
   }
   else {
-    console.log(profile);
+    console.log(JSON.parse(profile));
   }
 });
