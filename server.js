@@ -97,7 +97,7 @@ var profilesSchema = new Schema({
 });
 
 var requestsSchema = new Schema({
-  requesterUserId: String
+  requesterUserId: { type: Array, "default": [] }
 });
 
 var connectedUsersSchema = new Schema({
