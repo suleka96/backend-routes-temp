@@ -153,6 +153,7 @@ User.update(
   { $pull: { profiles : { _profileId : '5ab91095b1b47a00041a81e5' } } },
   { safe: true },
   function removeConnectionsCB(err, obj) {
+    console.log("fark"+err);
     console.log("fark"+obj);
   });
 
@@ -174,6 +175,37 @@ User.update(
 //       "work.designation":"",
 //      }}}, false, true)
 
+var profileObj = {
+  _profileId: '5ab91095b1b47a00041a81e5',
+  uid: 'aaaaaaaaaa',
+  profileName: 'Naul',
+  mobileNo: '12345678',
+  dateOfBirth: '2017-11-09T18:30:00.000Z',
+  homeAddress: 'asd',
+  email: 'asd@asdasd.com',
+  links: { 
+    facebookURL: '', 
+    twitterURL: '', 
+    linkedinURL: '', 
+    blogURL: '' 
+  },
+  work: {
+    companyName: '',
+    companyWebsite: '',
+    workAddress: '',
+    workEmail: '',
+    designation: '' 
+  } 
+}
+
+User.update( {'userId:':'aaaaaaaaaa', '_profileId':'5ab91095b1b47a00041a81e5'}, profileObj, function(err, raw) {
+  if (err) {
+    console.log(err);
+  }
+  else {
+    console.log(raw);
+  }
+});
 
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
@@ -401,42 +433,6 @@ app.post("/profile/send", function (req, res) {
     }
   });
 });
-
-// function addProfile(profObj) {
-//   //populating a new profile
-//   var profile = new Profile({
-//     _profileId: mongoose.Types.ObjectId(),
-//     profileName: profObj.profileName,
-//     mobileNo: profObj.mobileNo,
-//     dateOfBirth: profObj.dateOfBirth,
-//     homeAddress: profObj.homeAddress,
-//     email: profObj.email,
-//     links: {
-//       facebookURL: profObj.links.facebookURL,
-//       twitterURL: profObj.links.twitterURL,
-//       linkedinURL: profObj.links.linkedinURL,
-//       blogURL: profObj.links.blogURL
-//     },
-//     work: {
-//       companyName: profObj.work.companyName,
-//       companyWebsite: profObj.work.companyWebsite,
-//       workAddress: profObj.work.workAddress,
-//       workEmail: profObj.work.workEmail,
-//       designation: profObj.work.designation
-//     }
-//   });
-
-//   console.log(profile);
-
-//   //Querying for the relevant user's document and pushing the profie to the profiles feild 
-//   User.findOne({ userId: profObj.uid }).then(function (record) {
-//     record.profiles.push(profile);
-//     record.save();
-//     console.log("profile saved successfully");
-//     res.json("successful");
-//   });
-// }  
-
 
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
