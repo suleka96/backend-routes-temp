@@ -490,7 +490,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests.$": 1, "_id": 0 }, function(err, requests){
+User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(err, requests){
   if (err) {
     console.log(err);
   }
