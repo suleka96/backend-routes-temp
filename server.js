@@ -383,7 +383,10 @@ app.post("/profile/send", function (req, res) {
       console.log(err);
     }
     else {
-      console.log(JSON.stringify(profile));
+      var profileSent = JSON.stringify(profile);
+      console.log(profileSent);
+      res.json(profileSent);
+
     }
   });
 });
