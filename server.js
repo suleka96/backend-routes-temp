@@ -289,8 +289,9 @@ app.post("/profiles/send", function (req, res) {
       console.log(record.profiles);
       //JS object is turned into a JSON Object
       var profiles = JSON.stringify(record.profiles); 
-      console.log(profiles);
-      res.json(profiles);
+      var gg=JSON.parse(profiles); 
+      console.log(gg);
+      res.json(gg);
       }
 });
 });
