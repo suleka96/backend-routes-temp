@@ -195,8 +195,6 @@ app.post("/register", function (req, res) {
       //Save created user document
       user.save(function(err) {
           if (err) console.log('Database Error: ' + err);
-      }).then(function() {
-        console.log("User document has been created successfully!");
       });
       
       res.json("User has been registered and document created successfully");
