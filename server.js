@@ -175,36 +175,36 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //       "work.designation":"",
 //      }}}, false, true)
 
-var profileObj = {
-  _profileId: '5ab8eab7cb24e60004758214',
-  profileName: 'owl',
-  mobileNo: '12345678',
-  dateOfBirth: '2017-11-09T18:30:00.000Z',
-  homeAddress: 'asd',
-  email: 'asd@asdasd.com',
-  links: { 
-    facebookURL: '', 
-    twitterURL: '', 
-    linkedinURL: '', 
-    blogURL: '' 
-  },
-  work: {
-    companyName: '',
-    companyWebsite: '',
-    workAddress: '',
-    workEmail: '',
-    designation: '' 
-  } 
-}
+// var profileObj = {
+//   _profileId: '5ab8eab7cb24e60004758214',
+//   profileName: 'owl',
+//   mobileNo: '12345678',
+//   dateOfBirth: '2017-11-09T18:30:00.000Z',
+//   homeAddress: 'asd',
+//   email: 'asd@asdasd.com',
+//   links: { 
+//     facebookURL: '', 
+//     twitterURL: '', 
+//     linkedinURL: '', 
+//     blogURL: '' 
+//   },
+//   work: {
+//     companyName: '',
+//     companyWebsite: '',
+//     workAddress: '',
+//     workEmail: '',
+//     designation: '' 
+//   } 
+// }
 
-User.update( { "profiles._profileId": "5ab8eab7cb24e60004758214"}, { "profiles.$": profileObj }, function(err, raw) {
-  if (err) {
-    console.log(err);
-  }
-  else {
-    console.log(raw);
-  }
-});
+// User.update( { "profiles._profileId": "5ab8eab7cb24e60004758214"}, { "profiles.$": profileObj }, function(err, raw) {
+//   if (err) {
+//     console.log(err);
+//   }
+//   else {
+//     console.log(raw);
+//   }
+// });
 
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
@@ -339,7 +339,14 @@ app.post("/profile/edit", function (req, res) {
 
     console.log(editProfObj);
 
-    
+    User.update( { "profiles._profileId": editProfObj._profileId}, { "profiles.$": profileObj }, function(err, raw) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(raw);
+      }
+    });    
 });
 
 //POST request handler for deleting profiles
