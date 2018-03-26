@@ -367,11 +367,11 @@ app.post("/device/requests/store", function (req, res) {
 //     }
 // });
 
-User.findOne({ '_profileId': '5ab6390b0ec955000400e67c' }, '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation', function(err, profile){
+User.findOne({ 'profiles._profileId': '5ab6390b0ec955000400e67c' }, 'profiles._profileId profiles.profileName', function(err, profile){
   if (err) {
     console.log(err);
   }
   else {
-    console.log(JSON.stringify(profile));
+    console.log(profile);
   }
 });
