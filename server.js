@@ -197,7 +197,7 @@ var profileObj = {
   } 
 }
 
-User.update( {'userId:':'aaaaaaaaaa', '_profileId':'5ab8eab7cb24e60004758214'}, profileObj, function(err, raw) {
+User.update( { _profileId: "5ab8eab7cb24e60004758214"}, { profileObj }, function(err, raw) {
   if (err) {
     console.log(err);
   }
