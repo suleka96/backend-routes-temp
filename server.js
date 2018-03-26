@@ -348,7 +348,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "_id": 0 }, function(err, profile){
+User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "_id": 0, "profiles._id": 0 }, function(err, profile){
   if (err) {
     console.log(err);
   }
