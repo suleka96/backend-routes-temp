@@ -353,6 +353,6 @@ User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.
     console.log(err);
   }
   else {
-    console.log(JSON.parse(profile));
+    console.log(JSON.stringify(profile));
   }
 });
