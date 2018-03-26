@@ -148,14 +148,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
-// User.update( 
-//   { userId: 'aaaaaaaaaa' },
-//   { $pull: { profiles : { _profileId : '5ab91095b1b47a00041a81e5' } } },
-//   { safe: true },
-//   function removeConnectionsCB(err, obj) {
-//     console.log("fark"+err);
-//     console.log("fark"+obj);
-//   });
 
 // User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
 //       {$set:{'profiles.$':
@@ -352,6 +344,8 @@ app.post("/profile/edit", function (req, res) {
 //POST request handler for deleting profiles
 app.post("/profile/delete", function(req, res) {
 
+  console.log("Inside delete profile route");
+
   if (!req.body)
     return res.sendStatus(400);
 
@@ -367,9 +361,20 @@ app.post("/profile/delete", function(req, res) {
     //Request body is parsed to a JSON Object
     var delProfObj = JSON.parse(plaintext);
 
-    
-
-    console.log(delProfObj);
+    User.update( 
+      { userId: delProfObj.uid },
+      { $pull: { profiles : { _profileId : delProfObj._profileId } } },
+      { safe: true },
+      function removeConnectionsCB(err, obj) {
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log(obj);
+          res.json("Success");
+        }
+        
+      });
 });
 
 //POST request handler for sending profiles
