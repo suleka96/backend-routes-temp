@@ -495,12 +495,22 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
     console.log(err);
   }
   else {
+
+    console.log(requests);
+
     var profileSent = JSON.stringify(requests);
     //console.log(requests);
     requests.forEach(function(profile) {
       var prof = profile.requesterId;
       console.log(prof);
     });
+
+    var arr = JSON.parse(profileSent);
+    for(var i = 0; i < arr.length; i++)
+    {
+      var tablename = arr[i].requesterId;
+      console.log(tablename);
+    }
 
     // console.log(profileSent);
     // console.log(profileSent[0]);
