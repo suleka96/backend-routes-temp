@@ -498,23 +498,40 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
 
     console.log(requests);
 
-    var profileSent = JSON.stringify(requests);
-    console.log(profileSent);
-    var arr = JSON.parse(profileSent);
-    console.log(profileSent);
+    // var profileSent = JSON.stringify(requests);
+    // console.log(profileSent);
+    var arr = JSON.parse(requests);
+    console.log(arr);
 
-    requests.forEach(function(arr) {
-      var prof = arr.requesterId;
-      console.log("fuck1"+prof);
-    });
+    for (i in arr.cars) {
+      for (j in arr.cars[i].requesterId) {
+         console.log(arr.cars[i].requesterId[j]);
+      }
+  }
+
+
+
+    // for (item in arr) {
+    //   for (subItem in arr[requests]) {
+    //      var student = classmem[item][subItem].student;
+    //      for (row in student) {
+    //        console.log(student[row]['class-name']);
+    //      }
+    //   }
+    // }
+
+    // requests.forEach(function(arr) {
+    //   var prof = arr.requesterId;
+    //   console.log("fuck1"+prof);
+    // });
 
     
 
-    for(var i = 0; i < arr.length; i++)
-    {
-      var tablename = arr[i].requesterId;
-      console.log("fuck"+tablename);
-    }
+    // for(var i = 0; i < arr.length; i++)
+    // {
+    //   var tablename = arr[i].requesterId;
+    //   console.log("fuck"+tablename);
+    // }
 
     // console.log(profileSent);
     // console.log(profileSent[0]);
