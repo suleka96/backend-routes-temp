@@ -106,6 +106,10 @@ var receivedProfilesSchema = new Schema({
   receivedProfileId: { type: Array, "default": [] }
 });
 
+var requestsSchema = new Schema({
+  requesterId: String
+});
+
 var usersSchema = new Schema({
   userId: String,
   fName: String,
@@ -113,7 +117,7 @@ var usersSchema = new Schema({
   bio: String,
   profilePic: String,
   profiles: [profilesSchema],
-  requests: { type: Array, "default": [] },
+  requests: [requestsSchema],
   connectedUsers: [connectedUsersSchema],
   receivedProfiles: [receivedProfilesSchema]
 });
@@ -122,6 +126,7 @@ var Profile = mongoose.model("profiles", profilesSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 var User = mongoose.model("users", usersSchema);
 var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
+var Request = mongoose.model("requests", requestsSchema); 
 
 
 /*******************************************************************************************************************************/
@@ -492,6 +497,11 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
   else {
     var profileSent = JSON.stringify(requests);
     //console.log(requests);
+    profileSent.forEach(function(profile) {
+      var prof = table.name;
+      console.log(tableName);
+    });
+
     console.log(profileSent);
     console.log(profileSent[0]);
     var parsedRequest = JSON.parse(profileSent);
