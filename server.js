@@ -490,7 +490,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(err, requests){
+User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests.$": 1, "_id": 0 }, function(err, requests){
   if (err) {
     console.log(err);
   }
@@ -498,14 +498,14 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
     var profileSent = JSON.stringify(requests);
     //console.log(requests);
     profileSent.forEach(function(profile) {
-      var prof = table.name;
-      console.log(tableName);
+      var prof = profile.requesterId;
+      console.log(prof);
     });
 
-    console.log(profileSent);
-    console.log(profileSent[0]);
-    var parsedRequest = JSON.parse(profileSent);
-    console.log(requests[0]);
-    console.log(parsedRequest[0]);
+    // console.log(profileSent);
+    // console.log(profileSent[0]);
+    // var parsedRequest = JSON.parse(profileSent);
+    // console.log(requests[0]);
+    // console.log(parsedRequest[0]);
   }
 });
