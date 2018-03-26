@@ -276,8 +276,6 @@ app.post("/profiles/send", function (req, res) {
   //Decrypted request body is converted to plain text
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
-  console.log(uid);
-
   //creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({userId: uid})
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
@@ -289,11 +287,14 @@ app.post("/profiles/send", function (req, res) {
       } 
       else{
       //console.log(record.profiles);
+
       //JS object is turned into a JSON Object
       var profiles = JSON.stringify(record.profiles); 
-      var gg=JSON.parse(profiles); 
+
+      //var gg = JSON.parse(profiles); 
       //console.log(gg);
-      res.json(gg);
+      
+      res.json(profiles);
       }
 });
 });
@@ -316,23 +317,14 @@ app.post("/profile/send", function (req, res) {
   var infoObj = JSON.parse(plaintext);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({ userId: infoObj.uid, _profileId: infoObj.profileId }).lean()  
-  .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
-  .exec(
-    function(err, record){
-      if (err){
-        res.json("Error in retrieving");
-        console.log("Error in sending profiles");
-      } 
-      else{
-      console.log(record.profile);
-      
-      //JS object is turned into a JSON Object
-      var profile = JSON.stringify(record.profiles); 
-      console.log(profiles);
-      res.json(profiles);
-      }
-});
+  User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "_id": 0 }, function(err, profile){
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log(JSON.stringify(profile));
+    }
+  });
 });
 
 //POST request handler for storing requests
@@ -348,11 +340,3 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "_id": 0, "profiles._id": 0 }, function(err, profile){
-  if (err) {
-    console.log(err);
-  }
-  else {
-    console.log(JSON.stringify(profile));
-  }
-});
