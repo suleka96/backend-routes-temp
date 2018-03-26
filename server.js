@@ -149,7 +149,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 */
 
 
-
 // User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
 //       {$set:{'profiles.$':
 //       { "profileName": "flalalaaaaaa",
@@ -169,9 +168,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //      }}}, false, true)
 
 var profileObj = {
-  _profileId: '5ab91095b1b47a00041a81e5',
-  uid: 'aaaaaaaaaa',
-  profileName: 'Naul',
+  _profileId: '5ab8eab7cb24e60004758214',
+  profileName: 'owl',
   mobileNo: '12345678',
   dateOfBirth: '2017-11-09T18:30:00.000Z',
   homeAddress: 'asd',
@@ -191,7 +189,7 @@ var profileObj = {
   } 
 }
 
-User.update( {'userId:':'aaaaaaaaaa', '_profileId':'5ab91095b1b47a00041a81e5'}, profileObj, function(err, raw) {
+User.update( { "profiles._profileId": "5ab8eab7cb24e60004758214"}, { "profiles.$": profileObj }, function(err, raw) {
   if (err) {
     console.log(err);
   }
