@@ -126,7 +126,7 @@ var Profile = mongoose.model("profiles", profilesSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 var User = mongoose.model("users", usersSchema);
 var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
-var Request = mongoose.model("requests", requestsSchema); 
+var Request = mongoose.model("requests", requestsSchema);
 
 
 /*******************************************************************************************************************************/
@@ -228,8 +228,8 @@ app.post("/register", function (req, res) {
   })
     .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName); 
-      
+      console.log("Successfully created new user:", userRecord.displayName);
+
       //Create new user document
       var user = new User({
         userId: regObj.uuid,
@@ -241,12 +241,12 @@ app.post("/register", function (req, res) {
         requests: [],
         receivedProfiles: []
       });
-      
+
       //Save created user document
-      user.save(function(err) {
-          if (err) console.log('Database Error: ' + err);
+      user.save(function (err) {
+        if (err) console.log('Database Error: ' + err);
       });
-      
+
       res.json("User has been registered and document created successfully");
     })
     .catch(function (error) {
@@ -261,54 +261,54 @@ app.post("/profiles/create", function (req, res) {
   if (!req.body)
     return res.sendStatus(400);
 
-    //Received request body that is encrypted
-    var profileInfo = req.body;
+  //Received request body that is encrypted
+  var profileInfo = req.body;
 
-    //Request body is decrypted
-    var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
 
-    //Decrypted request body is converted to plain text
-    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-    //Request body is parsed to a JSON Object
-    var profObj = JSON.parse(plaintext);
-    // var profObj = JSON.parse(req.body);
+  //Request body is parsed to a JSON Object
+  var profObj = JSON.parse(plaintext);
+  // var profObj = JSON.parse(req.body);
 
-    console.log(profObj);
-    // addProfile(profObj);
+  console.log(profObj);
+  // addProfile(profObj);
 
-    //populating a new profile
-    var profile = new Profile({
-      _profileId: mongoose.Types.ObjectId(),
-      profileName: profObj.profileName,
-      mobileNo: profObj.mobileNo,
-      dateOfBirth: profObj.dateOfBirth,
-      homeAddress: profObj.homeAddress,
-      email: profObj.email,
-      links: {
-        facebookURL: profObj.links.facebookURL,
-        twitterURL: profObj.links.twitterURL,
-        linkedinURL: profObj.links.linkedinURL,
-        blogURL: profObj.links.blogURL
-      },
-      work: {
-        companyName: profObj.work.companyName,
-        companyWebsite: profObj.work.companyWebsite,
-        workAddress: profObj.work.workAddress,
-        workEmail: profObj.work.workEmail,
-        designation: profObj.work.designation
-      }
-    });
+  //populating a new profile
+  var profile = new Profile({
+    _profileId: mongoose.Types.ObjectId(),
+    profileName: profObj.profileName,
+    mobileNo: profObj.mobileNo,
+    dateOfBirth: profObj.dateOfBirth,
+    homeAddress: profObj.homeAddress,
+    email: profObj.email,
+    links: {
+      facebookURL: profObj.links.facebookURL,
+      twitterURL: profObj.links.twitterURL,
+      linkedinURL: profObj.links.linkedinURL,
+      blogURL: profObj.links.blogURL
+    },
+    work: {
+      companyName: profObj.work.companyName,
+      companyWebsite: profObj.work.companyWebsite,
+      workAddress: profObj.work.workAddress,
+      workEmail: profObj.work.workEmail,
+      designation: profObj.work.designation
+    }
+  });
 
-    console.log(profile);
+  console.log(profile);
 
-    //Querying for the relevant user's document and pushing the profie to the profiles feild 
-    User.findOne({ userId: profObj.uid }).then(function (record) {
-      record.profiles.push(profile);
-      record.save();
-      console.log("profile saved successfully");
-      res.json("successful");
-    });
+  //Querying for the relevant user's document and pushing the profie to the profiles feild 
+  User.findOne({ userId: profObj.uid }).then(function (record) {
+    record.profiles.push(profile);
+    record.save();
+    console.log("profile saved successfully");
+    res.json("successful");
+  });
 });
 
 //POST request handler for editing profiles
@@ -317,64 +317,64 @@ app.post("/profile/edit", function (req, res) {
   if (!req.body)
     return res.sendStatus(400);
 
-    //Received request body that is encrypted
-    var editProfileInfo = req.body;
+  //Received request body that is encrypted
+  var editProfileInfo = req.body;
 
-    //Request body is decrypted
-    var bytes = CryptoJS.Rabbit.decrypt(editProfileInfo, 'my key is 123');
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(editProfileInfo, 'my key is 123');
 
-    //Decrypted request body is converted to plain text
-    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-    //Request body is parsed to a JSON Object
-    var editProfObj = JSON.parse(plaintext);
+  //Request body is parsed to a JSON Object
+  var editProfObj = JSON.parse(plaintext);
 
-    console.log(editProfObj);
+  console.log(editProfObj);
 
-    User.update( { "profiles._profileId": editProfObj._profileId}, { "profiles.$": profileObj }, function(err, raw) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log(raw);
-      }
-    });    
+  User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": profileObj }, function (err, raw) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log(raw);
+    }
+  });
 });
 
 //POST request handler for deleting profiles
-app.post("/profile/delete", function(req, res) {
+app.post("/profile/delete", function (req, res) {
 
   console.log("Inside delete profile route");
 
   if (!req.body)
     return res.sendStatus(400);
 
-    //Received request body that is encrypted
-    var delProfileInfo = req.body;
+  //Received request body that is encrypted
+  var delProfileInfo = req.body;
 
-    //Request body is decrypted
-    var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'my key is 123');
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'my key is 123');
 
-    //Decrypted request body is converted to plain text
-    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-    //Request body is parsed to a JSON Object
-    var delProfObj = JSON.parse(plaintext);
+  //Request body is parsed to a JSON Object
+  var delProfObj = JSON.parse(plaintext);
 
-    User.update( 
-      { userId: delProfObj.uid },
-      { $pull: { profiles : { _profileId : delProfObj._profileId } } },
-      { safe: true },
-      function removeConnectionsCB(err, obj) {
-        if(err){
-          console.log(err);
-        }
-        else{
-          console.log(obj);
-          res.json("Success");
-        }
-        
-      });
+  User.update(
+    { userId: delProfObj.uid },
+    { $pull: { profiles: { _profileId: delProfObj._profileId } } },
+    { safe: true },
+    function removeConnectionsCB(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(obj);
+        res.json("Success");
+      }
+
+    });
 });
 
 //POST request handler for sending profiles
@@ -392,26 +392,26 @@ app.post("/profiles/send", function (req, res) {
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({userId: uid})
-  .populate('_profileId profileName')
-  .lean().exec(
-    function(err, record){
-      if (err){
+  User.findOne({ userId: uid })
+    .populate('_profileId profileName')
+    .lean().exec(
+    function (err, record) {
+      if (err) {
         res.json("Error in retrieving");
         console.log("Error in sending profiles");
-      } 
-      else{
-      //console.log(record.profiles);
-
-      //JS object is turned into a JSON Object
-      var profiles = JSON.stringify(record.profiles); 
-      console.log(profiles);
-      //var gg = JSON.parse(profiles); 
-      //console.log(gg);
-
-      res.json(profiles);
       }
-});
+      else {
+        //console.log(record.profiles);
+
+        //JS object is turned into a JSON Object
+        var profiles = JSON.stringify(record.profiles);
+        console.log(profiles);
+        //var gg = JSON.parse(profiles); 
+        //console.log(gg);
+
+        res.json(profiles);
+      }
+    });
 });
 
 //POST request handler for sending information of a profile
@@ -432,7 +432,7 @@ app.post("/profile/send", function (req, res) {
   var infoObj = JSON.parse(plaintext);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({ "profiles._profileId": infoObj._profileId }, { "profiles.$": 1, "_id": 0 }, function(err, profile){
+  User.findOne({ "profiles._profileId": infoObj._profileId }, { "profiles.$": 1, "_id": 0 }, function (err, profile) {
     if (err) {
       console.log(err);
     }
@@ -462,7 +462,7 @@ app.post("/device/requests/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var infoObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId" : infoObj.uid }, { "requests.$": 1, "_id": 0 }, function(err, requests){
+  User.findOne({ "userId": infoObj.uid }, { "requests.$": 1, "_id": 0 }, function (err, requests) {
     if (err) {
       console.log(err);
     }
@@ -473,7 +473,7 @@ app.post("/device/requests/return", function (req, res) {
       res.json(requests);
 
     }
-  });  
+  });
 
 });
 
@@ -490,7 +490,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(err, result){
+User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err, result) {
   if (err) {
     console.log(err);
   }
@@ -499,13 +499,18 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
     console.log(result);
 
     var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj);
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
-    console.log(myObj);
+    console.log(parsedObj);
 
-    for (i in myObj.requests) {
-     console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
-  }
+    for (var i = 0; i < parsedObj.length; i++) {
+      console.log("JSON Index " + i + ": " + parsedObj.requests[i].requesterId);
+    }
+
+    // for (i in myObj.requests) {
+    //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
+    // }
 
 
 
@@ -523,7 +528,7 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
     //   console.log("fuck1"+prof);
     // });
 
-    
+
 
     // for(var i = 0; i < arr.length; i++)
     // {
