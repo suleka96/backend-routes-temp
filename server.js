@@ -378,7 +378,7 @@ app.post("/profile/send", function (req, res) {
   var infoObj = JSON.parse(plaintext);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 1, "_id": 0 }, function(err, profile){
+  User.findOne({ "profiles._profileId": infoObj._profileId }, { "profiles.$": 1, "_id": 0 }, function(err, profile){
     if (err) {
       console.log(err);
     }
