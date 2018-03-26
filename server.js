@@ -148,6 +148,33 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
+User.update( 
+  { userId: 'aaaaaaaaaa' },
+  { $pull: { profiles : { _profileId : '5ab91095b1b47a00041a81e5' } } },
+  { safe: true },
+  function removeConnectionsCB(err, obj) {
+    console.log("fark"+err);
+    console.log("fark"+obj);
+  });
+
+// User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
+//       {$set:{'profiles.$':
+//       { "profileName": "flalalaaaaaa",
+//       "mobileNo":"",
+//       "dateOfBirth":"",
+//       "homeAddress": "",
+//       "email":"",
+//       "links.facebookURL":"",
+//       "links.twitterURL":"",
+//       "links.linkedinURL":"",
+//       "links.blogURL":"",
+//       "work.companyName":"",
+//       "work.companyWebsite":"",
+//       "work.workAddress":"",
+//       "work.workEmail":"",
+//       "work.designation":"",
+//      }}}, false, true)
+
 var profileObj = {
   _profileId: '5ab8eab7cb24e60004758214',
   profileName: 'Naul',
@@ -332,6 +359,8 @@ app.post("/profile/delete", function(req, res) {
 
     //Request body is parsed to a JSON Object
     var delProfObj = JSON.parse(plaintext);
+
+    
 
     console.log(delProfObj);
 });
