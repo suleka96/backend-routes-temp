@@ -497,7 +497,7 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
   else {
     var profileSent = JSON.stringify(requests);
     //console.log(requests);
-    profileSent.forEach(function(profile) {
+    requests.forEach(function(profile) {
       var prof = profile.requesterId;
       console.log(prof);
     });
