@@ -313,6 +313,8 @@ app.post("/profile/send", function (req, res) {
   //Request body is parsed to a JSON Object
   var infoObj = JSON.parse(plaintext);
 
+  console.log(infoObj);
+
   //creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({ userId: infoObj.uid, _profileId: infoObj.profileId }).lean()  
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
