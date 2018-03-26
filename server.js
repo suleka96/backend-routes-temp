@@ -150,7 +150,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 var profileObj = {
   _profileId: '5ab91095b1b47a00041a81e5',
-  uid: 'aaaaaaaaaa',
   profileName: 'Naul',
   mobileNo: '12345678',
   dateOfBirth: '2017-11-09T18:30:00.000Z',
@@ -171,7 +170,7 @@ var profileObj = {
   } 
 }
 
-User.update( {'userId:':'aaaaaaaaaa', '_profileId':'5ab91095b1b47a00041a81e5'}, profileObj, function(err, raw) {
+User.update( {'userId:':'aaaaaaaaaa', '_profileId':'profileObj._profileId'}, profileObj, function(err, raw) {
   if (err) {
     console.log(err);
   }
