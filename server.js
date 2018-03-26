@@ -277,9 +277,9 @@ app.post("/profiles/send", function (req, res) {
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
-  User.findOne({userId: uid}).lean()
+  User.findOne({userId: uid})
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
-  .exec(
+  .lean().exec(
     function(err, record){
       if (err){
         res.json("Error in retrieving");
@@ -289,8 +289,9 @@ app.post("/profiles/send", function (req, res) {
       console.log(record.profiles);
       //JS object is turned into a JSON Object
       var profiles = JSON.stringify(record.profiles); 
-      console.log(profiles);
-      res.json(profiles);
+      var gg=JSON.parse(profiles); 
+      console.log(gg);
+      res.json(gg);
       }
 });
 });
