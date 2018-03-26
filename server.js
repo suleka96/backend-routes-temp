@@ -276,6 +276,8 @@ app.post("/profiles/send", function (req, res) {
   //Decrypted request body is converted to plain text
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
+  console.log(uid);
+
   //creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({userId: uid})
   .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
@@ -286,11 +288,11 @@ app.post("/profiles/send", function (req, res) {
         console.log("Error in sending profiles");
       } 
       else{
-      console.log(record.profiles);
+      //console.log(record.profiles);
       //JS object is turned into a JSON Object
       var profiles = JSON.stringify(record.profiles); 
       var gg=JSON.parse(profiles); 
-      console.log(gg);
+      //console.log(gg);
       res.json(gg);
       }
 });
@@ -312,8 +314,6 @@ app.post("/profile/send", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var infoObj = JSON.parse(plaintext);
-
-  console.log(infoObj);
 
   //creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({ userId: infoObj.uid, _profileId: infoObj.profileId }).lean()  
