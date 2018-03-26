@@ -500,16 +500,20 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
 
     var profileSent = JSON.stringify(requests);
     console.log(profileSent);
-    // requests.forEach(function(profile) {
-    //   var prof = profile.requesterId;
-    //   console.log(prof);
-    // });
-
     var arr = JSON.parse(profileSent);
+    console.log(profileSent);
+
+    requests.forEach(function(arr) {
+      var prof = arr.requesterId;
+      console.log("fuck1"+prof);
+    });
+
+    
+
     for(var i = 0; i < arr.length; i++)
     {
       var tablename = arr[i].requesterId;
-      console.log(tablename);
+      console.log("fuck"+tablename);
     }
 
     // console.log(profileSent);
