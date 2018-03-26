@@ -349,7 +349,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 //creating json object from mongoose document that contains information of profiles of a particular user
-User.findOne({ "userId": 'konnect123', "_profileId": ObjectId("5ab6390b0ec955000400e67c") })  
+User.find({ "userId": 'konnect123', "_profileId": ObjectId("5ab6390b0ec955000400e67c") })  
 .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
 .lean().exec(
   function(err, record){
