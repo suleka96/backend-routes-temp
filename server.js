@@ -498,15 +498,13 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
 
     console.log(requests);
 
-    var arr = JSON.stringify(requests);
+    var myObj = JSON.stringify(requests);
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
-    console.log(arr);
+    console.log(myObj);
 
-    for (i in arr.cars) {
-      for (j in arr.cars[i].requesterId) {
-         console.log("fuck"+arr.cars[i].requesterId[j]);
-      }
+    for (i in myObj.requests) {
+     console.log(myObj.requests[i].requesterId);
   }
 
 
