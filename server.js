@@ -148,14 +148,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
-User.update( 
-  { userId: 'aaaaaaaaaa' },
-  { $pull: { profiles : { _profileId : '5ab91095b1b47a00041a81e5' } } },
-  { safe: true },
-  function removeConnectionsCB(err, obj) {
-    console.log("fark"+err);
-    console.log("fark"+obj);
-  });
+// User.update( 
+//   { userId: 'aaaaaaaaaa' },
+//   { $pull: { profiles : { _profileId : '5ab91095b1b47a00041a81e5' } } },
+//   { safe: true },
+//   function removeConnectionsCB(err, obj) {
+//     console.log("fark"+err);
+//     console.log("fark"+obj);
+//   });
 
 // User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
 //       {$set:{'profiles.$':
@@ -177,7 +177,7 @@ User.update(
 
 var profileObj = {
   _profileId: '5ab8eab7cb24e60004758214',
-  profileName: 'Naul',
+  profileName: 'owl',
   mobileNo: '12345678',
   dateOfBirth: '2017-11-09T18:30:00.000Z',
   homeAddress: 'asd',
@@ -197,7 +197,7 @@ var profileObj = {
   } 
 }
 
-User.update( {'userId:':'aaaaaaaaaa', '_profileId':'profileObj._profileId'}, profileObj, function(err, raw) {
+User.update( {'userId:':'aaaaaaaaaa', '_profileId':'5ab8eab7cb24e60004758214'}, profileObj, function(err, raw) {
   if (err) {
     console.log(err);
   }
