@@ -260,9 +260,49 @@ app.post("/profiles/create", function (req, res) {
     });
 });
 
+app.post("/profile/edit", function (req, res) {
+
+  if (!req.body)
+    return res.sendStatus(400);
+
+    //Received request body that is encrypted
+    var editProfileInfo = req.body;
+
+    //Request body is decrypted
+    var bytes = CryptoJS.Rabbit.decrypt(editProfileInfo, 'my key is 123');
+
+    //Decrypted request body is converted to plain text
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+    //Request body is parsed to a JSON Object
+    var editProfObj = JSON.parse(plaintext);
+
+    console.log(editProfObj);
+});
+
+app.post("/profile/delete", function(req, res) {
+
+  if (!req.body)
+    return res.sendStatus(400);
+
+    //Received request body that is encrypted
+    var delProfileInfo = req.body;
+
+    //Request body is decrypted
+    var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'my key is 123');
+
+    //Decrypted request body is converted to plain text
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+    //Request body is parsed to a JSON Object
+    var delProfObj = JSON.parse(plaintext);
+
+    console.log(delProfObj);
+});
+
 //POST request handler for sending profiles
 app.post("/profiles/send", function (req, res) {
-  console.log("inside sending profiles route");
+  console.log("inside sending profile ID route");
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
@@ -299,7 +339,7 @@ app.post("/profiles/send", function (req, res) {
 
 //POST request handler for sending information of a profile
 app.post("/profile/send", function (req, res) {
-  console.log("inside sending profiles route");
+  console.log("inside sending individual profiles route");
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
@@ -324,6 +364,8 @@ app.post("/profile/send", function (req, res) {
     }
   });
 });
+
+
 
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
