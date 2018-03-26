@@ -299,7 +299,7 @@ app.post("/profile/edit", function (req, res) {
       "work.designation":editProfObj.designation,
      }}}, false, true)
 
-    // addProfile(profObj);
+     res.json("successful");
 });
 
 //POST request handler for deleting profiles
