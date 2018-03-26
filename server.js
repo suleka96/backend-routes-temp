@@ -278,7 +278,7 @@ app.post("/profiles/send", function (req, res) {
 
   //creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({userId: uid})
-  .populate('profiles', '_profileId profileName')
+  .populate('profiles._profileId profiles.profileName')
   .lean().exec(
     function(err, record){
       if (err){
