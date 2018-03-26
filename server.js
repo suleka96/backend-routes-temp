@@ -286,11 +286,11 @@ app.post("/profiles/send", function (req, res) {
         console.log("Error in sending profiles");
       } 
       else{
-      console.log(record.profiles);
+      //console.log(record.profiles);
 
       //JS object is turned into a JSON Object
       var profiles = JSON.stringify(record.profiles); 
-
+      console.log(profiles);
       //var gg = JSON.parse(profiles); 
       //console.log(gg);
 
