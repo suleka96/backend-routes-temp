@@ -373,5 +373,8 @@ User.findOne({ 'profiles._profileId': '5ab6390b0ec955000400e67c' }, 'profiles._p
   }
   else {
     console.log(profile);
+    if (profile.profiles._profileId === ObjectId("5ab6390b0ec955000400e67c")) {
+      console.log(profile.profiles);
+    }
   }
 });
