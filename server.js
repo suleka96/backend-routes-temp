@@ -96,10 +96,6 @@ var profilesSchema = new Schema({
   }
 });
 
-var requestsSchema = new Schema({
-  requesterUserId: String
-});
-
 var connectedUsersSchema = new Schema({
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
@@ -117,13 +113,12 @@ var usersSchema = new Schema({
   bio: String,
   profilePic: String,
   profiles: [profilesSchema],
-  requests: [requestsSchema],
+  requests: { type: Array, "default": [] },
   connectedUsers: [connectedUsersSchema],
   receivedProfiles: [receivedProfilesSchema]
 });
 
 var Profile = mongoose.model("profiles", profilesSchema);
-var Request = mongoose.model("requests", requestsSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 var User = mongoose.model("users", usersSchema);
 var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
