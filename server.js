@@ -498,9 +498,9 @@ User.findOne({ "userId" : "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function(
 
     console.log(requests);
 
-    // var profileSent = JSON.stringify(requests);
+    var arr = JSON.stringify(requests);
     // console.log(profileSent);
-    var arr = JSON.parse(requests);
+    // var arr = JSON.parse(requests);
     console.log(arr);
 
     for (i in arr.cars) {
