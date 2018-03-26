@@ -225,6 +225,7 @@ app.post("/profiles/create", function (req, res) {
     // var profObj = JSON.parse(req.body);
 
     console.log(profObj);
+    // addProfile(profObj);
 
     //populating a new profile
     var profile = new Profile({
@@ -260,6 +261,7 @@ app.post("/profiles/create", function (req, res) {
     });
 });
 
+//POST request handler for editing profiles
 app.post("/profile/edit", function (req, res) {
 
   if (!req.body)
@@ -278,8 +280,29 @@ app.post("/profile/edit", function (req, res) {
     var editProfObj = JSON.parse(plaintext);
 
     console.log(editProfObj);
+
+    User.update( {'userId:':'profObj.uid', 'profiles._profileId':'profObj._profileId'}, 
+      {$set:{'profiles.$':
+      { "profileName": editProfObj.profileName,
+      "mobileNo":editProfObj.mobileNo,
+      "dateOfBirth":editProfObj.dateOfBirth,
+      "homeAddress": editProfObj.homeAddress,
+      "email":editProfObj.email,
+      "links.facebookURL":editProfObj.facebookURL,
+      "links.twitterURL":editProfObj.twitterURL,
+      "links.linkedinURL":editProfObj.linkedinURL,
+      "links.blogURL":editProfObj.blogURL,
+      "work.companyName":editProfObj.companyName,
+      "work.companyWebsite":editProfObj.companyWebsite,
+      "work.workAddress":editProfObj.workAddress,
+      "work.workEmail":editProfObj.workEmail,
+      "work.designation":editProfObj.designation,
+     }}}, false, true)
+
+    // addProfile(profObj);
 });
 
+//POST request handler for deleting profiles
 app.post("/profile/delete", function(req, res) {
 
   if (!req.body)
@@ -365,6 +388,40 @@ app.post("/profile/send", function (req, res) {
   });
 });
 
+// function addProfile(profObj) {
+//   //populating a new profile
+//   var profile = new Profile({
+//     _profileId: mongoose.Types.ObjectId(),
+//     profileName: profObj.profileName,
+//     mobileNo: profObj.mobileNo,
+//     dateOfBirth: profObj.dateOfBirth,
+//     homeAddress: profObj.homeAddress,
+//     email: profObj.email,
+//     links: {
+//       facebookURL: profObj.links.facebookURL,
+//       twitterURL: profObj.links.twitterURL,
+//       linkedinURL: profObj.links.linkedinURL,
+//       blogURL: profObj.links.blogURL
+//     },
+//     work: {
+//       companyName: profObj.work.companyName,
+//       companyWebsite: profObj.work.companyWebsite,
+//       workAddress: profObj.work.workAddress,
+//       workEmail: profObj.work.workEmail,
+//       designation: profObj.work.designation
+//     }
+//   });
+
+//   console.log(profile);
+
+//   //Querying for the relevant user's document and pushing the profie to the profiles feild 
+//   User.findOne({ userId: profObj.uid }).then(function (record) {
+//     record.profiles.push(profile);
+//     record.save();
+//     console.log("profile saved successfully");
+//     res.json("successful");
+//   });
+// }  
 
 
 //POST request handler for storing requests
