@@ -148,6 +148,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
+User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
+      {$set:{'profiles.$':
+      { "profileName": "flalalaaaaaa",
+      "mobileNo":"",
+      "dateOfBirth":"",
+      "homeAddress": "",
+      "email":"",
+      "links.facebookURL":"",
+      "links.twitterURL":"",
+      "links.linkedinURL":"",
+      "links.blogURL":"",
+      "work.companyName":"",
+      "work.companyWebsite":"",
+      "work.workAddress":"",
+      "work.workEmail":"",
+      "work.designation":"",
+     }}}, false, true)
+
+     res.json("successful");
+
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
@@ -281,25 +301,7 @@ app.post("/profile/edit", function (req, res) {
 
     console.log(editProfObj);
 
-    User.update( {'userId:':'profObj.uid', 'profiles._profileId':'profObj._profileId'}, 
-      {$set:{'profiles.$':
-      { "profileName": editProfObj.profileName,
-      "mobileNo":editProfObj.mobileNo,
-      "dateOfBirth":editProfObj.dateOfBirth,
-      "homeAddress": editProfObj.homeAddress,
-      "email":editProfObj.email,
-      "links.facebookURL":editProfObj.facebookURL,
-      "links.twitterURL":editProfObj.twitterURL,
-      "links.linkedinURL":editProfObj.linkedinURL,
-      "links.blogURL":editProfObj.blogURL,
-      "work.companyName":editProfObj.companyName,
-      "work.companyWebsite":editProfObj.companyWebsite,
-      "work.workAddress":editProfObj.workAddress,
-      "work.workEmail":editProfObj.workEmail,
-      "work.designation":editProfObj.designation,
-     }}}, false, true)
-
-     res.json("successful");
+    
 });
 
 //POST request handler for deleting profiles
