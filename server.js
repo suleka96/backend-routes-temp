@@ -348,26 +348,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-// //creating json object from mongoose document that contains information of profiles of a particular user
-// User.find({ "userId": 'konnect123', "profiles._profileId": 5ab6390b0ec955000400e67c })  
-// .populate('profiles', '_profileId profileName mobileNo dateOfBirth homeAddress email links.facebookURL links.twitterURL links.linkedinURL links.blogURL work.companyName work.companyWebsite work.workAddress work.workEmail work.designation')
-// .lean().exec(
-//   function(err, record){
-//     if (err){
-//       res.json("Error in retrieving");
-//       console.log("Error in sending profiles");
-//     } 
-//     else{
-//     console.log(record.profiles);
-    
-//     //JS object is turned into a JSON Object
-//     var profile = JSON.stringify(record.profiles); 
-//     console.log(profile);
-//     //res.json(profiles);
-//     }
-// });
-
-User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.$": 2 }, function(err, profile){
+User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles.links.$": 1 }, function(err, profile){
   if (err) {
     console.log(err);
   }
