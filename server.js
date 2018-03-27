@@ -503,7 +503,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
     console.log(parsedObj);
-    console.log(myObj.length);
+    console.log(myObj.requests.length);
 
     // for (var i = 0; i < myObj.length; i++) {
     //   console.log("going in"+i);
