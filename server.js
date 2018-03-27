@@ -505,14 +505,15 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     console.log(parsedObj);
     console.log(myObj.length);
 
-    for (var i = 0; i < myObj.length; i++) {
+    // for (var i = 0; i < myObj.length; i++) {
+    //   console.log("going in"+i);
+    //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
+    // }
+
+    for (i in myObj.requests) {
       console.log("going in"+i);
       console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
     }
-
-    // for (i in myObj.requests) {
-    //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
-    // }
 
     // requests.forEach(function(arr) {
     //   var prof = arr.requesterId;
