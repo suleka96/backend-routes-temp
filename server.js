@@ -503,6 +503,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
     console.log(parsedObj);
+    console.log(parsedObj.length);
 
     for (var i = 0; i < parsedObj.length; i++) {
       console.log("JSON Index " + i + ": " + parsedObj.requests[i].requesterId);
