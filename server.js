@@ -506,10 +506,10 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     const item_name = parsedObj.requests[1].requesterId;
     console.log("this is "+item_name);
 
-    // for (var i = 0; i < myObj.length; i++) {
-    //   console.log("going in"+i);
-    //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
-    // }
+    for (var i = 0; i < parsedObj.requests.length; i++) {
+      console.log("going in"+i);
+      console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+    }
 
     // for (i in myObj.requests) {
     //   console.log("going in"+i);
