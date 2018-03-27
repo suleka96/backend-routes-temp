@@ -512,6 +512,10 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
     // }
 
+    // requests.forEach(function(arr) {
+    //   var prof = arr.requesterId;
+    //   console.log("fuck1"+prof);
+    // });
 
 
     // for (item in arr) {
@@ -523,10 +527,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     //   }
     // }
 
-    // requests.forEach(function(arr) {
-    //   var prof = arr.requesterId;
-    //   console.log("fuck1"+prof);
-    // });
+    
 
 
 
