@@ -502,7 +502,6 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
     console.log(parsedObj);
-    console.log(myObj.requests.length);
 
     const item_name = parsedObj.requests[1].requesterId;
     console.log("this is "+item_name);
