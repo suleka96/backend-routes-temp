@@ -505,8 +505,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     console.log(parsedObj);
     console.log(myObj.length);
 
-    for (var i = 0; i < parsedObj.length; i++) {
-      console.log("JSON Index " + i + ": " + parsedObj.requests[i].requesterId);
+    for (var i = 0; i < myObj.length; i++) {
+      console.log("going in"+i);
+      console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
     }
 
     // for (i in myObj.requests) {
