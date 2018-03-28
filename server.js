@@ -497,6 +497,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
   else {
 
     console.log(result);
+
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
     // console.log(profileSent);
@@ -508,7 +509,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (err,record) {
         if(err){
-          console.log(err);
+          console.log(err+"error");
         }
         else{
           console.log("profile retrieved successfully");
@@ -517,6 +518,6 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
        
       });
     }
-    console.log(JSON.stringify(result));
+    console.log("resultttttttttttt"+JSON.stringify(result));
   }
 });
