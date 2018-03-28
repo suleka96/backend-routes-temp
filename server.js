@@ -500,9 +500,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
   // var arr = JSON.parse(requests);
 
   
+  let array = [];//store JS object
   for (var i = 0; i < parsedObj.requests.length; i++) {
     
-  let array = [];//store JS object
     console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
 
     User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
