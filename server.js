@@ -489,7 +489,7 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-
+var array = [];//store JS object
 User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err, result) {
   if (err) {
     console.log(err);
@@ -503,7 +503,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
 
-    var array = [];//store JS object
+    
     
     for (var i = 0; i < parsedObj.requests.length; i++) {
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
@@ -513,11 +513,13 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("resultttttttttttt"+JSON.stringify(array));     
       });
-      if(i == 1){
-        console.log("result babes"+JSON.stringify(array));
-      }        
+      // if(i == 1){
+      //   console.log("result babes"+JSON.stringify(array));
+      // }        
     }
     
     
   }
+}).then(function() {
+  console.log("result babes: " + JSON.stringify(array));
 });
