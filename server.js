@@ -503,7 +503,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
 
-    var result = [];//store JS object
+    var array = [];//store JS object
     
     for (var i = 0; i < parsedObj.requests.length; i++) {
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
@@ -513,11 +513,11 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
         }
         else{
           console.log("profile retrieved successfully");
-          result.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
         }
        
       });
     }
-    console.log("resultttttttttttt"+JSON.stringify(result));
+    console.log("resultttttttttttt"+JSON.stringify(array));
   }
 });
