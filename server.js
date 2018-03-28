@@ -512,7 +512,7 @@ app.post("/device/connections/return", function (req, res) {
 
     res.json(myObj);
   });
-}
+});
 
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
