@@ -329,8 +329,6 @@ app.post("/profile/edit", function (req, res) {
   //Request body is parsed to a JSON Object
   var editProfObj = JSON.parse(plaintext);
 
-  console.log(editProfObj);
-
   User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": editProfObj }, function (err, raw) {
     if (err) {
       console.log(err);
@@ -361,9 +359,11 @@ app.post("/profile/delete", function (req, res) {
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
 
+  console.log(delProfObj);
+
   User.update(
-    { userId: 'aaaaaaaaaa' },
-    { $pull: { profiles: { _profileId: '5abb430cd83da10004a9d1a3' } } },
+    { "userId": delProfObj.uid },
+    { $pull: { "profiles": { "_profileId": delProfObj._profileId } } },
     { safe: true },
     function(err, obj) {
       if (err) {
@@ -518,19 +518,3 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     }    
   }
 });
-
-console.log("Inside delete profile route");
-
-  User.update(
-    { userId: 'aaaaaaaaaa' },
-    { $pull: { profiles: { _profileId: '5abb430cd83da10004a9d1a3' } } },
-    { safe: true },
-    function(err, obj) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log("Successfully deleted: " + obj);
-        //res.json("Success");
-      }
-    });
