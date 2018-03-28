@@ -512,7 +512,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
         console.log("resultttttttttttt"+JSON.stringify(array));   
     }).then(function(){
         if(Object.keys(array).length == parsedObj.requests.length){
-          console.log(i+"result babes"+JSON.stringify(array)); 
+          console.log("result babes"+JSON.stringify(array)); 
         } 
     });
            
