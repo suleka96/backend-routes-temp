@@ -520,6 +520,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     
     
   }
+
 }).then(function() {
   console.log("result babes: " + JSON.stringify(array));
 });
