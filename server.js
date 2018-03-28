@@ -361,9 +361,13 @@ app.post("/profile/delete", function (req, res) {
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
 
+  //test
+  var parsedRequest = JSON.parse(req.body);
+  //test
+
   User.update(
-    { userId: req.body.uid },
-    { $pull: { profiles: { _profileId: req.body._profileId } } },
+    { userId: parsedRequest.uid },
+    { $pull: { profiles: { _profileId: parsedRequest._profileId } } },
     { safe: true },
     function(err, obj) {
       if (err) {
