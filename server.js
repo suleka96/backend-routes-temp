@@ -501,50 +501,22 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     var parsedObj = JSON.parse(myObj);
     // console.log(profileSent);
     // var arr = JSON.parse(requests);
-    console.log(parsedObj.requests.length);
 
-    const item_name = parsedObj.requests[1].requesterId;
-    console.log("this is "+item_name);
-
-    for (var i = 0; i < parsedObj.requests.length; i++) {
-      console.log("going in"+i);
-      console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-    }
-
-    // for (i in myObj.requests) {
-    //   console.log("going in"+i);
-    //   console.log("JSON Index " + i + ": " + myObj.requests[i].requesterId);
-    // }
-
-    // requests.forEach(function(arr) {
-    //   var prof = arr.requesterId;
-    //   console.log("fuck1"+prof);
-    // });
-
-
-    // for (item in arr) {
-    //   for (subItem in arr[requests]) {
-    //      var student = classmem[item][subItem].student;
-    //      for (row in student) {
-    //        console.log(student[row]['class-name']);
-    //      }
-    //   }
-    // }
-
+    var result = [];//store JS object
     
-
-
-
-    // for(var i = 0; i < arr.length; i++)
-    // {
-    //   var tablename = arr[i].requesterId;
-    //   console.log("fuck"+tablename);
-    // }
-
-    // console.log(profileSent);
-    // console.log(profileSent[0]);
-    // var parsedRequest = JSON.parse(profileSent);
-    // console.log(requests[0]);
-    // console.log(parsedRequest[0]);
+    for (var i = 0; i < parsedObj.requests.length; i++) {
+      console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+      User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (err,record) {
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log("profile retrieved successfully");
+          result.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+        }
+       
+      });
+    }
+    console.log(JSON.stringify(result));
   }
 });
