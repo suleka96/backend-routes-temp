@@ -510,9 +510,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
         console.log("profile retrieved successfully");
         array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
         console.log("resultttttttttttt"+JSON.stringify(array));  
-        if(i == 0){
-          console.log(i+"result babes"+JSON.stringify(array)); 
-        }   
+        // if(i == 0){
+        //   console.log(i+"result babes"+JSON.stringify(array)); 
+        // }   
         
     }).then(function(){
       console.log("result babes"+JSON.stringify(array)); 
