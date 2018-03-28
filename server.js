@@ -149,55 +149,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 */
 
 
-// User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
-//       {$set:{'profiles.$':
-//       { "profileName": "flalalaaaaaa",
-//       "mobileNo":"",
-//       "dateOfBirth":"",
-//       "homeAddress": "",
-//       "email":"",
-//       "links.facebookURL":"",
-//       "links.twitterURL":"",
-//       "links.linkedinURL":"",
-//       "links.blogURL":"",
-//       "work.companyName":"",
-//       "work.companyWebsite":"",
-//       "work.workAddress":"",
-//       "work.workEmail":"",
-//       "work.designation":"",
-//      }}}, false, true)
-
-// var profileObj = {
-//   _profileId: '5ab8eab7cb24e60004758214',
-//   profileName: 'owl',
-//   mobileNo: '12345678',
-//   dateOfBirth: '2017-11-09T18:30:00.000Z',
-//   homeAddress: 'asd',
-//   email: 'asd@asdasd.com',
-//   links: { 
-//     facebookURL: '', 
-//     twitterURL: '', 
-//     linkedinURL: '', 
-//     blogURL: '' 
-//   },
-//   work: {
-//     companyName: '',
-//     companyWebsite: '',
-//     workAddress: '',
-//     workEmail: '',
-//     designation: '' 
-//   } 
-// }
-
-// User.update( { "profiles._profileId": "5ab8eab7cb24e60004758214"}, { "profiles.$": profileObj }, function(err, raw) {
-//   if (err) {
-//     console.log(err);
-//   }
-//   else {
-//     console.log(raw);
-//   }
-// });
-
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
