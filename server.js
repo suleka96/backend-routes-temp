@@ -511,7 +511,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
         array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
         console.log("resultttttttttttt"+JSON.stringify(array));   
     }).then(function(){
-        if((i+1) == parsedObj.requests.length){
+        if((i+1) == 2){
           console.log(i+"result babes"+JSON.stringify(array)); 
         } 
     });
