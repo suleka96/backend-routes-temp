@@ -510,9 +510,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
           console.log("profile retrieved successfully");
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-       
+          console.log("resultttttttttttt"+JSON.stringify(array));
+          
       });
     }
-    console.log("resultttttttttttt"+JSON.stringify(array));
   }
 });
