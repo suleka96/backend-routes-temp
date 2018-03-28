@@ -507,13 +507,14 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
     
     for (var i = 0; i < parsedObj.requests.length; i++) {
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
           console.log("profile retrieved successfully");
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("resultttttttttttt"+JSON.stringify(array));    
       });
-      
-      if( i == parsedObj.requests.length){
+
+      if( (i+1) == parsedObj.requests.length){
         console.log("result babes"+JSON.stringify(array));
       }  
     }   
