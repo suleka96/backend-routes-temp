@@ -448,21 +448,39 @@ app.post("/profile/send", function (req, res) {
 //POST request handler for returning public profile of requests
 app.post("/device/requests/return", function (req, res) {
   console.log("inside returnRequest route");
-  if (!req.body) return res.sendStatus(400);
+  // if (!req.body) return res.sendStatus(400);
 
-  //Received request body that is encrypted
-  var userProfileInfo = req.body;
+  // //Received request body that is encrypted
+  // var userProfileInfo = req.body;
 
-  //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
+  // //Request body is decrypted
+  // var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
 
-  //Decrypted request body is converted to plain text
-  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  // //Decrypted request body is converted to plain text
+  // var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-  //Request body is parsed to a JSON Object
-  var infoObj = JSON.parse(plaintext);
+  // //Request body is parsed to a JSON Object
+  // var infoObj = JSON.parse(plaintext);
 
+  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
   
+    console.log(result);
+  
+    var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj); 
+    
+    let array = [];//store JS object
+
+    for (var i = 0; i < parsedObj.requests.length; i++) {      
+      console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);  
+      User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+          console.log("profile retrieved successfully");
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+          console.log("resultttttttttttt"+JSON.stringify(array));     
+      });
+        console.log("result babes"+JSON.stringify(array));      
+    }
+  });
 
 });
 
