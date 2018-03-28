@@ -329,6 +329,8 @@ app.post("/profile/edit", function (req, res) {
   //Request body is parsed to a JSON Object
   var editProfObj = JSON.parse(plaintext);
 
+  console.log(editProfObj);
+
   User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": editProfObj }, function (err, raw) {
     if (err) {
       console.log(err);
@@ -359,13 +361,11 @@ app.post("/profile/delete", function (req, res) {
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
 
-  console.log(delProfObj);
-
   User.update(
-    { "userId": delProfObj.uid },
-    { $pull: { "profiles": { "_profileId": delProfObj._profileId } } },
+    { userId: delProfObj.uid },
+    { $pull: { profiles: { _profileId: delProfObj._profileId } } },
     { safe: true },
-    function(err, obj) {
+    function removeConnectionsCB(err, obj) {
       if (err) {
         console.log(err);
       }
@@ -373,6 +373,7 @@ app.post("/profile/delete", function (req, res) {
         console.log(obj);
         res.json("Success");
       }
+
     });
 });
 
@@ -488,30 +489,81 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-var array = [];//store JS object
-User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(
-  function (err, result) {
-    if (err) {
-      console.log(err);
-    }
-    else {  
-      console.log(result);
+
+User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
   
-      var myObj = JSON.stringify(result);
-      var parsedObj = JSON.parse(myObj);
-         
-      for (var i = 0; i < parsedObj.requests.length; i++) {
-        console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+  console.log(result);
+
+  var myObj = JSON.stringify(result);
+  var parsedObj = JSON.parse(myObj);
+  // console.log(profileSent);
+  // var arr = JSON.parse(requests);
+
+  var array = [];//store JS object
   
-        User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-            console.log("profile retrieved successfully");
-            array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-            console.log("resultttttttttttt"+JSON.stringify(array));     
-        });
-            
-      }    
-    }
-    console.log("result babes"+JSON.stringify(array));   
-  });
+  for (var i = 0; i < parsedObj.requests.length; i++) {
+    console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+
+    User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+        console.log("profile retrieved successfully");
+        array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+        console.log("resultttttttttttt"+JSON.stringify(array));     
+    });
+      console.log("result babes"+JSON.stringify(array));      
+  }
+});
+//   if (err) {
+//     console.log(err);
+//   }
+//   else {
+
+//     console.log(result);
+
+//     var myObj = JSON.stringify(result);
+//     var parsedObj = JSON.parse(myObj);
+//     // console.log(profileSent);
+//     // var arr = JSON.parse(requests);
+
+//     var array = [];//store JS object
+    
+//     for (var i = 0; i < parsedObj.requests.length; i++) {
+//       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+
+//       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+//           console.log("profile retrieved successfully");
+//           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+//           console.log("resultttttttttttt"+JSON.stringify(array));     
+//       });
+//         console.log("result babes"+JSON.stringify(array));      
+//     }    
+//   }
+// });
 
 
+// User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err, result) {
+//   if (err) {
+//     console.log(err);
+//   }
+//   else {
+
+//     console.log(result);
+
+//     var myObj = JSON.stringify(result);
+//     var parsedObj = JSON.parse(myObj);
+//     // console.log(profileSent);
+//     // var arr = JSON.parse(requests);
+
+//     var array = [];//store JS object
+    
+//     for (var i = 0; i < parsedObj.requests.length; i++) {
+//       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+
+//       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+//           console.log("profile retrieved successfully");
+//           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+//           console.log("resultttttttttttt"+JSON.stringify(array));     
+//       });
+//         console.log("result babes"+JSON.stringify(array));      
+//     }    
+//   }
+// });
