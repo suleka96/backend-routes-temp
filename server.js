@@ -365,7 +365,7 @@ app.post("/profile/delete", function (req, res) {
     { userId: delProfObj.uid },
     { $pull: { profiles: { _profileId: delProfObj._profileId } } },
     { safe: true },
-    function removeConnectionsCB(err, obj) {
+    function(err, obj) {
       if (err) {
         console.log(err);
       }
