@@ -528,61 +528,34 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
+// User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
   
-  console.log(result);
+//   console.log(result);
 
-  var myObj = JSON.stringify(result);
-  var parsedObj = JSON.parse(myObj);
-  // console.log(profileSent);
-  // var arr = JSON.parse(requests);
+//   var myObj = JSON.stringify(result);
+//   var parsedObj = JSON.parse(myObj);
+//   // console.log(profileSent);
+//   // var arr = JSON.parse(requests);
 
-  var array = [];
+//   var array = [];
   
-  for (var i = 0; i < parsedObj.requests.length; i++) {
+//   for (var i = 0; i < parsedObj.requests.length; i++) {
     
-    console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+//     console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
 
-    User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-        console.log("profile retrieved successfully");
-        array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-        console.log("resultttttttttttt"+JSON.stringify(array));   
-    }).then(function(){
-        if(Object.keys(array).length == parsedObj.requests.length){
-          console.log("result babes"+JSON.stringify(array)); 
-        } 
-    });
+//     User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+//         console.log("profile retrieved successfully");
+//         array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+//         console.log("resultttttttttttt"+JSON.stringify(array));   
+//     }).then(function(){
+//         if(Object.keys(array).length == parsedObj.requests.length){
+//           console.log("result babes"+JSON.stringify(array)); 
+//         } 
+//     });
            
-  }
-});
-
-
-//   if (err) {
-//     console.log(err);
-//   }
-//   else {
-
-//     console.log(result);
-
-//     var myObj = JSON.stringify(result);
-//     var parsedObj = JSON.parse(myObj);
-//     // console.log(profileSent);
-//     // var arr = JSON.parse(requests);
-
-//     var array = [];//store JS object
-    
-//     for (var i = 0; i < parsedObj.requests.length; i++) {
-//       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-
-//       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-//           console.log("profile retrieved successfully");
-//           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-//           console.log("resultttttttttttt"+JSON.stringify(array));     
-//       });
-//         console.log("result babes"+JSON.stringify(array));      
-//     }    
 //   }
 // });
+
 
 
 // User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err, result) {
