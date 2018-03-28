@@ -498,7 +498,7 @@ app.post("/device/requests/store", function (req, res) {
   console.log(loginInfo);
 });
 
-function fuck();
+fuck();
 
 /*******************************************************************************************************************************/
 function fuck(){
