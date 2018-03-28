@@ -490,7 +490,8 @@ app.post("/device/requests/return", function (req, res) {
 });
 
 //POST request handler for returning recieved connections basic profile
-app.post("/device/connections/return", function (req, res) {
+
+]app.post("/device/connections/return", function (req, res) {
   console.log("inside return connections route");
   if (!req.body) return res.sendStatus(400);
 
