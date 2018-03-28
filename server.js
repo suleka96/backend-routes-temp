@@ -511,8 +511,24 @@ app.post("/device/requests/return", function (req, res) {
     console.log(result);
   
     var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj);
 
-    res.json(myObj);
+    var array = [];
+    
+    for (var i = 0; i < parsedObj.connectedUsers.length; i++) {
+      
+      console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
+  
+      User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function(record) {
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+          console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));   
+      }).then(function(){
+          if(Object.keys(array).length == parsedObj.requests.length){
+            console.log("Connected Users Public Profiles: " + JSON.stringify(array)); 
+            res.json(array);
+          } 
+      });             
+    }
   });
 });
 
