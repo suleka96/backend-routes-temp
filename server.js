@@ -451,31 +451,68 @@ app.post("/device/requests/return", function (req, res) {
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
-  var userProfileInfo = req.body;
+  var userRequest = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userRequest, 'my key is 123');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
   //Request body is parsed to a JSON Object
-  var infoObj = JSON.parse(plaintext);
+  var requestInfoObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": infoObj.uid }, { "requests.$": 1, "_id": 0 }, function (err, requests) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      var profileSent = JSON.stringify(requests);
-      console.log(requests);
-      console.log(profileSent);
-      res.json(requests);
-
+  User.findOne({ "userId": requestInfoObj.uid }, { "requests": 1, "_id": 0 }).then(function (result){
+  
+    console.log(result);
+  
+    var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj);
+  
+    var array = [];
+    
+    for (var i = 0; i < parsedObj.requests.length; i++) {
+      
+      console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
+  
+      User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
+          console.log("profile retrieved successfully");
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+          console.log("resultttttttttttt"+JSON.stringify(array));   
+      }).then(function(){
+          if(Object.keys(array).length == parsedObj.requests.length){
+            console.log("Requesters Public Profiles: " + JSON.stringify(array)); 
+            res.json(array);
+          } 
+      });             
     }
   });
-
 });
+
+app.post("/device/connections/return", function (req, res) {
+  console.log("inside return connections route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userConnections = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var requestConnectionObj = JSON.parse(plaintext);
+
+  User.findOne({ "userId": requestConnectionObj.uid }, { "connectedUsers": 1, "_id": 0 }).then(function (result){
+    console.log(result);
+  
+    var myObj = JSON.stringify(result);
+
+    res.json(myObj);
+  });
+}
 
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
