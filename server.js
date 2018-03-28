@@ -499,7 +499,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
   // console.log(profileSent);
   // var arr = JSON.parse(requests);
 
-  var array = [];//store JS object
+  let array;//store JS object
   
   for (var i = 0; i < parsedObj.requests.length; i++) {
     console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
