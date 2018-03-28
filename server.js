@@ -473,11 +473,12 @@ app.post("/device/requests/return", function (req, res) {
 
     for (var i = 0; i < parsedObj.requests.length; i++) {      
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-      console.log("result babes"+JSON.stringify(array));       
+           
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
           console.log("profile retrieved successfully");
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-          console.log("resultttttttttttt"+JSON.stringify(array));     
+          console.log("resultttttttttttt"+JSON.stringify(array)); 
+          console.log("result babes"+JSON.stringify(array));      
       });
         
         res.json(array); 
