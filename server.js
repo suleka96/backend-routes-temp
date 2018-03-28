@@ -228,7 +228,7 @@ app.post("/register", function (req, res) {
   })
     .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);
+      console.log("Successfully created new user:", userRecord.displayName);zzz
 
       //Create new user document
       var user = new User({
@@ -239,6 +239,7 @@ app.post("/register", function (req, res) {
         profilePic: "",
         profiles: [],
         requests: [],
+        connectedUsers: [],
         receivedProfiles: []
       });
 
