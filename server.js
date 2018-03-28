@@ -358,7 +358,7 @@ app.post("/profile/delete", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
-  
+
   User.update(
     { userId: delProfObj.uid },
     { $pull: { profiles: { _profileId: delProfObj._profileId } } },
@@ -459,18 +459,7 @@ app.post("/device/requests/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var infoObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": infoObj.uid }, { "requests.$": 1, "_id": 0 }, function (err, requests) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      var profileSent = JSON.stringify(requests);
-      console.log(requests);
-      console.log(profileSent);
-      res.json(requests);
-
-    }
-  });
+  
 
 });
 
