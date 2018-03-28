@@ -488,9 +488,7 @@ app.post("/device/requests/store", function (req, res) {
 });
 
 /*******************************************************************************************************************************/
-function fuck(){
-  let array = [];//store JS object
-  var parsedObj ;
+
 
 
 User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
@@ -502,7 +500,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
   // console.log(profileSent);
   // var arr = JSON.parse(requests);
 
-  
+  var array = [];
   
   for (var i = 0; i < parsedObj.requests.length; i++) {
     
@@ -517,11 +515,6 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(funct
            
   }
 });
-
-
-
-
-}
 
 
 //   if (err) {
