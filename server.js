@@ -480,6 +480,7 @@ app.post("/device/requests/return", function (req, res) {
       });
         console.log("result babes"+JSON.stringify(array));      
     }
+    res.json(array);
   });
 
 });
