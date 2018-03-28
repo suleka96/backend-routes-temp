@@ -329,8 +329,6 @@ app.post("/profile/edit", function (req, res) {
   //Request body is parsed to a JSON Object
   var editProfObj = JSON.parse(plaintext);
 
-  console.log(editProfObj);
-
   User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": editProfObj }, function (err, raw) {
     if (err) {
       console.log(err);
@@ -361,11 +359,13 @@ app.post("/profile/delete", function (req, res) {
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
 
+  console.log(delProfObj);
+
   User.update(
-    { userId: delProfObj.uid },
-    { $pull: { profiles: { _profileId: delProfObj._profileId } } },
+    { "userId": delProfObj.uid },
+    { $pull: { "profiles": { "_profileId": delProfObj._profileId } } },
     { safe: true },
-    function removeConnectionsCB(err, obj) {
+    function(err, obj) {
       if (err) {
         console.log(err);
       }
@@ -373,7 +373,6 @@ app.post("/profile/delete", function (req, res) {
         console.log(obj);
         res.json("Success");
       }
-
     });
 });
 
