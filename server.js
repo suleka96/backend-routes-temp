@@ -478,9 +478,10 @@ app.post("/device/requests/return", function (req, res) {
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("resultttttttttttt"+JSON.stringify(array));     
       });
-        console.log("result babes"+JSON.stringify(array));      
+        console.log("result babes"+JSON.stringify(array));     
+        res.json(array); 
     }
-    res.json(array);
+    
   });
 
 });
