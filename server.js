@@ -513,7 +513,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("resultttttttttttt"+JSON.stringify(array));               
       });
-      if(++i == parsedObj.requests.length){
+      if( i+1 == parsedObj.requests.length){
         console.log("result babes"+JSON.stringify(array));
       }    
     }   
