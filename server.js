@@ -371,7 +371,7 @@ app.post("/profile/delete", function (req, res) {
       }
       else {
         console.log(obj);
-        res.json(req.body);
+        res.json("Success");
       }
     });
 });
