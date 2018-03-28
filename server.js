@@ -521,21 +521,6 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
 
 console.log("Inside delete profile route");
 
-  if (!req.body)
-    return res.sendStatus(400);
-
-  //Received request body that is encrypted
-  var delProfileInfo = req.body;
-
-  //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'my key is 123');
-
-  //Decrypted request body is converted to plain text
-  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-
-  //Request body is parsed to a JSON Object
-  var delProfObj = JSON.parse(plaintext);
-
   User.update(
     { userId: 'aaaaaaaaaa' },
     { $pull: { profiles: { _profileId: '5abb430cd83da10004a9d1a3' } } },
@@ -545,7 +530,7 @@ console.log("Inside delete profile route");
         console.log(err);
       }
       else {
-        console.log(obj);
-        res.json("Success");
+        console.log("Successfully deleted: " + obj);
+        //res.json("Success");
       }
     });
