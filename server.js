@@ -331,7 +331,7 @@ app.post("/profile/edit", function (req, res) {
 
   console.log(editProfObj);
 
-  User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": profileObj }, function (err, raw) {
+  User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": editProfObj }, function (err, raw) {
     if (err) {
       console.log(err);
     }
@@ -513,14 +513,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (
           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("resultttttttttttt"+JSON.stringify(array));     
       });
-      // if(i == 1){
-      //   console.log("result babes"+JSON.stringify(array));
-      // }        
-    }
-    
-    
+      if(i == 1){
+        console.log("result babes"+JSON.stringify(array));
+      }        
+    }    
   }
-
-}).then(function() {
-  console.log("result babes: " + JSON.stringify(array));
 });
