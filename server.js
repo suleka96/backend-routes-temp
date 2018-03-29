@@ -579,12 +579,12 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
             dateOfBirth: profile.dateOfBirth,
             homeAddress: profile.homeAddress,
             email: profile.email,
-            links: {
-              facebookURL: profile.links.facebookURL,
-              twitterURL: profile.links.twitterURL,
-              linkedinURL: profile.links.linkedinURL,
-              blogURL: profile.links.blogURL
-            },
+            // links: {
+            //   facebookURL: profile.links.facebookURL,
+            //   twitterURL: profile.links.twitterURL,
+            //   linkedinURL: profile.links.linkedinURL,
+            //   blogURL: profile.links.blogURL
+            // },
             work: {
               companyName: profile.work.companyName,
               companyWebsite: profile.work.companyWebsite,
