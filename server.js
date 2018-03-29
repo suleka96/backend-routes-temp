@@ -579,7 +579,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
         array.push({
-            _profileId: profile,
+            _profileId: profile._profileId
             // profileName: profile.profiles.profileName,
             // mobileNo: profile.profiles.mobileNo,
             // dateOfBirth: profile.profiles.dateOfBirth,
