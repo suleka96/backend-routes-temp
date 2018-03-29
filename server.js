@@ -573,7 +573,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
           User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
             if (err) {
-              console.log(err);
+              console.log("ERROR: " + err);
             }
             else {
               var jsonProfileDocumentRetrieved = JSON.stringify(profile);
