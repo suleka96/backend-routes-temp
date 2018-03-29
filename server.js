@@ -559,7 +559,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
   var array = [];
 
-  console.log(parsedObj.length);
+  console.log(myObj.length);
   
   for (var i = 0; i < parsedObj.length; i++) {    
     
