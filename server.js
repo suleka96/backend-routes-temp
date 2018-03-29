@@ -558,6 +558,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
   var parsedObj = JSON.parse(myObj);
 
   var array = [];
+
+  console.log(parsedObj.length);
   
   for (var i = 0; i < parsedObj.length; i++) {    
     
