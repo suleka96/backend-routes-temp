@@ -571,15 +571,16 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (profile) {
+        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
+        var stringifiedRetreievedObj = JSON.stringify(profile);
          array.push({
-            _profileId: profile._profileId,
-            profileName: profile.profileName,
-            mobileNo: profile.mobileNo,
-            dateOfBirth: profile.dateOfBirth,
-            homeAddress: profile.homeAddress,
-            email: profile.email
+            _profileId: stringifiedRetreievedObj._profileId,
+            profileName: stringifiedRetreievedObj.profileName,
+            mobileNo: stringifiedRetreievedObj.mobileNo,
+            dateOfBirth: stringifiedRetreievedObj.dateOfBirth,
+            homeAddress: stringifiedRetreievedObj.homeAddress,
+            email: stringifiedRetreievedObj.email
             // links: {
             //   facebookURL: profile.links.facebookURL,
             //   twitterURL: profile.links.twitterURL,
