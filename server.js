@@ -579,6 +579,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
         array.push({
+          profiles: {
             _profileId: profile.profiles._profileId,
             profileName: profile.profiles.profileName,
             mobileNo: profile.profiles.mobileNo,
@@ -598,6 +599,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
             //   workEmail: profile.work.workEmail,
             //   designation: profile.work.designation
             // }
+          }           
           });         
           console.log(array);
         }).then(function () {
