@@ -578,15 +578,13 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
-        var stringifiedRetreievedObj = JSON.stringify(profile);
-        var parsedRetrievedObj = JSON.parse(stringifiedRetreievedObj);
-         array.push({
-            _profileId: parsedRetrievedObj._profileId,
-            profileName: parsedRetrievedObj.profileName,
-            mobileNo: parsedRetrievedObj.mobileNo,
-            dateOfBirth: parsedRetrievedObj.dateOfBirth,
-            homeAddress: parsedRetrievedObj.homeAddress,
-            email: parsedRetrievedObj.email
+        array.push({
+            _profileId: profile.profiles._profileId,
+            profileName: profile.profiles.profileName,
+            mobileNo: profile.profiles.mobileNo,
+            dateOfBirth: profile.profiles.dateOfBirth,
+            homeAddress: profile.profiles.homeAddress,
+            email: profile.profiles.email
             // links: {
             //   facebookURL: profile.links.facebookURL,
             //   twitterURL: profile.links.twitterURL,
