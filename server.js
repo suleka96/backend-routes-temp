@@ -576,29 +576,28 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-        User.findOne({ _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
+        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }).then(function(profile) {
         console.log(profile);
-        console.log(profile.facebookURL);
         array.push({
-            _profileId: profile._profileId,
-            profileName: profile.profileName,
-            mobileNo: profile.mobileNo,
-            dateOfBirth: profile.dateOfBirth,
-            homeAddress: profile.homeAddress,
-            email: profile.email
-            // links: {
-            //   facebookURL: profile.links.facebookURL,
-            //   twitterURL: profile.links.twitterURL,
-            //   linkedinURL: profile.links.linkedinURL,
-            //   blogURL: profile.links.blogURL
-            // },
-            // work: {
-            //   companyName: profile.work.companyName,
-            //   companyWebsite: profile.work.companyWebsite,
-            //   workAddress: profile.work.workAddress,
-            //   workEmail: profile.work.workEmail,
-            //   designation: profile.work.designation
-            // }
+            _profileId: profile.profiles._profileId,
+            profileName: profile.profiles.profileName,
+            mobileNo: profile.profiles.mobileNo,
+            dateOfBirth: profile.profiles.dateOfBirth,
+            homeAddress: profile.profiles.homeAddress,
+            email: profile.profiles.email,
+            links: {
+              facebookURL: profile.profiles.links.facebookURL,
+              twitterURL: profile.profiles.links.twitterURL,
+              linkedinURL: profile.profiles.links.linkedinURL,
+              blogURL: profile.profiles.links.blogURL
+            },
+            work: {
+              companyName: profile.profiles.work.companyName,
+              companyWebsite: profile.profiles.work.companyWebsite,
+              workAddress: profile.profiles.work.workAddress,
+              workEmail: profile.profiles.work.workEmail,
+              designation: profile.profiles.work.designation
+            }
           });         
           console.log(JSON.stringify(array));
         }).then(function () {
