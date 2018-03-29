@@ -149,55 +149,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 */
 
 
-// User.update( {'userId:':'aaaaaaaaaa', 'profiles._profileId':'5ab91095b1b47a00041a81e5'}, 
-//       {$set:{'profiles.$':
-//       { "profileName": "flalalaaaaaa",
-//       "mobileNo":"",
-//       "dateOfBirth":"",
-//       "homeAddress": "",
-//       "email":"",
-//       "links.facebookURL":"",
-//       "links.twitterURL":"",
-//       "links.linkedinURL":"",
-//       "links.blogURL":"",
-//       "work.companyName":"",
-//       "work.companyWebsite":"",
-//       "work.workAddress":"",
-//       "work.workEmail":"",
-//       "work.designation":"",
-//      }}}, false, true)
-
-// var profileObj = {
-//   _profileId: '5ab8eab7cb24e60004758214',
-//   profileName: 'owl',
-//   mobileNo: '12345678',
-//   dateOfBirth: '2017-11-09T18:30:00.000Z',
-//   homeAddress: 'asd',
-//   email: 'asd@asdasd.com',
-//   links: { 
-//     facebookURL: '', 
-//     twitterURL: '', 
-//     linkedinURL: '', 
-//     blogURL: '' 
-//   },
-//   work: {
-//     companyName: '',
-//     companyWebsite: '',
-//     workAddress: '',
-//     workEmail: '',
-//     designation: '' 
-//   } 
-// }
-
-// User.update( { "profiles._profileId": "5ab8eab7cb24e60004758214"}, { "profiles.$": profileObj }, function(err, raw) {
-//   if (err) {
-//     console.log(err);
-//   }
-//   else {
-//     console.log(raw);
-//   }
-// });
-
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
@@ -228,7 +179,7 @@ app.post("/register", function (req, res) {
   })
     .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);
+      console.log("Successfully created new user:", userRecord.displayName);zzz
 
       //Create new user document
       var user = new User({
@@ -239,6 +190,7 @@ app.post("/register", function (req, res) {
         profilePic: "",
         profiles: [],
         requests: [],
+        connectedUsers: [],
         receivedProfiles: []
       });
 
@@ -594,66 +546,4 @@ app.post("/device/requests/store", function (req, res) {
   console.log(loginInfo);
 });
 
-
-
 /*******************************************************************************************************************************/
-
-
-
-// User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }).then(function (result){
-  
-//   console.log(result);
-
-//   var myObj = JSON.stringify(result);
-//   var parsedObj = JSON.parse(myObj);
-//   // console.log(profileSent);
-//   // var arr = JSON.parse(requests);
-
-//   var array = [];
-  
-//   for (var i = 0; i < parsedObj.requests.length; i++) {
-    
-//     console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-
-//     User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-//         console.log("profile retrieved successfully");
-//         array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-//         console.log("resultttttttttttt"+JSON.stringify(array));   
-//     }).then(function(){
-//         if(Object.keys(array).length == parsedObj.requests.length){
-//           console.log("result babes"+JSON.stringify(array)); 
-//         } 
-//     });
-           
-//   }
-// });
-
-
-
-// User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err, result) {
-//   if (err) {
-//     console.log(err);
-//   }
-//   else {
-
-//     console.log(result);
-
-//     var myObj = JSON.stringify(result);
-//     var parsedObj = JSON.parse(myObj);
-//     // console.log(profileSent);
-//     // var arr = JSON.parse(requests);
-
-//     var array = [];//store JS object
-    
-//     for (var i = 0; i < parsedObj.requests.length; i++) {
-//       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-
-//       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-//           console.log("profile retrieved successfully");
-//           array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-//           console.log("resultttttttttttt"+JSON.stringify(array));     
-//       });
-//         console.log("result babes"+JSON.stringify(array));      
-//     }    
-//   }
-// });
