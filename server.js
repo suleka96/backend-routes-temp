@@ -583,33 +583,33 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
           console.log("Error: " + err);
         }
         else {
-          console.log("Iteration " + j + ": " + profile);
-          console.log("Single retrieval: " + profile.profiles._profileId);
-          console.log("Single retrieval with no profiles: " + profile._profileId);
-          console.log("Single retrieval for links: " + profile.profiles.links.facebookURL);
-          console.log("Single retrieval for links with no profiles: " + profile.links.facebookURL);
+          // console.log("Iteration " + j + ": " + profile);
+          // console.log("Single retrieval: " + profile.profiles._profileId);
+          // console.log("Single retrieval with no profiles: " + profile._profileId);
+          // console.log("Single retrieval for links: " + profile.profiles.links.facebookURL);
+          // console.log("Single retrieval for links with no profiles: " + profile.links.facebookURL);
   
-          // array.push({
-          //     _profileId: profile._profileId
-              // profileName: profile.profiles.profileName,
-              // mobileNo: profile.profiles.mobileNo,
-              // dateOfBirth: profile.profiles.dateOfBirth,
-              // homeAddress: profile.profiles.homeAddress,
-              // email: profile.profiles.email
-              // links: {
-              //   facebookURL: profile.links.facebookURL,
-              //   twitterURL: profile.links.twitterURL,
-              //   linkedinURL: profile.links.linkedinURL,
-              //   blogURL: profile.links.blogURL
-              // },
-              // work: {
-              //   companyName: profile.work.companyName,
-              //   companyWebsite: profile.work.companyWebsite,
-              //   workAddress: profile.work.workAddress,
-              //   workEmail: profile.work.workEmail,
-              //   designation: profile.work.designation
-              // }         
-            // });         
+          array.push({
+              _profileId: profile.profiles._profileId,
+              profileName: profile.profiles.profileName,
+              mobileNo: profile.profiles.mobileNo,
+              dateOfBirth: profile.profiles.dateOfBirth,
+              homeAddress: profile.profiles.homeAddress,
+              email: profile.profiles.email,
+              links: {
+                facebookURL: profile.profiles.links.facebookURL,
+                twitterURL: profile.profiles.links.twitterURL,
+                linkedinURL: profile.profiles.links.linkedinURL,
+                blogURL: profile.profiles.links.blogURL
+              },
+              work: {
+                companyName: profile.profiles.work.companyName,
+                companyWebsite: profile.profiles.work.companyWebsite,
+                workAddress: profile.profiles.work.workAddress,
+                workEmail: profile.profiles.work.workEmail,
+                designation: profile.profiles.work.designation
+              }         
+            });         
             console.log(array);
         }        
         });
