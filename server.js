@@ -590,12 +590,12 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
           // console.log("Single retrieval for links with no profiles: " + profile.links.facebookURL);
   
           array.push({
-              _profileId: profile.profiles._profileId,
-              profileName: profile.profiles.profileName,
-              mobileNo: profile.profiles.mobileNo,
-              dateOfBirth: profile.profiles.dateOfBirth,
-              homeAddress: profile.profiles.homeAddress,
-              email: profile.profiles.email
+              _profileId: profile._profileId,
+              profileName: profile.profileName,
+              mobileNo: profile.mobileNo,
+              dateOfBirth: profile.dateOfBirth,
+              homeAddress: profile.homeAddress,
+              email: profile.email
               // links: {
               //   facebookURL: profile.profiles.links.facebookURL,
               //   twitterURL: profile.profiles.links.twitterURL,
