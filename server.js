@@ -531,6 +531,62 @@ app.post("/device/connections/return", function (req, res) {
   });
 });
 
+//POST request handler for returning recieved connections complete profile
+app.post("/device/connection/return", function (req, res) {
+  console.log("inside return connection route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userConnections = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var requestConnectionObj = JSON.parse(plaintext);
+
+
+
+
+  User.findOne({ "userId": requestConnectionObj.uid }, { "receivedProfiles": 1, "_id": 0 }).then(function (result){
+    console.log(result);
+  
+    var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj);
+
+    var array = [];
+    
+    for (var i = 0; i < parsedObj.length; i++) {      
+
+      if(parsedObj[i].connectionId == requestConnectionObj.connectionId){
+
+        console.log("JS value " + i + ": " + parsedObj[i].connectionId);
+        
+          for (var j = 0; j < parsedObj[i].receivedProfileId.length; j++) {
+
+            User.findOne({ "profiles._profileId": parsedObj[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                var jsonProfileDocumentRetrieved = JSON.stringify(profile);
+                var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
+                array.push(jsObjProfile);                              
+              }
+            }).then(function() {
+              if (Object.keys(array).length == parsedObj.receivedProfileId.length) {
+                console.log("Final Connected User Profile Array: " + JSON.stringify(array));
+              }
+            });             
+          }
+      } 
+    }
+  });
+});
+
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
