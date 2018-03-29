@@ -559,7 +559,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
   var array = [];
   
-  for (var i = 0; i < parsedObj.length; i++) {      
+  for (var i = 0; i < parsedObj.length; i++) {    
+    
+    console.log("inside received profiles sub document" + parsedObj.length);
 
     if(parsedObj[i].connectionId == "konnect123"){
 
