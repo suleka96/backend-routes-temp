@@ -556,7 +556,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
+User.findOne({ "userId": "aaaaaaaaaa" }, { "_id": 0 }).then(function (result) {
   console.log(result);
 
   var myObj = JSON.stringify(result);
@@ -578,7 +578,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        Profile.find({ '_profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
+        User.find({ 'profiles._profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
         .populate('profiles', '_profileId profileName')
         .lean().exec(
         function (err, record) {
@@ -589,7 +589,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
           else {   
             //JS object is turned into a JSON Object
             var profiles = JSON.stringify(record);
-            console.log(profiles.profileName);        
+            console.log(profiles);        
           }
         });
 
