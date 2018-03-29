@@ -599,7 +599,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
             //   designation: profile.work.designation
             // }
           });         
-          console.log(JSON.stringify(array));
+          //console.log(JSON.stringify(array));
         }).then(function () {
           console.log("Before if: " + parsedObj.receivedProfiles.receivedProfileId.length);
           if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
