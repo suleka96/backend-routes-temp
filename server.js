@@ -547,3 +547,41 @@ app.post("/device/requests/store", function (req, res) {
 });
 
 /*******************************************************************************************************************************/
+
+
+
+
+User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result){
+  console.log(result);
+
+  var myObj = JSON.stringify(result);
+  var parsedObj = JSON.parse(myObj);
+
+  var array = [];
+  
+  for (var i = 0; i < parsedObj.length; i++) {      
+
+    if(parsedObj[i].connectionId == "konnect123"){
+
+      console.log("JS value " + i + ": " + parsedObj[i].connectionId);
+      
+        for (var j = 0; j < parsedObj[i].receivedProfileId.length; j++) {
+
+          User.findOne({ "profiles._profileId": parsedObj[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              var jsonProfileDocumentRetrieved = JSON.stringify(profile);
+              var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
+              array.push(jsObjProfile);                              
+            }
+          }).then(function() {
+            if (Object.keys(array).length == parsedObj.receivedProfileId.length) {
+              console.log("Final Connected User Profile Array: " + JSON.stringify(array));
+            }
+          });             
+        }
+    } 
+  }
+});
