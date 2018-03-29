@@ -429,7 +429,12 @@ app.post("/device/requests/return", function (req, res) {
 
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
         console.log("profile retrieved successfully");
-        array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
+        array.push({ 
+          userId: record.userId, 
+          fName: record.fName, 
+          lName: record.lName, 
+          bio: record.bio 
+        });
         console.log("resultttttttttttt" + JSON.stringify(array));
       }).then(function () {
         if (Object.keys(array).length == parsedObj.requests.length) {
@@ -574,13 +579,14 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
         var stringifiedRetreievedObj = JSON.stringify(profile);
+        var parsedRetrievedObj = JSON.parse(stringifiedRetreievedObj);
          array.push({
-            _profileId: stringifiedRetreievedObj._profileId,
-            profileName: stringifiedRetreievedObj.profileName,
-            mobileNo: stringifiedRetreievedObj.mobileNo,
-            dateOfBirth: stringifiedRetreievedObj.dateOfBirth,
-            homeAddress: stringifiedRetreievedObj.homeAddress,
-            email: stringifiedRetreievedObj.email
+            _profileId: parsedRetrievedObj._profileId,
+            profileName: parsedRetrievedObj.profileName,
+            mobileNo: parsedRetrievedObj.mobileNo,
+            dateOfBirth: parsedRetrievedObj.dateOfBirth,
+            homeAddress: parsedRetrievedObj.homeAddress,
+            email: parsedRetrievedObj.email
             // links: {
             //   facebookURL: profile.links.facebookURL,
             //   twitterURL: profile.links.twitterURL,
