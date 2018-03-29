@@ -579,7 +579,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }).populate('profiles', '_profileId').then(function(profile) {
         console.log(profile);
         array.push({
-            _profileId: profile.profiles,
+            _profileId: profile.profiles._profileId,
             // profileName: profile.profileName,
             // mobileNo: profile.mobileNo,
             // dateOfBirth: profile.dateOfBirth,
@@ -599,7 +599,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
             //   designation: profile.work.designation
             // }
           });         
-          //console.log(JSON.stringify(array));
+          console.log(array);
         }).then(function () {
           console.log("Before if: " + parsedObj.receivedProfiles.receivedProfileId.length);
           if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
