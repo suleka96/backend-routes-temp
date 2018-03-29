@@ -557,26 +557,26 @@ app.post("/device/requests/store", function (req, res) {
 
 
 User.findOne({ "userId": "aaaaaaaaaa" }, { "_id": 0 }).then(function (result) {
-  console.log(result);
+  // console.log(result);
 
   var myObj = JSON.stringify(result);
   var parsedObj = JSON.parse(myObj);
 
   var array = [];
 
-  console.log(parsedObj.receivedProfiles.length);
+  // console.log(parsedObj.receivedProfiles.length);
 
   for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {
 
-    console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
+    //console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
 
     if (parsedObj.receivedProfiles[i].connectionId == "konnect123") {
 
-      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
+      //console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-        console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
+        //console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
         User.find({ 'profiles._profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
         .populate('profiles', '_profileId profileName')
@@ -589,7 +589,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "_id": 0 }).then(function (result) {
           else {   
             //JS object is turned into a JSON Object
             var profiles = JSON.stringify(record);
-            console.log(profiles.profiles.profileName);        
+            var parsedObj = JSON.parse(profiles);
+            console.log(parsedObj.profiles.profileName);        
           }
         });
 
