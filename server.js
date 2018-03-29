@@ -567,15 +567,11 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
     if(parsedObj.receivedProfiles[i].connectionId == "konnect123"){
 
-      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
-
-      console.log("outside 2nd for" + parsedObj.receivedProfiles[i].receivedProfileId.length);
+      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);     
       
         for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-          console.log("inside 2nd for" + parsedObj.receivedProfiles[i].receivedProfileId.length);
-
-          User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
+          User.findOne({ "_profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles.$": 1, "_id": 0 }).then(function (err, profile) {
             if (err) {
               console.log("ERROR: " + err);
             }
