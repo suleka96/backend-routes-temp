@@ -579,13 +579,12 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log(profile);
         array.push({
-          profiles: {
-            _profileId: profile.profiles._profileId,
-            profileName: profile.profiles.profileName,
-            mobileNo: profile.profiles.mobileNo,
-            dateOfBirth: profile.profiles.dateOfBirth,
-            homeAddress: profile.profiles.homeAddress,
-            email: profile.profiles.email
+            _profileId: profile,
+            // profileName: profile.profiles.profileName,
+            // mobileNo: profile.profiles.mobileNo,
+            // dateOfBirth: profile.profiles.dateOfBirth,
+            // homeAddress: profile.profiles.homeAddress,
+            // email: profile.profiles.email
             // links: {
             //   facebookURL: profile.links.facebookURL,
             //   twitterURL: profile.links.twitterURL,
@@ -598,8 +597,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
             //   workAddress: profile.work.workAddress,
             //   workEmail: profile.work.workEmail,
             //   designation: profile.work.designation
-            // }
-          }           
+            // }         
           });         
           console.log(array);
         }).then(function () {
