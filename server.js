@@ -571,7 +571,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-        User.findOne({ "_profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (profile) {
+        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (profile) {
           var jsonProfileDocumentRetrieved = JSON.stringify(profile);
           var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
           array.push({
