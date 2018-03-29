@@ -572,27 +572,25 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (profile) {
-          var jsonProfileDocumentRetrieved = JSON.stringify(profile);
-          var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
-          array.push({
-            _profileId: jsObjProfile._profileId,
-            profileName: jsObjProfile.profileName,
-            mobileNo: jsObjProfile.mobileNo,
-            dateOfBirth: jsObjProfile.dateOfBirth,
-            homeAddress: jsObjProfile.homeAddress,
-            email: jsObjProfile.email,
+         array.push({
+            _profileId: profile._profileId,
+            profileName: profile.profileName,
+            mobileNo: profile.mobileNo,
+            dateOfBirth: profile.dateOfBirth,
+            homeAddress: profile.homeAddress,
+            email: profile.email,
             links: {
-              facebookURL: jsObjProfile.links.facebookURL,
-              twitterURL: jsObjProfile.links.twitterURL,
-              linkedinURL: jsObjProfile.links.linkedinURL,
-              blogURL: jsObjProfile.links.blogURL
+              facebookURL: profile.links.facebookURL,
+              twitterURL: profile.links.twitterURL,
+              linkedinURL: profile.links.linkedinURL,
+              blogURL: profile.links.blogURL
             },
             work: {
-              companyName: jsObjProfile.work.companyName,
-              companyWebsite: jsObjProfile.work.companyWebsite,
-              workAddress: jsObjProfile.work.workAddress,
-              workEmail: jsObjProfile.work.workEmail,
-              designation: jsObjProfile.work.designation
+              companyName: profile.work.companyName,
+              companyWebsite: profile.work.companyWebsite,
+              workAddress: profile.work.workAddress,
+              workEmail: profile.work.workEmail,
+              designation: profile.work.designation
             }
           });
 
