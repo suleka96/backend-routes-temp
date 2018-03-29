@@ -576,10 +576,10 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }).populate('-profileId').then(function(profile) {
+        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }).populate('profiles', '_profileId').then(function(profile) {
         console.log(profile);
         array.push({
-            _profileId: profile._profileId,
+            _profileId: profile.profiles,
             // profileName: profile.profileName,
             // mobileNo: profile.mobileNo,
             // dateOfBirth: profile.dateOfBirth,
