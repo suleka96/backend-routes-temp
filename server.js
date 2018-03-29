@@ -179,7 +179,7 @@ app.post("/register", function (req, res) {
   })
     .then(function (userRecord) {
       // See the UserRecord reference doc for the contents of userRecord.
-      console.log("Successfully created new user:", userRecord.displayName);zzz
+      console.log("Successfully created new user:", userRecord.displayName); zzz
 
       //Create new user document
       var user = new User({
@@ -414,29 +414,29 @@ app.post("/device/requests/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestInfoObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestInfoObj.uid }, { "requests": 1, "_id": 0 }).then(function (result){
-  
+  User.findOne({ "userId": requestInfoObj.uid }, { "requests": 1, "_id": 0 }).then(function (result) {
+
     console.log(result);
-  
+
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
-  
+
     var array = [];
-    
+
     for (var i = 0; i < parsedObj.requests.length; i++) {
-      
+
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
-  
+
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
-          console.log("profile retrieved successfully");
-          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-          console.log("resultttttttttttt"+JSON.stringify(array));   
-      }).then(function(){
-          if(Object.keys(array).length == parsedObj.requests.length){
-            console.log("Requesters Public Profiles: " + JSON.stringify(array)); 
-            res.json(array);
-          } 
-      });             
+        console.log("profile retrieved successfully");
+        array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
+        console.log("resultttttttttttt" + JSON.stringify(array));
+      }).then(function () {
+        if (Object.keys(array).length == parsedObj.requests.length) {
+          console.log("Requesters Public Profiles: " + JSON.stringify(array));
+          res.json(array);
+        }
+      });
     }
   });
 });
@@ -458,27 +458,27 @@ app.post("/device/connections/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestConnectionObj.uid }, { "connectedUsers": 1, "_id": 0 }).then(function (result){
+  User.findOne({ "userId": requestConnectionObj.uid }, { "connectedUsers": 1, "_id": 0 }).then(function (result) {
     console.log(result);
-  
+
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
 
     var array = [];
-    
+
     for (var i = 0; i < parsedObj.connectedUsers.length; i++) {
-      
+
       console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
-  
-      User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function(record) {
-          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
-          console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));   
-      }).then(function(){
-          if(Object.keys(array).length == parsedObj.requests.length){
-            console.log("Connected Users Public Profiles: " + JSON.stringify(array)); 
-            res.json(array);
-          } 
-      });             
+
+      User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function (record) {
+        array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
+        console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));
+      }).then(function () {
+        if (Object.keys(array).length == parsedObj.requests.length) {
+          console.log("Connected Users Public Profiles: " + JSON.stringify(array));
+          res.json(array);
+        }
+      });
     }
   });
 });
@@ -500,38 +500,38 @@ app.post("/device/connection/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestConnectionObj.uid }, { "receivedProfiles": 1, "_id": 0 }).then(function (result){
+  User.findOne({ "userId": requestConnectionObj.uid }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
     console.log(result);
-  
+
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
 
     var array = [];
-    
-    for (var i = 0; i < parsedObj.length; i++) {      
 
-      if(parsedObj[i].connectionId == requestConnectionObj.connectionId){
+    for (var i = 0; i < parsedObj.length; i++) {
+
+      if (parsedObj[i].connectionId == requestConnectionObj.connectionId) {
 
         console.log("JS value " + i + ": " + parsedObj[i].connectionId);
-        
-          for (var j = 0; j < parsedObj[i].receivedProfileId.length; j++) {
 
-            User.findOne({ "profiles._profileId": parsedObj[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
-              if (err) {
-                console.log(err);
-              }
-              else {
-                var jsonProfileDocumentRetrieved = JSON.stringify(profile);
-                var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
-                array.push(jsObjProfile);                              
-              }
-            }).then(function() {
-              if (Object.keys(array).length == parsedObj.receivedProfileId.length) {
-                console.log("Final Connected User Profile Array: " + JSON.stringify(array));
-              }
-            });             
-          }
-      } 
+        for (var j = 0; j < parsedObj[i].receivedProfileId.length; j++) {
+
+          User.findOne({ "profiles._profileId": parsedObj[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              var jsonProfileDocumentRetrieved = JSON.stringify(profile);
+              var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
+              array.push(jsObjProfile);
+            }
+          }).then(function () {
+            if (Object.keys(array).length == parsedObj.receivedProfileId.length) {
+              console.log("Final Connected User Profile Array: " + JSON.stringify(array));
+            }
+          });
+        }
+      }
     }
   });
 });
@@ -551,7 +551,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result){
+User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
   console.log(result);
 
   var myObj = JSON.stringify(result);
@@ -560,53 +560,49 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
   var array = [];
 
   console.log(parsedObj.receivedProfiles.length);
-  
-  for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {    
-    
+
+  for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {
+
     console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
 
-    if(parsedObj.receivedProfiles[i].connectionId == "konnect123"){
+    if (parsedObj.receivedProfiles[i].connectionId == "konnect123") {
 
-      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);     
-      
-        for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
+      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
 
-          User.findOne({ "_profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
-            if (err) {
-              console.log("ERROR: " + err);
+      for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
+
+        User.findOne({ "_profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (profile) {
+          var jsonProfileDocumentRetrieved = JSON.stringify(profile);
+          var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
+          array.push({
+            _profileId: jsObjProfile._profileId,
+            profileName: jsObjProfile.profileName,
+            mobileNo: jsObjProfile.mobileNo,
+            dateOfBirth: jsObjProfile.dateOfBirth,
+            homeAddress: jsObjProfile.homeAddress,
+            email: jsObjProfile.email,
+            links: {
+              facebookURL: jsObjProfile.links.facebookURL,
+              twitterURL: jsObjProfile.links.twitterURL,
+              linkedinURL: jsObjProfile.links.linkedinURL,
+              blogURL: jsObjProfile.links.blogURL
+            },
+            work: {
+              companyName: jsObjProfile.work.companyName,
+              companyWebsite: jsObjProfile.work.companyWebsite,
+              workAddress: jsObjProfile.work.workAddress,
+              workEmail: jsObjProfile.work.workEmail,
+              designation: jsObjProfile.work.designation
             }
-            else {
-              var jsonProfileDocumentRetrieved = JSON.stringify(profile);
-              var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
-              array.push({
-                _profileId: jsObjProfile._profileId, 
-                profileName: jsObjProfile.profileName,
-                mobileNo: jsObjProfile.mobileNo,
-                dateOfBirth: jsObjProfile.dateOfBirth, 
-                homeAddress: jsObjProfile.homeAddress, 
-                email: jsObjProfile.email, 
-                links: {
-                  facebookURL: jsObjProfile.links.facebookURL,
-                  twitterURL: jsObjProfile.links.twitterURL,
-                  linkedinURL: jsObjProfile.links.linkedinURL,
-                  blogURL: jsObjProfile.links.blogURL
-                },
-                work: {
-                  companyName: jsObjProfile.work.companyName,
-                  companyWebsite: jsObjProfile.work.companyWebsite,
-                  workAddress: jsObjProfile.work.workAddress,
-                  workEmail: jsObjProfile.work.workEmail,
-                  designation: jsObjProfile.work.designation
-                }
-                });                              
-            }
-          }).then(function() {
-            console.log("Before if: "+parsedObj.receivedProfiles.receivedProfileId.length);
-            if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
-              console.log("Final Connected User Profile Array: " + JSON.stringify(array));
-            }
-          });             
-        }
-    } 
+          });
+
+        }).then(function () {
+          console.log("Before if: " + parsedObj.receivedProfiles.receivedProfileId.length);
+          if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
+            console.log("Final Connected User Profile Array: " + JSON.stringify(array));
+          }
+        });
+      }
+    }
   }
 });
