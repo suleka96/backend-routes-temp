@@ -471,7 +471,8 @@ app.post("/device/connections/return", function (req, res) {
       console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
   
       User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function(record) {
-          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio }.
+          );  
           console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));   
       }).then(function(){
           if(Object.keys(array).length == parsedObj.requests.length){
@@ -568,8 +569,12 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
     if(parsedObj.receivedProfiles[i].connectionId == "konnect123"){
 
       console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
+
+      console.log("outside 2nd for" + parsedObj.receivedProfiles[i].receivedProfileId.length);
       
         for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
+
+          console.log("inside 2nd for" + parsedObj.receivedProfiles[i].receivedProfileId.length);
 
           User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
             if (err) {
