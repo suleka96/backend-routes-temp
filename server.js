@@ -579,7 +579,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }).then(function(profile) {
-        var retrievedObjParsed = JSON.parse(profile);
+        var retrievedObjStringified = JSON.parse(profile);
+        var retrievedObjParsed = JSON.parse(retrievedObjStringified);
         console.log("Iteration " + j + ": " + profile);
         console.log("Single retrieval: " + retrievedObjParsed.profiles._profileId);
         console.log("Single retrieval with no profiles: " + retrievedObjParsed._profileId);
