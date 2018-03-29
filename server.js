@@ -589,7 +589,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "_id": 0 }).then(function (result) {
           else {   
             //JS object is turned into a JSON Object
             var profiles = JSON.stringify(record);
-            console.log(profiles);        
+            console.log(profiles.profiles.profileName);        
           }
         });
 
