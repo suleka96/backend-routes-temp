@@ -580,6 +580,11 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }).then(function(profile) {
         console.log("Iteration " + j + ": " + profile);
+        console.log("Single retrieval: " + profile.profiles._profileId);
+        console.log("Single retrieval with no profiles: " + profile._profileId);
+        console.log("Single retrieval for links: " + profile.profiles.links.facebookURL);
+        console.log("Single retrieval for links with no profiles: " + profile.links.facebookURL);
+
         // array.push({
         //     _profileId: profile._profileId
             // profileName: profile.profiles.profileName,
