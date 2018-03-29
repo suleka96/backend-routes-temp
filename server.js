@@ -471,8 +471,7 @@ app.post("/device/connections/return", function (req, res) {
       console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
   
       User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function(record) {
-          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio }.
-          );  
+          array.push({userId: record.userId ,fName: record.fName, lName: record.lName, bio: record.bio });  
           console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));   
       }).then(function(){
           if(Object.keys(array).length == parsedObj.requests.length){
