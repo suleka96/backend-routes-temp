@@ -595,20 +595,20 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
               mobileNo: profile.profiles.mobileNo,
               dateOfBirth: profile.profiles.dateOfBirth,
               homeAddress: profile.profiles.homeAddress,
-              email: profile.profiles.email,
-              links: {
-                facebookURL: profile.profiles.links.facebookURL,
-                twitterURL: profile.profiles.links.twitterURL,
-                linkedinURL: profile.profiles.links.linkedinURL,
-                blogURL: profile.profiles.links.blogURL
-              },
-              work: {
-                companyName: profile.profiles.work.companyName,
-                companyWebsite: profile.profiles.work.companyWebsite,
-                workAddress: profile.profiles.work.workAddress,
-                workEmail: profile.profiles.work.workEmail,
-                designation: profile.profiles.work.designation
-              }         
+              email: profile.profiles.email
+              // links: {
+              //   facebookURL: profile.profiles.links.facebookURL,
+              //   twitterURL: profile.profiles.links.twitterURL,
+              //   linkedinURL: profile.profiles.links.linkedinURL,
+              //   blogURL: profile.profiles.links.blogURL
+              // },
+              // work: {
+              //   companyName: profile.profiles.work.companyName,
+              //   companyWebsite: profile.profiles.work.companyWebsite,
+              //   workAddress: profile.profiles.work.workAddress,
+              //   workEmail: profile.profiles.work.workEmail,
+              //   designation: profile.profiles.work.designation
+              // }         
             });         
             console.log(array);
         }        
