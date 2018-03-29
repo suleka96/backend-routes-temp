@@ -578,7 +578,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        User.find({ _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j] })
+        User.find({ '_profileId': '5ab6390b0ec955000400e67c' })
+        .populate('profiles', '_profileId profileName')
         .lean().exec(
         function (err, record) {
           if (err) {
@@ -588,7 +589,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
           else {   
             //JS object is turned into a JSON Object
             var profiles = JSON.stringify(record);
-            console.log(record);        
+            console.log(profiles.profileName);        
           }
         });
 
