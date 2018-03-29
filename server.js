@@ -548,9 +548,6 @@ app.post("/device/connection/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-
-
-
   User.findOne({ "userId": requestConnectionObj.uid }, { "receivedProfiles": 1, "_id": 0 }).then(function (result){
     console.log(result);
   
