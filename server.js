@@ -578,17 +578,20 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }, function(err, profile) {
-        if (err) {
-          console.log("Error: " + err);
-        }
-
-        else {
-          console.log(profile);
-          array.push({ 
-            name: profile.profileName, 
-            id: profile._profileId, 
-          });
+        User.find({ 'profiles._profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
+        .populate('profiles', '_profileId profileName')
+        .lean().exec(
+        function (err, record) {
+          if (err) {
+            res.json("Error in retrieving");
+            console.log("Error in sending connections profile info");
+          }
+          else {   
+            //JS object is turned into a JSON Object
+            var profiles = JSON.stringify(record.profiles);
+            console.log(profiles);        
+          }
+        });
 
           // console.log("Iteration " + j + ": " + profile);
           // console.log("Single retrieval: " + profile.profiles._profileId);
@@ -618,8 +621,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
               // }         
             // });         
             // console.log(array);
-        }        
-        });
+        // }        
+        // });
       }
     }
   }
