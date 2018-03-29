@@ -578,8 +578,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        User.find({ '_profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
-        .populate('_profileId profileName')
+        User.find({ _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j] })
         .lean().exec(
         function (err, record) {
           if (err) {
