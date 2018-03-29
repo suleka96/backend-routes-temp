@@ -578,42 +578,40 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }).then(function(profile) {
-        var retrievedObjStringified = JSON.stringify(profile);
-        var retrievedObjParsed = JSON.parse(retrievedObjStringified);
-        console.log("Iteration " + j + ": " + profile);
-        console.log("Single retrieval: " + retrievedObjParsed.profiles._profileId);
-        console.log("Single retrieval with no profiles: " + retrievedObjParsed._profileId);
-        console.log("Single retrieval for links: " + retrievedObjParsed.profiles.links.facebookURL);
-        console.log("Single retrieval for links with no profiles: " + retrievedObjParsed.links.facebookURL);
-
-        // array.push({
-        //     _profileId: profile._profileId
-            // profileName: profile.profiles.profileName,
-            // mobileNo: profile.profiles.mobileNo,
-            // dateOfBirth: profile.profiles.dateOfBirth,
-            // homeAddress: profile.profiles.homeAddress,
-            // email: profile.profiles.email
-            // links: {
-            //   facebookURL: profile.links.facebookURL,
-            //   twitterURL: profile.links.twitterURL,
-            //   linkedinURL: profile.links.linkedinURL,
-            //   blogURL: profile.links.blogURL
-            // },
-            // work: {
-            //   companyName: profile.work.companyName,
-            //   companyWebsite: profile.work.companyWebsite,
-            //   workAddress: profile.work.workAddress,
-            //   workEmail: profile.work.workEmail,
-            //   designation: profile.work.designation
-            // }         
-          // });         
-          console.log(array);
-        }).then(function () {
-          console.log("Before if: " + parsedObj.receivedProfiles[i].receivedProfileId.length);
-          // if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
-          //   console.log("Final Connected User Profile Array: " + JSON.stringify(array));
-          // }
+        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }, function(err, profile) {
+        if (err) {
+          console.log("Error: " + err);
+        }
+        else {
+          console.log("Iteration " + j + ": " + profile);
+          console.log("Single retrieval: " + profile.profiles._profileId);
+          console.log("Single retrieval with no profiles: " + profile._profileId);
+          console.log("Single retrieval for links: " + retrievedObjParsed.profiles.links.facebookURL);
+          console.log("Single retrieval for links with no profiles: " + retrievedObjParsed.links.facebookURL);
+  
+          // array.push({
+          //     _profileId: profile._profileId
+              // profileName: profile.profiles.profileName,
+              // mobileNo: profile.profiles.mobileNo,
+              // dateOfBirth: profile.profiles.dateOfBirth,
+              // homeAddress: profile.profiles.homeAddress,
+              // email: profile.profiles.email
+              // links: {
+              //   facebookURL: profile.links.facebookURL,
+              //   twitterURL: profile.links.twitterURL,
+              //   linkedinURL: profile.links.linkedinURL,
+              //   blogURL: profile.links.blogURL
+              // },
+              // work: {
+              //   companyName: profile.work.companyName,
+              //   companyWebsite: profile.work.companyWebsite,
+              //   workAddress: profile.work.workAddress,
+              //   workEmail: profile.work.workEmail,
+              //   designation: profile.work.designation
+              // }         
+            // });         
+            console.log(array);
+        }        
         });
       }
     }
