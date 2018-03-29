@@ -578,12 +578,32 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
           User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
             if (err) {
-              console.log(err);
+              console.log("ERROR: " + err);
             }
             else {
               var jsonProfileDocumentRetrieved = JSON.stringify(profile);
               var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
-              array.push(jsObjProfile);                              
+              array.push({
+                _profileId: jsObjProfile._profileId, 
+                profileName: jsObjProfile.profileName,
+                mobileNo: jsObjProfile.mobileNo,
+                dateOfBirth: jsObjProfile.dateOfBirth, 
+                homeAddress: jsObjProfile.homeAddress, 
+                email: jsObjProfile.email, 
+                links: {
+                  facebookURL: jsObjProfile.links.facebookURL,
+                  twitterURL: jsObjProfile.links.twitterURL,
+                  linkedinURL: jsObjProfile.links.linkedinURL,
+                  blogURL: jsObjProfile.links.blogURL
+                },
+                work: {
+                  companyName: jsObjProfile.work.companyName,
+                  companyWebsite: jsObjProfile.work.companyWebsite,
+                  workAddress: jsObjProfile.work.workAddress,
+                  workEmail: jsObjProfile.work.workEmail,
+                  designation: jsObjProfile.work.designation
+                }
+                });                              
             }
           }).then(function() {
             console.log("Before if: "+parsedObj.receivedProfiles.receivedProfileId.length);
