@@ -578,7 +578,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }, { "profiles": 1, "_id": 0 }).then(function(profile){
+        User.findOne({ "profiles._profileId": "5ab6390b0ec955000400e67c" }).then(function(profile){
         console.log("Iteration " + j + ": " + profile);
         // array.push({
         //     _profileId: profile._profileId
