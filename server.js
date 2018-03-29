@@ -576,6 +576,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
+        console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
+
         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function(profile) {
         console.log("Iteration" + j + ": " + profile);
         // array.push({
@@ -601,10 +603,10 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
           });         
           console.log(array);
         }).then(function () {
-          console.log("Before if: " + parsedObj.receivedProfiles.receivedProfileId.length);
-          if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
-            console.log("Final Connected User Profile Array: " + JSON.stringify(array));
-          }
+          console.log("Before if: " + parsedObj.receivedProfiles[i].receivedProfileId.length);
+          // if (Object.keys(array).length == parsedObj.receivedProfiles.receivedProfileId.length) {
+          //   console.log("Final Connected User Profile Array: " + JSON.stringify(array));
+          // }
         });
       }
     }
