@@ -559,9 +559,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
 
   var array = [];
 
-  console.log(myObj.length);
+  console.log(parsedObj.receivedProfiles.length);
   
-  for (var i = 0; i < parsedObj.length; i++) {    
+  for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {    
     
     console.log("inside received profiles sub document" + parsedObj.length);
 
