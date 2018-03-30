@@ -507,40 +507,54 @@ app.post("/device/connection/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestConnectionObj.uid }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
-    console.log(result);
-
-    var myObj = JSON.stringify(result);
-    var parsedObj = JSON.parse(myObj);
-
-    var array = [];
-
-    for (var i = 0; i < parsedObj.length; i++) {
-
-      if (parsedObj[i].connectionId == requestConnectionObj.connectionId) {
-
-        console.log("JS value " + i + ": " + parsedObj[i].connectionId);
-
-        for (var j = 0; j < parsedObj[i].receivedProfileId.length; j++) {
-
-          User.findOne({ "profiles._profileId": parsedObj[i].receivedProfileId[j] }, { "profiles": 1, "_id": 0 }).then(function (err, profile) {
-            if (err) {
-              console.log(err);
-            }
-            else {
-              var jsonProfileDocumentRetrieved = JSON.stringify(profile);
-              var jsObjProfile = JSON.parse(jsonProfileDocumentRetrieved);
-              array.push(jsObjProfile);
-            }
-          }).then(function () {
-            if (Object.keys(array).length == parsedObj.receivedProfileId.length) {
-              console.log("Final Connected User Profile Array: " + JSON.stringify(array));
-            }
-          });
-        }
-      }
+  User.findOne({"userId": requestConnectionObj.userId}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
+    if(err){
+      console.log("Error "+err);
+      return
     }
+    var array = [];
+    
+    var profiles = result.receivedProfiles[0].receivedProfileId;
+  
+    for (let profile of profiles) {
+  
+      User.findOne({"userId": requestConnectionObj.connectionId}, {profiles: {$elemMatch: {_profileId: profile}}},function(err, result){
+        if(err) {
+          console.log("Error "+err);
+          return
+        }
+        array.push({
+          _profileId: result.profiles[0]._profileId,
+          profileName: result.profiles[0].profileName,
+          mobileNo: result.profiles[0].mobileNo,
+          dateOfBirth: result.profiles[0].dateOfBirth,
+          homeAddress: result.profiles[0].homeAddress,
+          email: result.profiles[0].email,
+          links: {
+            facebookURL: result.profiles[0].links.facebookURL,
+            twitterURL: result.profiles[0].links.twitterURL,
+            linkedinURL: result.profiles[0].links.linkedinURL,
+            blogURL: result.profiles[0].links.blogURL
+          },
+          work: {
+            companyName: result.profiles[0].work.companyName,
+            companyWebsite: result.profiles[0].work.companyWebsite,
+            workAddress: result.profiles[0].work.workAddress,
+            workEmail: result.profiles[0].work.workEmail,
+            designation: result.profiles[0].work.designation
+          }
+        });
+  
+        if (Object.keys(array).length == profiles.length) {
+          console.log("ARRAY "+JSON.stringify(array));
+        }
+        
+        return
+      });
+    }
+    return
   });
+
 });
 
 //POST request handler for storing requests
@@ -553,56 +567,7 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connectionId: "konnect123"}}}, function(err, result){
-  if(err){
-    console.log("Error "+err);
-    return
-  }
-  var array = [];
-  console.log(result);
-  console.log(result.receivedProfiles[0].receivedProfileId);
 
-  var profiles = result.receivedProfiles[0].receivedProfileId;
-
-  for (let profile of profiles) {
-    console.log("inside "+profile);
-
-    User.findOne({"userId": "konnect123"}, {profiles: {$elemMatch: {_profileId: profile}}},function(err, result){
-      if(err) {
-        console.log("Error "+err);
-        return
-      }
-      array.push({
-        _profileId: result.profiles[0]._profileId,
-        profileName: result.profiles[0].profileName,
-        mobileNo: result.profiles[0].mobileNo,
-        dateOfBirth: result.profiles[0].dateOfBirth,
-        homeAddress: result.profiles[0].homeAddress,
-        email: result.profiles[0].email,
-        links: {
-          facebookURL: result.profiles[0].links.facebookURL,
-          twitterURL: result.profiles[0].links.twitterURL,
-          linkedinURL: result.profiles[0].links.linkedinURL,
-          blogURL: result.profiles[0].links.blogURL
-        },
-        work: {
-          companyName: result.profiles[0].work.companyName,
-          companyWebsite: result.profiles[0].work.companyWebsite,
-          workAddress: result.profiles[0].work.workAddress,
-          workEmail: result.profiles[0].work.workEmail,
-          designation: result.profiles[0].work.designation
-        }
-      });
-      console.log("RESULT"+result);
-
-      if (Object.keys(array).length == profiles.length) {
-        console.log("ARRAY "+JSON.stringify(array));
-      }
-      return
-    });
-  }
-  return
-})
 
 
 
