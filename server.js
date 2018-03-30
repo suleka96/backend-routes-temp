@@ -559,7 +559,9 @@ User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }, func
     return
   }
   else{
-    console.log("fuck"+result.receivedProfiles.receivedProfileId[0]);
+    var myObj = JSON.stringify(result);
+    var parsedObj = JSON.parse(myObj);
+    console.log("fuck"+parsedObj.receivedProfiles.receivedProfileId[0]);
     return
   }
 
