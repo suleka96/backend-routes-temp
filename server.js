@@ -599,7 +599,8 @@ User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }),func
 //             id: profile._profileId, 
 //           });
 
-          // console.log("Iteration " + j + ": " + profile);
+// console.log("Iteration " + j + ": " + profile);
+
           // console.log("Single retrieval: " + profile.profiles._profileId);
           // console.log("Single retrieval with no profiles: " + profile._profileId);
           // console.log("Single retrieval for links: " + profile.profiles.links.facebookURL);
