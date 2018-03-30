@@ -573,13 +573,12 @@ User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connecti
         return
       }
       array.push(result);
-      console.log("RESULT"+result.profiles[0].links.facebookURL);
+      console.log("RESULT"+result);
+      console.log("ARRAY "+array);
       return
     });
   }
-
   return
-
 })
 
 
