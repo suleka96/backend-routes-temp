@@ -555,17 +555,29 @@ app.post("/device/requests/store", function (req, res) {
 
 User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connectionId: "konnect123"}}}, function(err, result){
   if(err){
-    console.log("Error"+err);
+    console.log("Error "+err);
     return
   }
+  var array = [];
   console.log(result);
   console.log(result.receivedProfiles[0].receivedProfileId);
 
-  var arr = result.receivedProfiles[0].receivedProfileId;
-  for (let profile of arr) {
+  var profiles = result.receivedProfiles[0].receivedProfileId;
 
+  for (let profile of profiles) {
     console.log("inside "+profile);
+
+    Project.findOne({"profiles._profileId": profile}, function(err, result){
+      if(err) {
+        console.log("Error "+err);
+        return
+      }
+      array.push(result);
+      console.log(result);
+      return;
+    });
   }
+  return
 
 })
 
