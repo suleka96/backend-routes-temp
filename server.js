@@ -559,6 +559,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connecti
     return
   }
   console.log(result);
+  console.log(result.receivedProfiles[0].receivedProfileId[0]);
 })
 
 
