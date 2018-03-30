@@ -553,7 +553,7 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }, function(err, result){
+User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }, function(err, parsedObjresult){
   if(err){
     console.log("Error"+err);
     return
@@ -561,7 +561,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }, func
   else{
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
-    console.log("fuck"+result.receivedProfiles.connectionId);
+    console.log("fuck"+parsedObj.receivedProfiles.connectionId);
     return
   }
 
