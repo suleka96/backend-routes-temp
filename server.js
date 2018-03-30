@@ -561,7 +561,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }, func
   else{
     var myObj = JSON.stringify(result);
     var parsedObj = JSON.parse(myObj);
-    console.log("fuck"+parsedObj.receivedProfiles.receivedProfileId[0]);
+    console.log("fuck"+result.receivedProfiles.connectionId);
     return
   }
 
