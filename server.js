@@ -13,6 +13,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./admin/konnect-ionic-auth-firebase-adminsdk-s951b-aabc7ba7c0.json");
 var cors = require('cors');
 
+
 /*******************************************************************************************************************************/
 
 /*
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, "public"))); //Define path for stati
 app.set("views", path.join(__dirname, "views")); //Define path for views
 app.set("view engine", "ejs"); //Define view engine as EJS
 app.use(cors());
+mongoose.Promise = global.Promise;
 
 /*******************************************************************************************************************************/
 
@@ -545,50 +547,57 @@ app.post("/device/connection/return", function (req, res) {
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
-
-  var loginInfo = req.body;
-  res.sendStatus(200).send(req.body);
-  console.log(loginInfo);
+  res.json(req.body);
+  console.log(req.body);
 });
 
 /*******************************************************************************************************************************/
+User.findOne({"userId": "aaaaaaaaaa"}, { "receivedProfiles": 1, "_id": 0 }),function(err, result){
+  if(err){
+    console.log("Error"+err);
+    return
+  }
+  else{
+    console.log(result);
+  }
+
+}
 
 
 
+// User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
+//   console.log(result);
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).then(function (result) {
-  console.log(result);
+//   var myObj = JSON.stringify(result);
+//   var parsedObj = JSON.parse(myObj);
 
-  var myObj = JSON.stringify(result);
-  var parsedObj = JSON.parse(myObj);
+//   var array = [];
 
-  var array = [];
+//   console.log(parsedObj.receivedProfiles.length);
 
-  console.log(parsedObj.receivedProfiles.length);
+//   for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {
 
-  for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {
+//     console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
 
-    console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
+//     if (parsedObj.receivedProfiles[i].connectionId == "konnect123") {
 
-    if (parsedObj.receivedProfiles[i].connectionId == "konnect123") {
+//       console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
 
-      console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
+//       for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
 
-      for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
+//         console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
 
-        console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
+//         User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }, function(err, profile) {
+//         if (err) {
+//           console.log("Error: " + err);
+//         }
 
-        User.findOne({ "profiles._profileId": parsedObj.receivedProfiles[i].receivedProfileId[j] }, { profiles: {$elemMatch: { _profileId: parsedObj.receivedProfiles[i].receivedProfileId[j]}}, "_id": 0 }, function(err, profile) {
-        if (err) {
-          console.log("Error: " + err);
-        }
-
-        else {
-          console.log(profile);
-          array.push({ 
-            name: profile.profileName, 
-            id: profile._profileId, 
-          });
+//         else {
+//           console.log(profile);
+//           array.push({ 
+//             name: profile.profileName, 
+//             id: profile._profileId, 
+//           });
 
           // console.log("Iteration " + j + ": " + profile);
           // console.log("Single retrieval: " + profile.profiles._profileId);
@@ -618,9 +627,9 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }).th
               // }         
             // });         
             // console.log(array);
-        }        
-        });
-      }
-    }
-  }
-});
+//         }        
+//         });
+//       }
+//     }
+//   }
+// });
