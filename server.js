@@ -13,6 +13,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./admin/konnect-ionic-auth-firebase-adminsdk-s951b-aabc7ba7c0.json");
 var cors = require('cors');
 
+
 /*******************************************************************************************************************************/
 
 /*
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, "public"))); //Define path for stati
 app.set("views", path.join(__dirname, "views")); //Define path for views
 app.set("view engine", "ejs"); //Define view engine as EJS
 app.use(cors());
+mongoose.Promise = global.Promise;
 
 /*******************************************************************************************************************************/
 
@@ -545,86 +547,43 @@ app.post("/device/connection/return", function (req, res) {
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
-
-  var loginInfo = req.body;
-  res.sendStatus(200).send(req.body);
-  console.log(loginInfo);
+  res.json(req.body);
+  console.log(req.body);
 });
 
 /*******************************************************************************************************************************/
 
-
-
-
-User.findOne({ "userId": "aaaaaaaaaa" }, { "_id": 0 }).then(function (result) {
-  // console.log(result);
-
-  var myObj = JSON.stringify(result);
-  var parsedObj = JSON.parse(myObj);
-
-  var array = [];
-
-  // console.log(parsedObj.receivedProfiles.length);
-
-  for (var i = 0; i < parsedObj.receivedProfiles.length; i++) {
-
-    //console.log("inside received profiles sub document" + parsedObj.receivedProfiles.length);
-
-    if (parsedObj.receivedProfiles[i].connectionId == "konnect123") {
-
-      //console.log("JS value " + i + ": " + parsedObj.receivedProfiles[i].connectionId);
-
-      for (var j = 0; j < parsedObj.receivedProfiles[i].receivedProfileId.length; j++) {
-
-        //console.log("object value " + j + ": " +  parsedObj.receivedProfiles[i].receivedProfileId[j]);
-
-        User.find({ 'profiles._profileId': parsedObj.receivedProfiles[i].receivedProfileId[j] })
-        .populate('profiles', '_profileId profileName')
-        .lean().exec(
-        function (err, record) {
-          if (err) {
-            res.json("Error in retrieving");
-            console.log("Error in sending connections profile info");
-          }
-          else {   
-            //JS object is turned into a JSON Object
-            var profiles = JSON.stringify(record);
-            var parsedObj = JSON.parse(profiles);
-            console.log(record);        
-          }
-        });
-
-          // console.log("Iteration " + j + ": " + profile);
-          // console.log("Single retrieval: " + profile.profiles._profileId);
-          // console.log("Single retrieval with no profiles: " + profile._profileId);
-          // console.log("Single retrieval for links: " + profile.profiles.links.facebookURL);
-          // console.log("Single retrieval for links with no profiles: " + profile.links.facebookURL);
-  
-          // array.push({
-          //     _profileId: profile.profiles._profileId,
-          //     profileName: profile.profiles.profileName,
-          //     mobileNo: profile.profiles.mobileNo,
-          //     dateOfBirth: profile.profiles.dateOfBirth,
-          //     homeAddress: profile.profiles.homeAddress,
-          //     email: profile.profiles.email
-              // links: {
-              //   facebookURL: profile.profiles.links.facebookURL,
-              //   twitterURL: profile.profiles.links.twitterURL,
-              //   linkedinURL: profile.profiles.links.linkedinURL,
-              //   blogURL: profile.profiles.links.blogURL
-              // },
-              // work: {
-              //   companyName: profile.profiles.work.companyName,
-              //   companyWebsite: profile.profiles.work.companyWebsite,
-              //   workAddress: profile.profiles.work.workAddress,
-              //   workEmail: profile.profiles.work.workEmail,
-              //   designation: profile.profiles.work.designation
-              // }         
-            // });         
-            // console.log(array);
-        // }        
-        // });
-      }
-    }
+User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connectionId: "konnect123"}}}, function(err, result){
+  if(err){
+    console.log("Error "+err);
+    return
   }
+  var array = [];
+  console.log(result);
+  console.log(result.receivedProfiles[0].receivedProfileId);
+
+  var profiles = result.receivedProfiles[0].receivedProfileId;
+
+  for (let profile of profiles) {
+    console.log("inside "+profile);
+
+    User.findOne({"userId": "konnect123"}, {profiles: {$elemMatch: {_profileId: profile}}},function(err, result){
+      if(err) {
+        console.log("Error "+err);
+        return
+      }
+      array.push(result);
+      console.log("RESULT"+result);
+
+      if (Object.keys(array).length == profiles.length) {
+        console.log("ARRAY "+array);
+      }
+
+      return
+    });
+  }
+  return
 });
+
+
+
