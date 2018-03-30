@@ -465,6 +465,7 @@ app.post("/device/requests/allowed", function (req, res) {
   //Request body is parsed to a JSON Object
   var allowedRequestObj = JSON.parse(plaintext);
 
+  
 
 });
 
@@ -494,8 +495,8 @@ app.post("/device/requests/declined", function (req, res) {
         console.log(err);
       }
       else {
-        console.log(obj);
-        res.json("Success");
+        console.log("Succesfully deleted request: " + obj);
+        res.json("Succesfully deleted request");
       }  
     });  
 });
@@ -619,17 +620,5 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-//Testing deleting requester
-User.update(
-  { userId: "aaaaaaaaaa" },
-  { $pull: { requests: { requesterId: "111111111" } } },
-  { safe: true },
-  function removeRequester(err, obj) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      console.log("Succesfully deleted request: " + obj);      
-    }  
-  });
+
  
