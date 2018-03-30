@@ -578,7 +578,6 @@ User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connecti
       if (Object.keys(array).length == profiles.length) {
         console.log("ARRAY "+array);
       }
-
       return
     });
   }
