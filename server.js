@@ -572,11 +572,31 @@ User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connecti
         console.log("Error "+err);
         return
       }
-      array.push(result);
+      array.push({
+        _profileId: result.profiles[0]._profileId,
+        profileName: result.profiles[0].profileName,
+        mobileNo: result.profiles[0].mobileNo,
+        dateOfBirth: result.profiles[0].dateOfBirth,
+        homeAddress: result.profiles[0].homeAddress,
+        email: result.profiles[0].email,
+        links: {
+          facebookURL: result.profiles[0].links.facebookURL,
+          twitterURL: result.profiles[0].links.twitterURL,
+          linkedinURL: result.profiles[0].links.linkedinURL,
+          blogURL: result.profiles[0].links.blogURL
+        },
+        work: {
+          companyName: result.profiles[0].work.companyName,
+          companyWebsite: result.profiles[0].work.companyWebsite,
+          workAddress: result.profiles[0].work.workAddress,
+          workEmail: result.profiles[0].work.workEmail,
+          designation: result.profiles[0].work.designation
+        }
+      });
       console.log("RESULT"+result);
 
       if (Object.keys(array).length == profiles.length) {
-        console.log("ARRAY "+array);
+        console.log("ARRAY "+JSON.stringify(array));
       }
       return
     });
