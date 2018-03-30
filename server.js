@@ -448,6 +448,58 @@ app.post("/device/requests/return", function (req, res) {
   });
 });
 
+//POST request handler for allowed connection requests
+app.post("/device/requests/allowed", function (req, res) {
+  console.log("inside allowed connection requests route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var allowedRequest = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(allowedRequest, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var allowedRequestObj = JSON.parse(plaintext);
+
+
+});
+
+//POST request handler for declined connection requests
+app.post("/device/requests/declined", function (req, res) {
+  console.log("inside declined connection requests route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var declinedRequest = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(declinedRequest, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var declinedRequestObj = JSON.parse(plaintext);  
+
+  User.update(
+    { userId: declinedRequestObj.uid },
+    { $pull: { requests: { requesterId: declinedRequestObj.requesterId } } },
+    { safe: true },
+    function removeRequester(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(obj);
+        res.json("Success");
+      }  
+    });  
+});
+
 //POST request handler for returning recieved connections basic profile
 app.post("/device/connections/return", function (req, res) {
   console.log("inside return connections route");
@@ -567,5 +619,17 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-
+//Testing deleting requester
+User.update(
+  { userId: "aaaaaaaaaa" },
+  { $pull: { requests: { requesterId: "111111111" } } },
+  { safe: true },
+  function removeRequester(err, obj) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("Succesfully deleted request: " + obj);      
+    }  
+  });
  
