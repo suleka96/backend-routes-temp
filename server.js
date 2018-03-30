@@ -567,7 +567,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connecti
   for (let profile of profiles) {
     console.log("inside "+profile);
 
-    Project.findOne({"profiles._profileId": profile}, function(err, result){
+    User.findOne({"profiles._profileId": profile}, function(err, result){
       if(err) {
         console.log("Error "+err);
         return
