@@ -549,7 +549,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestConnectionObj.userId }, { "receivedProfiles": 1, "_id": 0 }, function (err,result) {
+  User.findOne({ "userId": requestConnectionObj.uid}, { "receivedProfiles": 1, "_id": 0 }, function (err,result) {
 
     if(err){
       console.log("Error "+err);
