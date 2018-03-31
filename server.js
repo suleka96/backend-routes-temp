@@ -784,8 +784,9 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
              grantedStatus: true, 
              _profileId: array[i]._profileId     
           };
-          break;
-          console.log("inside if "+JSON.stringify(array));          
+          console.log("inside if "+JSON.stringify(array));
+          //break;
+                    
         }        
         
         if (Object.keys(array).length == AllProfiles.length) {
