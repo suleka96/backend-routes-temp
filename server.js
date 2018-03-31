@@ -776,7 +776,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
           });
           console.log("inside if "+JSON.stringify(array));
         }
-        else{
+        else if (profile._profileId != sharedProf){
           array.push({
             profileName: profile.profileName, 
             grantedStatus: "not granted", 
