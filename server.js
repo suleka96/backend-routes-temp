@@ -753,24 +753,42 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
   var array = [];
   
   var sharedProfiles = result.connectedUsers[0].sharedProfiles;
+
   console.log("shared profiles "+sharedProfiles);
 
-  User.findOne({"userId": "aaaaaaaaaa"}, {"profiles":1 },function(err, profiles){
+  User.findOne({"userId": "aaaaaaaaaa"}, {"profiles":1 },function(err, resultProfiles){
     if(err) {
       console.log("Error "+err);
       return
     }
 
+    var AllProfiles = resultProfiles.profiles;
+
     console.log("All profiles "+ profiles);
-    // var allProfiles = profiles
 
-    // array.push({
-    //   _
-    // });
+   for(let profile of AllProfiles){
+     for(let sharedProf of sharedProfiles){
+        if(profile._profileId == sharedProf ){
 
-    // if (Object.keys(array).length == profiles.length) {
-    //   console.log("ARRAY "+JSON.stringify(array));
-    // }
+          array.push({
+             profileName: profile.profileName, 
+             grantedStatus: "granted", 
+             _profileId: profile._profileId     
+          });
+        }
+        else{
+          array.push({
+            profileName: profile.profileName, 
+            grantedStatus: "not granted", 
+            _profileId: profile._profileId     
+         });
+        }
+     }
+   }
+
+    if (Object.keys(array).length == AllProfiles.length) {
+      console.log("ARRAY "+JSON.stringify(array));
+    }
     
     return
   });
