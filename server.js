@@ -775,11 +775,11 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
              _profileId: profile._profileId     
           });
           
-          console.log("inside if "+JSON.stringify(array));
-          if (Object.keys(array).length == AllProfiles.length) {
-            console.log("ARRAY "+JSON.stringify(array));
-          }
+          console.log("inside if "+JSON.stringify(array));          
           break;
+        }
+        if (Object.keys(array).length == AllProfiles.length) {
+          console.log("ARRAY "+JSON.stringify(array));
         }
         // else if (profile._profileId != sharedProf){
         //   array.push({
