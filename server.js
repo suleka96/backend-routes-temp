@@ -715,39 +715,47 @@ var allowedRequestObj = {
   "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
 }
 
-var receivedSharedProfiles = allowedRequestObj.profileIds;
-var jsonStringify = JSON.stringify(receivedSharedProfiles);
+var newConnectedUser = new ConnectedUsers({
+  connectedUserId: allowedRequestObj.requesterId,
+  sharedProfiles: allowedRequestObj.profileIds
+});
 
-console.log("Raneesh test: " + jsonStringify);
+ //Querying for the relevant user's document and pushing the profie to the profiles feild 
+ User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
+  record.connectedUsers.push(newConnectedUser);
+  record.save();
+  console.log("New Connection saved successfully");
+  //res.json("successful");
+});
 
  
-User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+// User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
-  if(err){
-    console.log("Error "+err);
-    return
-  }
+//   if(err){
+//     console.log("Error "+err);
+//     return
+//   }
 
-  var array = [];
+//   var array = [];
   
-  var Users = result
+//   var Users = result
 
-  console.log(result);
+//   console.log(result);
 
-  // for (let profile of prconnectedUsersofiles) {
+//   // for (let profile of prconnectedUsersofiles) {
 
 
-  //   console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
+//   //   console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
 
-  //   User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function (record) {
-  //     array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
-  //     console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));
-  //   }).then(function () {
-  //     if (Object.keys(array).length == parsedObj.requests.length) {
-  //       console.log("Connected Users Public Profiles: " + JSON.stringify(array));
-  //       res.json(array);
-  //     }
-  //   });
-  // }
+//   //   User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function (record) {
+//   //     array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
+//   //     console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));
+//   //   }).then(function () {
+//   //     if (Object.keys(array).length == parsedObj.requests.length) {
+//   //       console.log("Connected Users Public Profiles: " + JSON.stringify(array));
+//   //       res.json(array);
+//   //     }
+//   //   });
+//   // }
 
-});
+// });
