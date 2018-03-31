@@ -749,47 +749,33 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
     console.log("Error "+err);
     return
   }
+
   var array = [];
   
-  var profiles = result.connectedUsers[0].sharedProfiles;
+  var sharedProfiles = result.connectedUsers[0].sharedProfiles;
+  console.log("shared profiles "+sharedProfiles);
 
-  for (let profile of profiles) {
-
-    User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, result){
-      if(err) {
-        console.log("Error "+err);
-        return
-      }
-      array.push({
-        _profileId: result.profiles[0]._profileId,
-        profileName: result.profiles[0].profileName,
-        mobileNo: result.profiles[0].mobileNo,
-        dateOfBirth: result.profiles[0].dateOfBirth,
-        homeAddress: result.profiles[0].homeAddress,
-        email: result.profiles[0].email,
-        links: {
-          facebookURL: result.profiles[0].links.facebookURL,
-          twitterURL: result.profiles[0].links.twitterURL,
-          linkedinURL: result.profiles[0].links.linkedinURL,
-          blogURL: result.profiles[0].links.blogURL
-        },
-        work: {
-          companyName: result.profiles[0].work.companyName,
-          companyWebsite: result.profiles[0].work.companyWebsite,
-          workAddress: result.profiles[0].work.workAddress,
-          workEmail: result.profiles[0].work.workEmail,
-          designation: result.profiles[0].work.designation
-        }
-      });
-
-      if (Object.keys(array).length == profiles.length) {
-        console.log("ARRAY "+JSON.stringify(array));
-      }
-      
+  User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, profiles){
+    if(err) {
+      console.log("Error "+err);
       return
-    });
-  }
-  return
+    }
+
+    console.log("All profiles "+ profiles);
+    // var allProfiles = profiles
+
+    // array.push({
+    //   _
+    // });
+
+    // if (Object.keys(array).length == profiles.length) {
+    //   console.log("ARRAY "+JSON.stringify(array));
+    // }
+    
+    return
+  });
+  return;
+
 });
 
 
