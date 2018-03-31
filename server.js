@@ -708,7 +708,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-//Testing allowed requests
+Testing allowed requests
 var allowedRequestObj = {
   "uid": "aaaaaaaaaa",
   "requesterId" : "konnect123",
@@ -744,6 +744,7 @@ var newConnectedUser = new ConnectedUsers({
 
 //   // for (let profile of prconnectedUsersofiles) {
 
+   // User.findOne({ userId: profile.connectedUserId }, function (record) {
 
 //   //   console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
 
