@@ -738,7 +738,7 @@ app.post("/device/connection/return", function (req, res) {
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
-  res.json(req.body);
+  res.send(req.body);
   console.log(req.body);
 });
 
@@ -789,10 +789,9 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
      }
   }
 
-  // if (Object.keys(array).length == AllProfiles.length) {
     console.log("ARRAY "+JSON.stringify(array));
-  // }
     return
+
   });
   return
 
