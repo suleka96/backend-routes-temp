@@ -769,12 +769,12 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
    for(let profile of AllProfiles){
      for(let sharedProf of sharedProfiles){
         if(profile._profileId == sharedProf ){
-
           array.push({
              profileName: profile.profileName, 
              grantedStatus: "granted", 
              _profileId: profile._profileId     
           });
+          console.log("inside if "+array);
         }
         else{
           array.push({
@@ -782,6 +782,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
             grantedStatus: "not granted", 
             _profileId: profile._profileId     
          });
+         console.log("inside else "+array);
         }
      }
    }
