@@ -744,53 +744,53 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-// User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectionId}}}, function(err, result){
-//   if(err){
-//     console.log("Error "+err);
-//     return
-//   }
-//   var array = [];
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+  if(err){
+    console.log("Error "+err);
+    return
+  }
+  var array = [];
   
-//   var profiles = result.receivedProfiles[0].receivedProfileId;
+  var profiles = result.connectedUsers[0].sharedProfiles;
 
-//   for (let profile of profiles) {
+  for (let profile of profiles) {
 
-//     User.findOne({"userId": requestConnectionObj.connectionId}, {profiles: {$elemMatch: {_profileId: profile}}},function(err, result){
-//       if(err) {
-//         console.log("Error "+err);
-//         return
-//       }
-//       array.push({
-//         _profileId: result.profiles[0]._profileId,
-//         profileName: result.profiles[0].profileName,
-//         mobileNo: result.profiles[0].mobileNo,
-//         dateOfBirth: result.profiles[0].dateOfBirth,
-//         homeAddress: result.profiles[0].homeAddress,
-//         email: result.profiles[0].email,
-//         links: {
-//           facebookURL: result.profiles[0].links.facebookURL,
-//           twitterURL: result.profiles[0].links.twitterURL,
-//           linkedinURL: result.profiles[0].links.linkedinURL,
-//           blogURL: result.profiles[0].links.blogURL
-//         },
-//         work: {
-//           companyName: result.profiles[0].work.companyName,
-//           companyWebsite: result.profiles[0].work.companyWebsite,
-//           workAddress: result.profiles[0].work.workAddress,
-//           workEmail: result.profiles[0].work.workEmail,
-//           designation: result.profiles[0].work.designation
-//         }
-//       });
+    User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, result){
+      if(err) {
+        console.log("Error "+err);
+        return
+      }
+      array.push({
+        _profileId: result.profiles[0]._profileId,
+        profileName: result.profiles[0].profileName,
+        mobileNo: result.profiles[0].mobileNo,
+        dateOfBirth: result.profiles[0].dateOfBirth,
+        homeAddress: result.profiles[0].homeAddress,
+        email: result.profiles[0].email,
+        links: {
+          facebookURL: result.profiles[0].links.facebookURL,
+          twitterURL: result.profiles[0].links.twitterURL,
+          linkedinURL: result.profiles[0].links.linkedinURL,
+          blogURL: result.profiles[0].links.blogURL
+        },
+        work: {
+          companyName: result.profiles[0].work.companyName,
+          companyWebsite: result.profiles[0].work.companyWebsite,
+          workAddress: result.profiles[0].work.workAddress,
+          workEmail: result.profiles[0].work.workEmail,
+          designation: result.profiles[0].work.designation
+        }
+      });
 
-//       if (Object.keys(array).length == profiles.length) {
-//         console.log("ARRAY "+JSON.stringify(array));
-//       }
+      if (Object.keys(array).length == profiles.length) {
+        console.log("ARRAY "+JSON.stringify(array));
+      }
       
-//       return
-//     });
-//   }
-//   return
-// });
+      return
+    });
+  }
+  return
+});
 
 
 
