@@ -783,9 +783,11 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
               array.push({
                 profileName: profile.profileName, 
                 grantedStatus: false, 
-                _profileId: profile._profileId     
+                _profileId: profile._profileId    
              });
              console.log("inside else if "+JSON.stringify(array));
+             break;
+            
             }            
           }        
         }
