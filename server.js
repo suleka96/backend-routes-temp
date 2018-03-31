@@ -491,7 +491,8 @@ app.post("/device/requests/declined", function (req, res) {
   //Request body is parsed to a JSON Object
   var declinedRequestObj = JSON.parse(plaintext);  
 
-  console.log("DILLONS OBJ: " + declinedRequestObj);
+  console.log("DILLONS UID: " + declinedRequestObj.uid);
+  console.log("DILLONS REQUESTER ID: " + declinedRequestObj.requesterId);
 
   User.update(
     { userId: declinedRequestObj.uid },
