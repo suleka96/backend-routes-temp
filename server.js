@@ -822,6 +822,66 @@ app.post("/device/requests/store", function (req, res) {
 //Testing handling granting revoking
 User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
     console.log(result);  
+
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+
+    var currSharedProfiles = result.connectedUsers[0].sharedProfiles;
+    var modifiedProfiles = [
+      {
+        profileName: "Sample", 
+        grantedStatus: false, 
+        _profileId: "5abb694e26b24d000480c93a"
+      }, 
+      {
+        profileName: "Sampe 2", 
+        grantedStatus: true, 
+        _profileId: "5abb7e9396f60300044034e4"
+      },
+      {
+        profileName: "red", 
+        grantedStatus: true, 
+        _profileId: "5abb7e9a96f60300044034e7"
+      },
+      {
+        profileName: "Red", 
+        grantedStatus: false, 
+        _profileId: "5abba10e440f840004dc52fb"
+      }
+    ];
+    //SULEKAS IDEA: Make a new array according to the above array and push that whole thing to sharedProfiles instead of adding and removing seperately using if blocks
+
+    for (let currProf of currSharedProfiles) {
+      for (var i = 0; i < modifiedProfiles.length; i++) {
+        if ((modifiedProfiles[i]._profileId == currProf) && (modifiedProfiles[i].grantedStatus == true)) {
+          continue;
+        }
+        else if ((modifiedProfiles[i]._profileId == currProf) && (modifiedProfiles[i].grantedStatus == false)) {
+          User.update(
+            { userId: "aaaaaaaaaa" },
+            { $pull: { connectedUsers: [{ connectedUserId: "konnect123" }, {sharedProfiles: }] } },
+            { safe: true },
+            function removeSharedProfile(err, obj) {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                console.log("Succesfully deleted shared profile: " + obj);
+                //res.json("Succesfully deleted shared profile");
+              }  
+          });    
+        }
+        else if ((modifiedProfiles[i]._profileId != currProf) && (modifiedProfiles[i].grantedStatus == true)) {
+
+        }
+      }
+    }
+    
+
+
+
 });
 
 
