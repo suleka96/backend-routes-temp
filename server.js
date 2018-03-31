@@ -610,6 +610,93 @@ app.post("/device/connection/return", function (req, res) {
 
 });
 
+//POST request handler for returning basic profiles of individuals whome the user has shared profiles with
+app.post("/device/connections/return", function (req, res) {
+  console.log("inside return connections route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userConnections = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var requestConnectionObj = JSON.parse(plaintext);
+
+  
+});
+
+//POST request handler for returning shared profile names
+app.post("/device/connection/return", function (req, res) {
+  console.log("inside return connection route");
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var userConnections = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var requestConnectionObj = JSON.parse(plaintext);
+
+  User.findOne({"userId": requestConnectionObj.userId}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+    var array = [];
+    
+    var profiles = result.receivedProfiles[0].receivedProfileId;
+  
+    for (let profile of profiles) {
+  
+      User.findOne({"userId": requestConnectionObj.connectionId}, {profiles: {$elemMatch: {_profileId: profile}}},function(err, result){
+        if(err) {
+          console.log("Error "+err);
+          return
+        }
+        array.push({
+          _profileId: result.profiles[0]._profileId,
+          profileName: result.profiles[0].profileName,
+          mobileNo: result.profiles[0].mobileNo,
+          dateOfBirth: result.profiles[0].dateOfBirth,
+          homeAddress: result.profiles[0].homeAddress,
+          email: result.profiles[0].email,
+          links: {
+            facebookURL: result.profiles[0].links.facebookURL,
+            twitterURL: result.profiles[0].links.twitterURL,
+            linkedinURL: result.profiles[0].links.linkedinURL,
+            blogURL: result.profiles[0].links.blogURL
+          },
+          work: {
+            companyName: result.profiles[0].work.companyName,
+            companyWebsite: result.profiles[0].work.companyWebsite,
+            workAddress: result.profiles[0].work.workAddress,
+            workEmail: result.profiles[0].work.workEmail,
+            designation: result.profiles[0].work.designation
+          }
+        });
+  
+        if (Object.keys(array).length == profiles.length) {
+          console.log("ARRAY "+JSON.stringify(array));
+        }
+        
+        return
+      });
+    }
+    return
+  });
+
+});
+
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
@@ -630,6 +717,36 @@ var allowedRequestObj = {
 
 var receivedSharedProfiles = allowedRequestObj.profileIds;
 
-console.log(receivedSharedProfiles);
+console.log("Raneesh test: " + receivedSharedProfiles);
 
  
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+
+  if(err){
+    console.log("Error "+err);
+    return
+  }
+
+  var array = [];
+  
+  var Users = result
+
+  console.log(result);
+
+  // for (let profile of prconnectedUsersofiles) {
+
+
+  //   console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
+
+  //   User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function (record) {
+  //     array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
+  //     console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));
+  //   }).then(function () {
+  //     if (Object.keys(array).length == parsedObj.requests.length) {
+  //       console.log("Connected Users Public Profiles: " + JSON.stringify(array));
+  //       res.json(array);
+  //     }
+  //   });
+  // }
+
+});
