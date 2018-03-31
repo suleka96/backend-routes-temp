@@ -590,7 +590,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
 });
 
 //POST request handler for returning recieved connections complete profile
-app.post("/device/connection/return", function (req, res) {
+app.post("/device/connections/received/profile", function (req, res) {
   console.log("inside return connection route");
   if (!req.body) return res.sendStatus(400);
 
@@ -606,7 +606,7 @@ app.post("/device/connection/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({"userId": requestConnectionObj.userId}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
+  User.findOne({"userId": requestConnectionObj.uid}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
     if(err){
       console.log("Error "+err);
       return
@@ -674,7 +674,7 @@ app.post("/device/connections/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
-  User.findOne({ "userId": requestConnectionObj.userId }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+  User.findOne({ "userId": requestConnectionObj.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
     if(err){
       console.log("Error "+err);
@@ -744,7 +744,7 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
-// User.findOne({"userId": "aaaaaaaaaa"}, {receivedProfiles: {$elemMatch: {connectedUserId: requestConnectionObj.connectionId}}}, function(err, result){
+// User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectionId}}}, function(err, result){
 //   if(err){
 //     console.log("Error "+err);
 //     return
