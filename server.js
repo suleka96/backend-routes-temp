@@ -657,7 +657,6 @@ app.post("/device/connections/return", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
-
   
 });
 
