@@ -752,7 +752,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
       }
 
       array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
-      console.log("RESULT" + i + ": " + record);
+      console.log("RESULT" + record);
 
       if (Object.keys(array).length == profile.length) {
         console.log("ARRAY " + JSON.stringify(array));
