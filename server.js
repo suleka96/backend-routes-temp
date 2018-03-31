@@ -77,6 +77,7 @@ mongoose.connect(URI); //Connecting to mLab Database
 var Schema = mongoose.Schema;
 
 var profilesSchema = new Schema({
+  _id: false,
   _profileId: Schema.Types.ObjectId,
   profileName: String,
   mobileNo: String,
@@ -99,20 +100,24 @@ var profilesSchema = new Schema({
 });
 
 var connectedUsersSchema = new Schema({
+  _id: false,
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
 var receivedProfilesSchema = new Schema({
+  _id: false,
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
 
 var requestsSchema = new Schema({
+  _id: false,
   requesterId: String
 });
 
 var usersSchema = new Schema({
+  _id: false,
   userId: String,
   fName: String,
   lName: String,
@@ -465,8 +470,31 @@ app.post("/device/requests/allowed", function (req, res) {
   //Request body is parsed to a JSON Object
   var allowedRequestObj = JSON.parse(plaintext);
 
-  var receivedSharedProfiles = allowedRequestObj.profileIds;
+  var newConnectedUser = new ConnectedUsers({
+    connectedUserId: allowedRequestObj.requesterId,
+    sharedProfiles: allowedRequestObj.profileIds
+  });
+  
+   //Querying for the relevant user's document and pushing the profie to the profiles feild 
+   User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
+    record.connectedUsers.push(newConnectedUser);
+    record.save();
+    console.log("New Connection saved successfully");
+    res.json("New Connection saved successfully");
+  });
 
+  User.update(
+    { userId: allowedRequestObj.uid },
+    { $pull: { requests: { requesterId: allowedRequestObj.requesterId } } },
+    { safe: true },
+    function removeRequester(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Succesfully deleted request: " + obj);
+      }  
+  });
 });
 
 //POST request handler for declined connection requests
@@ -485,6 +513,9 @@ app.post("/device/requests/declined", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var declinedRequestObj = JSON.parse(plaintext);  
+
+  console.log("DILLONS UID: " + declinedRequestObj.uid);
+  console.log("DILLONS REQUESTER ID: " + declinedRequestObj.requesterId);
 
   User.update(
     { userId: declinedRequestObj.uid },
@@ -746,27 +777,6 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-// //Testing allowed requests
-// var allowedRequestObj = {
-//   "uid": "aaaaaaaaaa",
-//   "requesterId" : "konnect123",
-//   "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
-// }
-
-// var newConnectedUser = new ConnectedUsers({
-//   connectedUserId: allowedRequestObj.requesterId,
-//   sharedProfiles: allowedRequestObj.profileIds
-// });
-
-//  //Querying for the relevant user's document and pushing the profie to the profiles feild 
-//  User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
-//   record.connectedUsers.push(newConnectedUser);
-//   record.save();
-//   console.log("New Connection saved successfully");
-//   //res.json("successful");
-// });
-
- 
 User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }, function (err,result) {
 
   if(err){
