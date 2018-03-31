@@ -708,7 +708,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-Testing allowed requests
+//Testing allowed requests
 var allowedRequestObj = {
   "uid": "aaaaaaaaaa",
   "requesterId" : "konnect123",
@@ -729,34 +729,4 @@ var newConnectedUser = new ConnectedUsers({
 });
 
  
-// User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
-//   if(err){
-//     console.log("Error "+err);
-//     return
-//   }
-
-//   var array = [];
-  
-//   var Users = result
-
-//   console.log(result);
-
-//   // for (let profile of prconnectedUsersofiles) {
-
-   // User.findOne({ userId: profile.connectedUserId }, function (record) {
-
-//   //   console.log("JS value " + i + ": " + parsedObj.connectedUsers[i].connectedUserId);
-
-//   //   User.findOne({ userId: parsedObj.requests[i].connectedUserId }).then(function (record) {
-//   //     array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
-//   //     console.log("Connected User Public Profiles Iteration" + i + ": " + JSON.stringify(array));
-//   //   }).then(function () {
-//   //     if (Object.keys(array).length == parsedObj.requests.length) {
-//   //       console.log("Connected Users Public Profiles: " + JSON.stringify(array));
-//   //       res.json(array);
-//   //     }
-//   //   });
-//   // }
-
-// });
