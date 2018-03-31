@@ -779,7 +779,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
         }        
         else {
           for (let arr of array) {
-            if (arr._profileId != profile._profileId) {
+            if (arr._profileId != sharedProf) {
               array.push({
                 profileName: profile.profileName, 
                 grantedStatus: false, 
