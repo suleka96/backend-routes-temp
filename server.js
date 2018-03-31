@@ -610,7 +610,7 @@ app.post("/device/connection/return", function (req, res) {
 
 });
 
-//POST request handler for returning basic profiles of individuals whome the user has shared profiles with
+//POST request handler for returning basic profiles of individuals with whome the user has shared profiles with
 app.post("/device/connections/return", function (req, res) {
   console.log("inside return connections route");
   if (!req.body) return res.sendStatus(400);
@@ -627,7 +627,44 @@ app.post("/device/connections/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
+  User.findOne({ "userId": requestConnectionObj.userId }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+
+    if(err){
+      console.log("Error "+err);
+      return
+    }
   
+    var array = [];
+    
+    var Users = result.connectedUsers
+  
+    console.log(result);
+  
+    for (let profile of Users) {
+  
+      User.findOne({ userId: profile.connectedUserId }, function (err,record) {
+  
+        if(err){
+          console.log("Error "+err);
+          return
+        }
+  
+        console.log("RESULT" + record);
+        array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });     
+  
+        if (Object.keys(array).length == Users.length) {
+          console.log("ARRAY " + JSON.stringify(array));
+          res.json(JSON.stringify(array));
+        }
+  
+        return;
+  
+    });
+  
+    }
+    return; 
+  
+  });
 });
 
 //POST request handler for returning shared profile names
@@ -687,6 +724,7 @@ app.post("/device/connection/return", function (req, res) {
   
         if (Object.keys(array).length == profiles.length) {
           console.log("ARRAY "+JSON.stringify(array));
+          res.json(JSON.stringify(array));
         }
         
         return
@@ -729,7 +767,7 @@ app.post("/device/requests/store", function (req, res) {
 // });
 
  
-User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+User.findOne({ "userId": "aaaaaaaaaa" }, { "receivedProfiles": 1, "_id": 0 }, function (err,result) {
 
   if(err){
     console.log("Error "+err);
@@ -738,13 +776,13 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
 
   var array = [];
   
-  var Users = result.connectedUsers
+  var Users = result.receivedProfiles
 
   console.log(result);
 
   for (let profile of Users) {
 
-    User.findOne({ userId: profile.connectedUserId }, function (err,record) {
+    User.findOne({ userId: profile.connectionId }, function (err,record) {
 
       if(err){
         console.log("Error "+err);
