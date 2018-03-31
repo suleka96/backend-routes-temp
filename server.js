@@ -766,27 +766,27 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
 
     console.log("All profiles "+ AllProfiles);
 
-    for(let sharedProf of sharedProfiles) {
-      sharedProfileWithFlag.push({
-        grantedStatus: true, 
-        _profileId: sharedProf
-      });
-    }
+    // for(let sharedProf of sharedProfiles) {
+    //   sharedProfileWithFlag.push({
+    //     grantedStatus: true, 
+    //     _profileId: sharedProf
+    //   });
+    // }
 
-    for (let profile of AllProfiles) {
-      for (let sharedProfWithFlag of sharedProfileWithFlag) {
-        if (profile._profileId != sharedProfWithFlag) {
-          sharedProfileWithFlag.push({
-            grantedStatus: false, 
-            _profileId: profile._profileId
-          });
-          console.log("INSIDE IF: " + sharedProfileWithFlag);
-          if (Object.keys(sharedProfileWithFlag).length == AllProfiles.length) {
-            console.log("ARRAY "+JSON.stringify(sharedProfileWithFlag));
-          }
-        }
-      }
-    }
+    // for (let profile of AllProfiles) {
+    //   for (let sharedProfWithFlag of sharedProfileWithFlag) {
+    //     if (profile._profileId != sharedProfWithFlag) {
+    //       sharedProfileWithFlag.push({
+    //         grantedStatus: false, 
+    //         _profileId: profile._profileId
+    //       });
+    //       console.log("INSIDE IF: " + sharedProfileWithFlag);
+    //       if (Object.keys(sharedProfileWithFlag).length == AllProfiles.length) {
+    //         console.log("ARRAY "+JSON.stringify(sharedProfileWithFlag));
+    //       }
+    //     }
+    //   }
+    // }
 
   //  for(let profile of AllProfiles){
   //    for(let sharedProf of sharedProfiles){
