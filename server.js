@@ -766,31 +766,26 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
 
     console.log("All profiles "+ AllProfiles);
 
+    for(let prof of AllProfiles){
+      array.push({
+        profileName: prof.profileName, 
+        grantedStatus: false, 
+        _profileId: prof._profileId     
+     });
+    }
+
    for(let sharedProf of sharedProfiles){
-     for(let profile of AllProfiles){
-        if(profile._profileId == sharedProf ){
-          array.push({
-             profileName: profile.profileName, 
+     for(var i=0; i < array.length; i++){
+        if(array[i]._profileId == sharedProf ){
+          array[i] = {
+             profileName: array[i].profileName, 
              grantedStatus: true, 
-             _profileId: profile._profileId     
-          });
-          
+             _profileId: array[i]._profileId     
+          };
+          break;
           console.log("inside if "+JSON.stringify(array));          
         }        
-        else {
-          for (let arr of array) {
-            if (arr._profileId != sharedProf) {
-              array.push({
-                profileName: profile.profileName, 
-                grantedStatus: false, 
-                _profileId: profile._profileId    
-             });
-             console.log("inside else if "+JSON.stringify(array));
-             break;
-            
-            }            
-          }        
-        }
+        
         if (Object.keys(array).length == AllProfiles.length) {
           console.log("ARRAY "+JSON.stringify(array));
         }
