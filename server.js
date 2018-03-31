@@ -766,8 +766,8 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
 
     console.log("All profiles "+ AllProfiles);
 
-   for(let profile of AllProfiles){
-     for(let sharedProf of sharedProfiles){
+   for(let sharedProf of sharedProfiles){
+     for(let profile of AllProfiles){
         if(profile._profileId == sharedProf ){
           array.push({
              profileName: profile.profileName, 
