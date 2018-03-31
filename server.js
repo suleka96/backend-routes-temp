@@ -776,7 +776,6 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
           });
           
           console.log("inside if "+JSON.stringify(array));          
-          break;
         }        
         else {
           for (let arr of array) {
