@@ -785,6 +785,29 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   }); 
 });
 
+//POST request handler for returning shared profile names to grant/revoke
+app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
+  console.log("inside handling granting revoking route");
+
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var grantRevoke = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevoke, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var grantRevokeObj = JSON.parse(plaintext);
+
+  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeObj.connectedUserId}}}, function(err, result){
+
+  });
+});
+
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
@@ -796,6 +819,10 @@ app.post("/device/requests/store", function (req, res) {
 /******************************************************************************************************************************/
 
 
+//Testing handling granting revoking
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+    console.log(result);  
+});
 
 
 
