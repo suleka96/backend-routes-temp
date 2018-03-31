@@ -401,7 +401,7 @@ app.post("/profile/send", function (req, res) {
 
 //POST request handler for returning public profile of requests
 app.post("/device/requests/return", function (req, res) {
-  console.log("inside returnRequest route");
+  console.log("inside return request route");
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
@@ -465,7 +465,7 @@ app.post("/device/requests/allowed", function (req, res) {
   //Request body is parsed to a JSON Object
   var allowedRequestObj = JSON.parse(plaintext);
 
-  
+  var receivedSharedProfiles = allowedRequestObj.profileIds;
 
 });
 
@@ -620,5 +620,16 @@ app.post("/device/requests/store", function (req, res) {
 
 /*******************************************************************************************************************************/
 
+
+//Testing allowed requests
+var allowedRequestObj = {
+  "uid": "aaaaaaaaaa",
+  "requesterId" : "konnect123",
+  "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
+}
+
+var receivedSharedProfiles = allowedRequestObj.profileIds;
+
+console.log(receivedSharedProfiles);
 
  
