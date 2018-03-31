@@ -714,63 +714,88 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
   });
 });
 
-//POST request handler for storing requests
-app.post("/device/requests/store", function (req, res) {
-  console.log("inside storeRequest route");
+//POST request handler for returning shared profile names to grant/revoke
+app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
+  console.log("inside return connection route");
   if (!req.body) return res.sendStatus(400);
-  res.json(req.body);
-  console.log(req.body);
-});
 
-/*******************************************************************************************************************************/
+  //Received request body that is encrypted
+  var userConnections = req.body;
 
-User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
-  if(err){
-    console.log("Error "+err);
-    return
-  }
-  var array = [];
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var requestConnectionObj = JSON.parse(plaintext);
+
+  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectedUserId}}}, function(err, result){
+    if(err){
+      console.log("Error "+err);
+      return
+    }
   
-  var profiles = result.connectedUsers[0].sharedProfiles;
-
-  for (let profile of profiles) {
-
-    User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, result){
+    var array = [];
+    
+    var sharedProfiles = result.connectedUsers[0].sharedProfiles;
+  
+    console.log("shared profiles "+sharedProfiles);
+  
+    User.findOne({"userId": requestConnectionObj.uid}, {"profiles":1 },function(err, resultProfiles){
       if(err) {
         console.log("Error "+err);
         return
       }
-      array.push({
-        _profileId: result.profiles[0]._profileId,
-        profileName: result.profiles[0].profileName,
-        mobileNo: result.profiles[0].mobileNo,
-        dateOfBirth: result.profiles[0].dateOfBirth,
-        homeAddress: result.profiles[0].homeAddress,
-        email: result.profiles[0].email,
-        links: {
-          facebookURL: result.profiles[0].links.facebookURL,
-          twitterURL: result.profiles[0].links.twitterURL,
-          linkedinURL: result.profiles[0].links.linkedinURL,
-          blogURL: result.profiles[0].links.blogURL
-        },
-        work: {
-          companyName: result.profiles[0].work.companyName,
-          companyWebsite: result.profiles[0].work.companyWebsite,
-          workAddress: result.profiles[0].work.workAddress,
-          workEmail: result.profiles[0].work.workEmail,
-          designation: result.profiles[0].work.designation
-        }
-      });
-
-      if (Object.keys(array).length == profiles.length) {
-        console.log("ARRAY "+JSON.stringify(array));
+  
+      var AllProfiles = resultProfiles.profiles;
+  
+      //console.log("All profiles "+ AllProfiles);
+  
+      for(let prof of AllProfiles){
+        array.push({
+          profileName: prof.profileName, 
+          grantedStatus: false, 
+          _profileId: prof._profileId     
+       });
       }
-      
+  
+     console.log(JSON.stringify(array));
+  
+     for(let sharedProf of sharedProfiles){
+       for(var i=0; i < array.length; i++){
+          if(array[i]._profileId == sharedProf ){
+            array[i] = {
+               profileName: array[i].profileName, 
+               grantedStatus: true, 
+               _profileId: array[i]._profileId     
+            };
+            console.log("inside if "+JSON.stringify(array));                    
+          }        
+       }
+    }
+  
+      console.log("ARRAY "+JSON.stringify(array));
+      res.json(JSON.stringify(array));
       return
+  
     });
-  }
-  return
+    return  
+  }); 
 });
+
+//POST request handler for storing requests
+app.post("/device/requests/store", function (req, res) {
+  console.log("inside storeRequest route");
+  if (!req.body) return res.sendStatus(400);
+  res.send(req.body);
+  console.log(req.body);
+});
+
+/******************************************************************************************************************************/
+
+
 
 
 
