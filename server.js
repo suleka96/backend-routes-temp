@@ -716,8 +716,9 @@ var allowedRequestObj = {
 }
 
 var receivedSharedProfiles = allowedRequestObj.profileIds;
+var jsonStringify = JSON.stringify(receivedSharedProfiles);
 
-console.log("Raneesh test: " + receivedSharedProfiles);
+console.log("Raneesh test: " + jsonStringify);
 
  
 User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
