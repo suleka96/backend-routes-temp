@@ -742,7 +742,7 @@ app.post("/device/requests/store", function (req, res) {
   console.log(req.body);
 });
 
-/*******************************************************************************************************************************/
+/******************************************************************************************************************************/
 
 User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
   if(err){
