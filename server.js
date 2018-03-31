@@ -77,6 +77,7 @@ mongoose.connect(URI); //Connecting to mLab Database
 var Schema = mongoose.Schema;
 
 var profilesSchema = new Schema({
+  _id: false,
   _profileId: Schema.Types.ObjectId,
   profileName: String,
   mobileNo: String,
@@ -99,20 +100,24 @@ var profilesSchema = new Schema({
 });
 
 var connectedUsersSchema = new Schema({
+  _id: false,
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
 var receivedProfilesSchema = new Schema({
+  _id: false,
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
 
 var requestsSchema = new Schema({
+  _id: false,
   requesterId: String
 });
 
 var usersSchema = new Schema({
+  _id: false,
   userId: String,
   fName: String,
   lName: String,
