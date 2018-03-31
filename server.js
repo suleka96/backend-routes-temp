@@ -784,22 +784,17 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
              grantedStatus: true, 
              _profileId: array[i]._profileId     
           };
-          console.log("inside if "+JSON.stringify(array));
-          //break;
-                    
+          console.log("inside if "+JSON.stringify(array));                    
         }        
-        
-        if (Object.keys(array).length == AllProfiles.length) {
-          console.log("ARRAY "+JSON.stringify(array));
-        }
      }
-   }
+  }
 
-    
-    
+  // if (Object.keys(array).length == AllProfiles.length) {
+    console.log("ARRAY "+JSON.stringify(array));
+  // }
     return
   });
-  return;
+  return
 
 });
 
