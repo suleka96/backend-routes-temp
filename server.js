@@ -776,6 +776,9 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
           });
           
           console.log("inside if "+JSON.stringify(array));
+          if (Object.keys(array).length == AllProfiles.length) {
+            console.log("ARRAY "+JSON.stringify(array));
+          }
           break;
         }
         // else if (profile._profileId != sharedProf){
@@ -789,9 +792,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
      }
    }
 
-    if (Object.keys(array).length == AllProfiles.length) {
-      console.log("ARRAY "+JSON.stringify(array));
-    }
+    
     
     return
   });
