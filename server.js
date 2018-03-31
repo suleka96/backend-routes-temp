@@ -750,7 +750,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
     return
   }
 
-  var array = [];
+  var sharedProfileWithFlag = [];
   
   var sharedProfiles = result.connectedUsers[0].sharedProfiles;
 
@@ -766,30 +766,52 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
 
     console.log("All profiles "+ AllProfiles);
 
-   for(let sharedProf of sharedProfiles){
-     for(let profile of AllProfiles){
-        if(profile._profileId == sharedProf ){
-          array.push({
-             profileName: profile.profileName, 
-             grantedStatus: "granted", 
-             _profileId: profile._profileId     
-          });
-          console.log("inside if "+JSON.stringify(array));
-        }
-        else if (profile._profileId != sharedProf){
-          array.push({
-            profileName: profile.profileName, 
-            grantedStatus: "not granted", 
-            _profileId: profile._profileId     
-         });
-         console.log("inside else "+JSON.stringify(array));
-        }
-     }
-   }
-
-    if (Object.keys(array).length == AllProfiles.length) {
-      console.log("ARRAY "+JSON.stringify(array));
+    for(let sharedProf of sharedProfiles) {
+      sharedProfileWithFlag.push({
+        grantedStatus: true, 
+        _profileId: sharedProf
+      });
     }
+
+    for (let profile of AllProfiles) {
+      for (let sharedProfWithFlag of sharedProfileWithFlag) {
+        if (profile._profileId != sharedProfWithFlag) {
+          sharedProfileWithFlag.push({
+            grantedStatus: false, 
+            _profileId: profile._profileId
+          });
+          console.log("INSIDE IF: " + sharedProfileWithFlag);
+          if (Object.keys(sharedProfileWithFlag).length == AllProfiles.length) {
+            console.log("ARRAY "+JSON.stringify(sharedProfileWithFlag));
+          }
+        }
+      }
+    }
+
+  //  for(let profile of AllProfiles){
+  //    for(let sharedProf of sharedProfiles){
+  //       if(profile._profileId == sharedProf ){
+  //         array.push({
+  //            profileName: profile.profileName, 
+  //            grantedStatus: "granted", 
+  //            _profileId: profile._profileId     
+  //         });
+          
+  //         console.log("inside if "+JSON.stringify(array));
+  //         break;
+  //       }
+  //       else if (profile._profileId != sharedProf){
+  //         array.push({
+  //           profileName: profile.profileName, 
+  //           grantedStatus: "not granted", 
+  //           _profileId: profile._profileId     
+  //        });
+  //        console.log("inside else "+JSON.stringify(array));
+  //       }
+  //    }
+  //  }
+
+    
     
     return
   });
