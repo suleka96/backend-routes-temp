@@ -730,13 +730,18 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
 
   var array = [];
   
-  var Users = result
+  var Users = result.connectedUsers
 
   console.log(result);
 
   for (let profile of Users) {
 
-    User.findOne({ userId: profile.connectedUserId }, function (record) {
+    User.findOne({ userId: profile.connectedUserId }, function (err,record) {
+
+      if(err){
+        console.log("Error "+err);
+        return
+      }
 
       array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });
       console.log("RESULT" + i + ": " + record);
@@ -745,6 +750,11 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
         console.log("ARRAY " + JSON.stringify(array));
       }
 
+      return;
+
   });
-} 
+
+  }
+  return; 
+
 });
