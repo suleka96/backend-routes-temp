@@ -774,7 +774,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
              grantedStatus: "granted", 
              _profileId: profile._profileId     
           });
-          console.log("inside if "+array);
+          console.log("inside if "+JSON.stringify(array));
         }
         else{
           array.push({
@@ -782,7 +782,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
             grantedStatus: "not granted", 
             _profileId: profile._profileId     
          });
-         console.log("inside else "+array);
+         console.log("inside else "+JSON.stringify(array));
         }
      }
    }
