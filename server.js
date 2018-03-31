@@ -658,7 +658,7 @@ app.post("/device/connections/received/profile", function (req, res) {
 });
 
 //POST request handler for returning basic profiles of individuals with whome the user has shared profiles with
-app.post("/device/connections/return", function (req, res) {
+app.post("/device/connections/sent/publicprofile", function (req, res) {
   console.log("inside return connections route");
   if (!req.body) return res.sendStatus(400);
 
@@ -714,26 +714,6 @@ app.post("/device/connections/return", function (req, res) {
   });
 });
 
-//POST request handler for returning shared profile names
-app.post("/device/connection/return", function (req, res) {
-  console.log("inside return connection route");
-  if (!req.body) return res.sendStatus(400);
-
-  //Received request body that is encrypted
-  var userConnections = req.body;
-
-  //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
-
-  //Decrypted request body is converted to plain text
-  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-
-  //Request body is parsed to a JSON Object
-  var requestConnectionObj = JSON.parse(plaintext);
-
- 
-});
-
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
@@ -743,3 +723,54 @@ app.post("/device/requests/store", function (req, res) {
 });
 
 /*******************************************************************************************************************************/
+
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+  if(err){
+    console.log("Error "+err);
+    return
+  }
+  var array = [];
+  
+  var profiles = result.connectedUsers[0].sharedProfiles;
+
+  for (let profile of profiles) {
+
+    User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, result){
+      if(err) {
+        console.log("Error "+err);
+        return
+      }
+      array.push({
+        _profileId: result.profiles[0]._profileId,
+        profileName: result.profiles[0].profileName,
+        mobileNo: result.profiles[0].mobileNo,
+        dateOfBirth: result.profiles[0].dateOfBirth,
+        homeAddress: result.profiles[0].homeAddress,
+        email: result.profiles[0].email,
+        links: {
+          facebookURL: result.profiles[0].links.facebookURL,
+          twitterURL: result.profiles[0].links.twitterURL,
+          linkedinURL: result.profiles[0].links.linkedinURL,
+          blogURL: result.profiles[0].links.blogURL
+        },
+        work: {
+          companyName: result.profiles[0].work.companyName,
+          companyWebsite: result.profiles[0].work.companyWebsite,
+          workAddress: result.profiles[0].work.workAddress,
+          workEmail: result.profiles[0].work.workEmail,
+          designation: result.profiles[0].work.designation
+        }
+      });
+
+      if (Object.keys(array).length == profiles.length) {
+        console.log("ARRAY "+JSON.stringify(array));
+      }
+      
+      return
+    });
+  }
+  return
+});
+
+
+
