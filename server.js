@@ -707,7 +707,7 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "userId": aaaaaaaaaa }, { "connectedUsers": 1, "_id": 0 }, function (result) {
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (result) {
   console.log(result);
 
   var array = [];
