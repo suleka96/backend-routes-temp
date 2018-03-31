@@ -709,16 +709,16 @@ app.post("/device/requests/store", function (req, res) {
 
 
 //Testing allowed requests
-var allowedRequestObj = {
-  "uid": "aaaaaaaaaa",
-  "requesterId" : "konnect123",
-  "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
-}
+// var allowedRequestObj = {
+//   "uid": "aaaaaaaaaa",
+//   "requesterId" : "konnect123",
+//   "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
+// }
 
-var receivedSharedProfiles = allowedRequestObj.profileIds;
-var jsonStringify = JSON.stringify(receivedSharedProfiles);
+// var receivedSharedProfiles = allowedRequestObj.profileIds;
+// var jsonStringify = JSON.stringify(receivedSharedProfiles);
 
-console.log("Raneesh test: " + jsonStringify);
+// console.log("Raneesh test: " + jsonStringify);
 
  
 User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
