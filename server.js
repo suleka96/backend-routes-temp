@@ -755,7 +755,7 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
   var sharedProfiles = result.connectedUsers[0].sharedProfiles;
   console.log("shared profiles "+sharedProfiles);
 
-  User.findOne({"userId": "konnect123"}, {"profiles":1 },function(err, profiles){
+  User.findOne({"userId": "aaaaaaaaaa"}, {"profiles":1 },function(err, profiles){
     if(err) {
       console.log("Error "+err);
       return
