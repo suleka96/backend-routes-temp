@@ -491,6 +491,8 @@ app.post("/device/requests/declined", function (req, res) {
   //Request body is parsed to a JSON Object
   var declinedRequestObj = JSON.parse(plaintext);  
 
+  console.log("DILLONS OBJ: " + declinedRequestObj);
+
   User.update(
     { userId: declinedRequestObj.uid },
     { $pull: { requests: { requesterId: declinedRequestObj.requesterId } } },
@@ -713,25 +715,25 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-// //Testing allowed requests
-// var allowedRequestObj = {
-//   "uid": "aaaaaaaaaa",
-//   "requesterId" : "konnect123",
-//   "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
-// }
+//Testing allowed requests
+var allowedRequestObj = {
+  "uid": "aaaaaaaaaa",
+  "requesterId" : "konnect123",
+  "profileIds": ["5abb694e26b24d000480c93a", "5abb7e9396f60300044034e4"]
+}
 
-// var newConnectedUser = new ConnectedUsers({
-//   connectedUserId: allowedRequestObj.requesterId,
-//   sharedProfiles: allowedRequestObj.profileIds
-// });
+var newConnectedUser = new ConnectedUsers({
+  connectedUserId: allowedRequestObj.requesterId,
+  sharedProfiles: allowedRequestObj.profileIds
+});
 
-//  //Querying for the relevant user's document and pushing the profie to the profiles feild 
-//  User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
-//   record.connectedUsers.push(newConnectedUser);
-//   record.save();
-//   console.log("New Connection saved successfully");
-//   //res.json("successful");
-// });
+ //Querying for the relevant user's document and pushing the profie to the profiles feild 
+ User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
+  record.connectedUsers.push(newConnectedUser);
+  record.save();
+  console.log("New Connection saved successfully");
+  //res.json("successful");
+});
 
  
 User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
