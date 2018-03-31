@@ -707,12 +707,16 @@ app.post("/device/requests/store", function (req, res) {
 /*******************************************************************************************************************************/
 
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (result) {
-  console.log(result);
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers.$": 1, "_id": 0 }, function (err,result) {
+
+  if(err){
+    console.log("Error "+err);
+    return
+  }
 
   var array = [];
   
-  var connectedUsers = result
+  var Users = result
 
   console.log(result);
 
