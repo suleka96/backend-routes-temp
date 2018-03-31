@@ -777,18 +777,22 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
           
           console.log("inside if "+JSON.stringify(array));          
           break;
+        }        
+        else {
+          for (let arr of array) {
+            if (arr._profileId != profile._profileId) {
+              array.push({
+                profileName: profile.profileName, 
+                grantedStatus: false, 
+                _profileId: profile._profileId     
+             });
+             console.log("inside else if "+JSON.stringify(array));
+            }            
+          }        
         }
         if (Object.keys(array).length == AllProfiles.length) {
           console.log("ARRAY "+JSON.stringify(array));
         }
-        // else if (profile._profileId != sharedProf){
-        //   array.push({
-        //     profileName: profile.profileName, 
-        //     grantedStatus: false, 
-        //     _profileId: profile._profileId     
-        //  });
-        //  console.log("inside else "+JSON.stringify(array));
-        // }
      }
    }
 
