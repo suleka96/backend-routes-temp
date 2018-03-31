@@ -715,7 +715,7 @@ app.post("/device/connections/return", function (req, res) {
 });
 
 //POST request handler for returning shared profile names
-app.post("/device/connection/return", function (req, res) {
+app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   console.log("inside return connection route");
   if (!req.body) return res.sendStatus(400);
 
@@ -731,6 +731,60 @@ app.post("/device/connection/return", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
+  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectedUserId}}}, function(err, result){
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+  
+    var array = [];
+    
+    var sharedProfiles = result.connectedUsers[0].sharedProfiles;
+  
+    console.log("shared profiles "+sharedProfiles);
+  
+    User.findOne({"userId": requestConnectionObj.uid}, {"profiles":1 },function(err, resultProfiles){
+      if(err) {
+        console.log("Error "+err);
+        return
+      }
+  
+      var AllProfiles = resultProfiles.profiles;
+  
+      //console.log("All profiles "+ AllProfiles);
+  
+      for(let prof of AllProfiles){
+        array.push({
+          profileName: prof.profileName, 
+          grantedStatus: false, 
+          _profileId: prof._profileId     
+       });
+      }
+  
+     console.log(JSON.stringify(array));
+  
+     for(let sharedProf of sharedProfiles){
+       for(var i=0; i < array.length; i++){
+          if(array[i]._profileId == sharedProf ){
+            array[i] = {
+               profileName: array[i].profileName, 
+               grantedStatus: true, 
+               _profileId: array[i]._profileId     
+            };
+            console.log("inside if "+JSON.stringify(array));                    
+          }        
+       }
+    }
+  
+      console.log("ARRAY "+JSON.stringify(array));
+      res.json(JSON.stringify(array));
+      return
+  
+    });
+    return
+  
+  });
+
  
 });
 
@@ -744,58 +798,7 @@ app.post("/device/requests/store", function (req, res) {
 
 /******************************************************************************************************************************/
 
-User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
-  if(err){
-    console.log("Error "+err);
-    return
-  }
 
-  var array = [];
-  
-  var sharedProfiles = result.connectedUsers[0].sharedProfiles;
-
-  console.log("shared profiles "+sharedProfiles);
-
-  User.findOne({"userId": "aaaaaaaaaa"}, {"profiles":1 },function(err, resultProfiles){
-    if(err) {
-      console.log("Error "+err);
-      return
-    }
-
-    var AllProfiles = resultProfiles.profiles;
-
-    //console.log("All profiles "+ AllProfiles);
-
-    for(let prof of AllProfiles){
-      array.push({
-        profileName: prof.profileName, 
-        grantedStatus: false, 
-        _profileId: prof._profileId     
-     });
-    }
-
-   console.log(JSON.stringify(array));
-
-   for(let sharedProf of sharedProfiles){
-     for(var i=0; i < array.length; i++){
-        if(array[i]._profileId == sharedProf ){
-          array[i] = {
-             profileName: array[i].profileName, 
-             grantedStatus: true, 
-             _profileId: array[i]._profileId     
-          };
-          console.log("inside if "+JSON.stringify(array));                    
-        }        
-     }
-  }
-
-    console.log("ARRAY "+JSON.stringify(array));
-    return
-
-  });
-  return
-
-});
 
 
 
