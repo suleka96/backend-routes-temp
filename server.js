@@ -972,16 +972,16 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
   });
     
   //Querying for the relevant user's document and pushing the updated connection to the connectedUser subdocument 
-  User.findOne({ userId: "aaaaaaaaaa" }).then(function(record) {
-    record.connectedUsers.push(newConnectedUserObj);
-    record.save();
+  User.findOne({ userId: "aaaaaaaaaa" }).then(function(userRecord) {
+    userRecord.connectedUsers.push(newConnectedUserObj);
+    userRecord.save();
     console.log("Updated Connection saved successfully");
   });
 
   //Querying for the relevant connetion's document and pushing the updated allowed profiles to the receivedProfiles subdocument 
-  User.findOne({ userId: "konnect123" }).then(function(record) {
-    record.receivedProfiles.push(newReceivedProfileObj);
-    record.save();
+  User.findOne({ userId: "konnect123" }).then(function(connectionRecord) {
+    connectionRecord.receivedProfiles.push(newReceivedProfileObj);
+    connectionRecord.save();
     console.log("Updated Received Profile saved successfully");
     //res.json("New Connection saved successfully");
   });
