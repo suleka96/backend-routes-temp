@@ -877,20 +877,20 @@ app.post("/device/requests/store", function (req, res) {
 /******************************************************************************************************************************/
 
 
-// //Testing handling granting revoking
-// User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
-//     console.log(result);  
-// });
+//Testing handling granting revoking
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+    console.log(result);  
+});
 
-// User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
-//   if(err){
-//     console.log("Error "+err);
-//     return
-//   }
+  if(err){
+    console.log("Error "+err);
+    return
+  }
 
-//   console.log(result);
+  console.log(result);
 
-// });
+});
 
 
