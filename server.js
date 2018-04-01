@@ -476,7 +476,7 @@ app.post("/device/requests/allowed", function (req, res) {
   });
   
    //Querying for the relevant user's document and pushing the profie to the profiles feild 
-   User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
+  User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
     record.connectedUsers.push(newConnectedUser);
     record.save();
     console.log("New Connection saved successfully");
@@ -514,8 +514,8 @@ app.post("/device/requests/declined", function (req, res) {
   //Request body is parsed to a JSON Object
   var declinedRequestObj = JSON.parse(plaintext);  
 
-  console.log("DILLONS UID: " + declinedRequestObj.uid);
-  console.log("DILLONS REQUESTER ID: " + declinedRequestObj.requesterId);
+  console.log("DILLONS DECLINE UID: " + declinedRequestObj.uid);
+  console.log("DILLONS DECLINE REQUESTER ID: " + declinedRequestObj.requesterId);
 
   User.update(
     { userId: declinedRequestObj.uid },
@@ -658,7 +658,7 @@ app.post("/device/connections/received/profile", function (req, res) {
 });
 
 //POST request handler for returning basic profiles of individuals with whome the user has shared profiles with
-app.post("/device/connections/return", function (req, res) {
+app.post("/device/connections/sent/publicprofile", function (req, res) {
   console.log("inside return connections route");
   if (!req.body) return res.sendStatus(400);
 
@@ -714,7 +714,7 @@ app.post("/device/connections/return", function (req, res) {
   });
 });
 
-//POST request handler for returning shared profile names
+//POST request handler for returning shared profile names to grant/revoke
 app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   console.log("inside return connection route");
   if (!req.body) return res.sendStatus(400);
@@ -781,11 +781,31 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
       return
   
     });
-    return
-  
-  });
+    return  
+  }); 
+});
 
- 
+//POST request handler for returning shared profile names to grant/revoke
+app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
+  console.log("inside handling granting revoking route");
+
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var grantRevoke = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevoke, 'my key is 123');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var grantRevokeObj = JSON.parse(plaintext);
+
+  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeObj.connectedUserId}}}, function(err, result){
+
+  });
 });
 
 //POST request handler for storing requests
@@ -800,6 +820,10 @@ app.post("/device/requests/store", function (req, res) {
 /******************************************************************************************************************************/
 
 
+//Testing handling granting revoking
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+    console.log(result);  
+});
 
 User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
