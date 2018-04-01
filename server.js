@@ -870,8 +870,8 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
       for(let i=0; i < receivedRequests.length; i++){
         if(request == receivedRequests[i] ){
           receivedRequests.splice(i, 1);
-          break;
         }
+        console.log("inside if"+receivedRequests);
       }
     }
 
