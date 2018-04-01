@@ -865,11 +865,11 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     }
 
     currentReqests = result.requests
-    console.log(result);
+    console.log("result of query"+result);
 
     for(let request of currentReqests){
       for(let i=0; i < receivedRequests.length; i++){
-        if(request == receivedRequests[i] ){
+        if(request.requesterId == receivedRequests[i] ){
           receivedRequests.splice(i, 1);
         }
         console.log("inside if"+receivedRequests);
