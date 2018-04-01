@@ -837,7 +837,7 @@ app.post("/device/requests/store", function (req, res) {
 // });
 
 
-User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
   if(err){
     console.log("Error "+err);
@@ -846,7 +846,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
 
   received = { sharedProfiles: ["konnect123", "123456kon","duckyou123"], uid: "aaaaaaaaaa" }
   receivedRequests = received.sharedProfiles
-  connectedUsers = result.connectedUsers
+  connectedUsers = result1.connectedUsers
 
   for(let connecterUser of connectedUsers){
     for(let i=0; i < receivedRequests.length; i++){
@@ -857,15 +857,15 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     }
   }
 
-  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err,result) {
+  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err,result2) {
 
     if(err){
       console.log("Error "+err);
       return
     }
 
-    currentReqests = result.requests
-    console.log("result of query"+result);
+    currentReqests = result2.requests
+    console.log("result of query"+result2);
 
     for(let request of currentReqests){
       for(let i=0; i < receivedRequests.length; i++){
@@ -882,7 +882,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
         requesterId: newRequest
       });
       currentReqests.push(request);
-      currentReqests.save();
+      result2.save();
       console.log("saved "+ newRequest);
     }
 
