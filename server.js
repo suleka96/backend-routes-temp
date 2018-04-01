@@ -865,6 +865,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     }
 
     currentReqests = result.requests
+    console.log(result);
 
     for(let request of currentReqests){
       for(let i=0; i < receivedRequests.length; i++){
