@@ -844,7 +844,21 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     return
   }
 
-  console.log(result);
+  received = { sharedProfiles: ["konnect123", "123456kon"], uid: "aaaaaaaaaa" }
+  receivedRequests = received.sharedProfiles
+  connectedUsers = result.connectedUsers
+
+  for(let connecterUser of connectedUsers){
+    for(let i=0; i < receivedRequests.length; i++){
+      if(connecterUser.connectedUserId == receivedRequests[i] ){
+        receivedRequests.splice(i, 1);
+        break;
+      }
+    }
+   
+  }
+
+  console.log(receivedRequests);
 
 });
 
