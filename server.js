@@ -844,7 +844,7 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     return
   }
 
-  received = { sharedProfiles: ["konnect123", "123456kon"], uid: "aaaaaaaaaa" }
+  received = { sharedProfiles: ["konnect123", "123456kon","duckyou123"], uid: "aaaaaaaaaa" }
   receivedRequests = received.sharedProfiles
   connectedUsers = result.connectedUsers
 
@@ -855,10 +855,28 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
         break;
       }
     }
-   
   }
 
-  console.log(receivedRequests);
+  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err,result) {
+
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+
+    currentReqests = result.requests
+
+    for(let request of currentReqests){
+      for(let i=0; i < receivedRequests.length; i++){
+        if(request == receivedRequests[i] ){
+          receivedRequests.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+    console.log(receivedRequests);
+  });    
 
 });
 
