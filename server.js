@@ -785,7 +785,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   }); 
 });
 
-//POST request handler for returning shared profile names to grant/revoke
+//POST request handler for handling granting/revoking of shared profiles to connected users
 app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   console.log("inside handling granting revoking route");
 
@@ -808,56 +808,78 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   });
 });
 
+//-------------------------------------REMAKE THE CODE TO RETRIEVE  DECODED JSON AND ASSIGN TO QUERY---------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------
+
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
+
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
 
-  res.send(req.body);
-  console.log(req.body);
+  User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
+
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+  
+    received = { sharedProfiles: ["konnect123", "123456kon","duckyou123"], uid: "aaaaaaaaaa" }
+    receivedRequests = received.sharedProfiles
+    connectedUsers = result1.connectedUsers
+  
+    for(let connecterUser of connectedUsers){
+      for(let i=0; i < receivedRequests.length; i++){
+        if(connecterUser.connectedUserId == receivedRequests[i] ){
+          receivedRequests.splice(i, 1);
+          break;
+        }
+      }
+    }
+  
+    User.findOne({ "userId": "aaaaaaaaaa" }, function (err,result) {
+  
+      if(err){
+        console.log("Error "+err);
+        return
+      }
+  
+      currentReqests = result.requests
+      console.log("result of query "+result);
+      console.log("RESULT of REQUEST ARRAY"+currentReqests);
+  
+      for(let request of currentReqests){
+        for(let i=0; i < receivedRequests.length; i++){
+          if(request.requesterId == receivedRequests[i] ){
+            console.log("inside if"+receivedRequests[i]);
+            receivedRequests.splice(i, 1);
+          }
+          
+        }
+      }
+  
+      for(let newRequest of receivedRequests){
+        
+        var element={requesterId: newRequest};
+        result.requests.push(element);
+        result.save();
+        console.log("saved "+ element);
+      }
+  
+      console.log(receivedRequests);
+      res.send("success");
+  
+    });    
+  
+  });
 });
 
 /******************************************************************************************************************************/
 
 
-// //Testing handling granting revoking
-// User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
-//     console.log(result);  
-// });
-
-// User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
-
-//   if(err){
-//     console.log("Error "+err);
-//     return
-//   }
-
-//   console.log(result);
-
-// });
-
-
-User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
-
-  if(err){
-    console.log("Error "+err);
-    return
-  }
-
-  received = { sharedProfiles: ["konnect123", "123456kon","duckyou123"], uid: "aaaaaaaaaa" }
-  receivedRequests = received.sharedProfiles
-  connectedUsers = result1.connectedUsers
-
-  for(let connecterUser of connectedUsers){
-    for(let i=0; i < receivedRequests.length; i++){
-      if(connecterUser.connectedUserId == receivedRequests[i] ){
-        receivedRequests.splice(i, 1);
-        break;
-      }
-    }
-  }
-
-  User.findOne({ "userId": "aaaaaaaaaa" }, function (err,result) {
+//Testing handling granting revoking
+User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+    console.log(result);
 
     if(err){
       console.log("Error "+err);
@@ -914,35 +936,4 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
         }
       }
     }
-    
-
-
-
-});
-    currentReqests = result.requests
-    console.log("result of query "+result);
-    console.log("RESULT of REQUEST ARRAY"+currentReqests);
-
-    for(let request of currentReqests){
-      for(let i=0; i < receivedRequests.length; i++){
-        if(request.requesterId == receivedRequests[i] ){
-          console.log("inside if"+receivedRequests[i]);
-          receivedRequests.splice(i, 1);
-        }
-        
-      }
-    }
-
-    for(let newRequest of receivedRequests){
-      
-      var element={requesterId: newRequest};
-      result.requests.push(element);
-      result.save();
-      console.log("saved "+ element);
-    }
-
-    console.log(receivedRequests);
-
-  });    
-
-});
+  });
