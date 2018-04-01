@@ -467,8 +467,13 @@ app.post("/device/requests/allowed", function (req, res) {
     connectedUserId: allowedRequestObj.requesterId,
     sharedProfiles: allowedRequestObj.profileIds
   });
+
+  var newReceivedProfile = new ReceivedProfile({
+    connectionId: allowedRequestObj.uid,
+    receivedProfileId: allowedRequestObj.profileIds
+  });
   
-   //Querying for the relevant user's document and pushing the profie to the profiles feild 
+  //Querying for the relevant user's document and pushing the new connection to the connectedUser subdocument 
   User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
     record.connectedUsers.push(newConnectedUser);
     record.save();
@@ -476,6 +481,14 @@ app.post("/device/requests/allowed", function (req, res) {
     res.json("New Connection saved successfully");
   });
 
+  //Querying for the requesters document and pushing the new connection to the receivedProfiles subdocument 
+  User.findOne({ userId: allowedRequestObj.requesterId }).then(function(record) {
+    record.receivedProfiles.push(newReceivedProfile);
+    record.save();
+    console.log("New Received Profile saved successfully");    
+  });
+
+  //Removing newly added connection from requests sub document
   User.update(
     { userId: allowedRequestObj.uid },
     { $pull: { requests: { requesterId: allowedRequestObj.requesterId } } },
@@ -778,7 +791,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   }); 
 });
 
-//POST request handler for returning shared profile names to grant/revoke
+//POST request handler for handling granting/revoking of shared profiles to connected users
 app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   console.log("inside handling granting revoking route");
 
@@ -795,9 +808,93 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
+ 
+    // var modifiedProfiles = [
+    //   {
+    //     profileName: "Sample", 
+    //     grantedStatus: false, 
+    //     _profileId: "5abb694e26b24d000480c93a"
+    //   }, 
+    //   {
+    //     profileName: "Sampe 2", 
+    //     grantedStatus: true, 
+    //     _profileId: "5abb7e9396f60300044034e4"
+    //   },
+    //   {
+    //     profileName: "red", 
+    //     grantedStatus: true, 
+    //     _profileId: "5abb7e9a96f60300044034e7"
+    //   },
+    //   {
+    //     profileName: "Red", 
+    //     grantedStatus: false, 
+    //     _profileId: "5abba10e440f840004dc52fb"
+    //   }
+    // ];
 
-  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeObj.connectedUserId}}}, function(err, result){
+    var modifiedProfiles = grantRevokeObj.modifiedProfiles;
 
+    var allowedProfilesArray = [];
+
+    for (var i = 0; i < modifiedProfiles.length; i++) {
+      if (modifiedProfiles[i].grantedStatus == true) {
+        allowedProfilesArray.push(modifiedProfiles[i]._profileId);
+      }
+    }
+
+    //New ConnectedUsers object to push to connectedUsers subdocument of user
+    var newConnectedUserObj = new ConnectedUsers({
+      sharedProfiles: allowedProfilesArray,
+      connectedUserId: grantRevokeObj.connectedUserId
+    });
+
+    //New ReceivedProfile object to push to receivedProfiles subdocument of connection
+    var newReceivedProfileObj = new ReceivedProfile({
+      connectionId: grantRevokeObj.uid,
+      receivedProfileId: allowedProfilesArray
+    });
+
+  //Delete current data from user's connectedUsers subdocument
+  User.update(
+    { userId: grantRevokeObj.uid },
+    { $pull: { connectedUsers: { connectedUserId: grantRevokeObj.connectedUserId } } },
+    { safe: true },
+    function removeConnectedUser(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Succesfully deleted connected user: " + obj);
+      }  
+  });
+
+  //Delete current data from connection's receivedProfiles subdocument
+  User.update(
+    { userId: grantRevokeObj.connectedUserId },
+    { $pull: { receivedProfiles: { connectionId: grantRevokeObj.uid } } },
+    { safe: true },
+    function removeReceivedProfile(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Succesfully deleted received profile: " + obj);
+      }  
+  });
+    
+  //Querying for the relevant user's document and pushing the updated connection to the connectedUser subdocument 
+  User.findOne({ userId: grantRevokeObj.uid }).then(function(userRecord) {
+    userRecord.connectedUsers.push(newConnectedUserObj);
+    userRecord.save();
+    console.log("Updated Connection saved successfully");
+  });
+
+  //Querying for the relevant connetion's document and pushing the updated allowed profiles to the receivedProfiles subdocument 
+  User.findOne({ userId: grantRevokeObj.connectedUserId }).then(function(connectionRecord) {
+    connectionRecord.receivedProfiles.push(newReceivedProfileObj);
+    connectionRecord.save();
+    console.log("Updated Received Profile saved successfully");
+    //res.json("New Connection saved successfully");
   });
 });
 
@@ -927,3 +1024,101 @@ User.update(
     });
     console.log("success");
 });
+//Testing handling granting revoking
+// User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
+//     console.log(result);
+
+//     if(err){
+//       console.log("Error "+err);
+//       return
+//     }
+
+//     var currSharedProfiles = result.connectedUsers[0].sharedProfiles;
+//     var modifiedProfiles = [
+//       {
+//         profileName: "Sample", 
+//         grantedStatus: false, 
+//         _profileId: "5abb694e26b24d000480c93a"
+//       }, 
+//       {
+//         profileName: "Sampe 2", 
+//         grantedStatus: true, 
+//         _profileId: "5abb7e9396f60300044034e4"
+//       },
+//       {
+//         profileName: "red", 
+//         grantedStatus: true, 
+//         _profileId: "5abb7e9a96f60300044034e7"
+//       },
+//       {
+//         profileName: "Red", 
+//         grantedStatus: false, 
+//         _profileId: "5abba10e440f840004dc52fb"
+//       }
+//     ];
+
+//     var allowedProfilesArray = [];
+
+//     for (var i = 0; i < modifiedProfiles.length; i++) {
+//       if (modifiedProfiles[i].grantedStatus == true) {
+//         allowedProfilesArray.push(modifiedProfiles[i]._profileId);
+//       }
+//     }
+
+//     //New ConnectedUsers object to push to connectedUsers subdocument of user
+//     var newConnectedUserObj = new ConnectedUsers({
+//       sharedProfiles: allowedProfilesArray,
+//       connectedUserId: "konnect123"
+//     });
+
+//     //New ReceivedProfile object to push to receivedProfiles subdocument of connection
+//     var newReceivedProfileObj = new ReceivedProfile({
+//       connectionId: "aaaaaaaaaa",
+//       receivedProfileId: allowedProfilesArray
+//     });
+
+//   //Delete current data from user's connectedUsers subdocument
+//   User.update(
+//     { userId: "aaaaaaaaaa" },
+//     { $pull: { connectedUsers: { connectedUserId: "konnect123" } } },
+//     { safe: true },
+//     function removeConnectedUser(err, obj) {
+//       if (err) {
+//         console.log(err);
+//       }
+//       else {
+//         console.log("Succesfully deleted connected user: " + obj);
+//       }  
+//   });
+
+//   //Delete current data from connection's receivedProfiles subdocument
+//   User.update(
+//     { userId: "konnect123" },
+//     { $pull: { receivedProfiles: { connectionId: "aaaaaaaaaa" } } },
+//     { safe: true },
+//     function removeReceivedProfile(err, obj) {
+//       if (err) {
+//         console.log(err);
+//       }
+//       else {
+//         console.log("Succesfully deleted received profile: " + obj);
+//       }  
+//   });
+    
+//   //Querying for the relevant user's document and pushing the updated connection to the connectedUser subdocument 
+//   User.findOne({ userId: "aaaaaaaaaa" }).then(function(userRecord) {
+//     userRecord.connectedUsers.push(newConnectedUserObj);
+//     userRecord.save();
+//     console.log("Updated Connection saved successfully");
+//   });
+
+//   //Querying for the relevant connetion's document and pushing the updated allowed profiles to the receivedProfiles subdocument 
+//   User.findOne({ userId: "konnect123" }).then(function(connectionRecord) {
+//     connectionRecord.receivedProfiles.push(newReceivedProfileObj);
+//     connectionRecord.save();
+//     console.log("Updated Received Profile saved successfully");
+//     //res.json("New Connection saved successfully");
+//   });
+
+    
+//   });
