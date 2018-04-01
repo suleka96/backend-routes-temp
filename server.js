@@ -857,30 +857,32 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
     }
   }
 
-  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 }, function (err,result2) {
+  User.findOne({ "userId": "aaaaaaaaaa" }, function (err,result) {
 
     if(err){
       console.log("Error "+err);
       return
     }
 
-    currentReqests = result2.requests
-    console.log("result of query"+result2);
+    currentReqests = result.requests
+    console.log("result of query "+result);
+    console.log("RESULT of REQUEST ARRAY"+currentReqests);
 
     for(let request of currentReqests){
       for(let i=0; i < receivedRequests.length; i++){
         if(request.requesterId == receivedRequests[i] ){
+          console.log("inside if"+receivedRequests[i]);
           receivedRequests.splice(i, 1);
         }
-        console.log("inside if"+receivedRequests);
+        
       }
     }
 
     for(let newRequest of receivedRequests){
       
       var element={requesterId: newRequest};
-      result2.requests.push(element);
-      result2.save();
+      result.requests.push(element);
+      result.save();
       console.log("saved "+ element);
     }
 
