@@ -878,10 +878,10 @@ User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, func
 
     for(let newRequest of receivedRequests){
       
-      var reqest={requesterId: newRequest};
-      result2.requests.push(request);
-      result2.requests.save();
-      console.log("saved "+ request);
+      var element={requesterId: newRequest};
+      result2.requests.push(element);
+      result2.save();
+      console.log("saved "+ element);
     }
 
     console.log(receivedRequests);
