@@ -474,6 +474,11 @@ app.post("/device/requests/allowed", function (req, res) {
     connectedUserId: allowedRequestObj.requesterId,
     sharedProfiles: allowedRequestObj.profileIds
   });
+
+  var newReceivedProfile = new ReceivedProfile({
+    connectionId: allowedRequestObj.uid,
+    receivedProfileId: allowedRequestObj.profileIds
+  });
   
   //Querying for the relevant user's document and pushing the new connection to the connectedUser subdocument 
   User.findOne({ userId: allowedRequestObj.uid }).then(function (record) {
@@ -483,6 +488,14 @@ app.post("/device/requests/allowed", function (req, res) {
     res.json("New Connection saved successfully");
   });
 
+  //Querying for the requesters document and pushing the new connection to the receivedProfiles subdocument 
+  User.findOne({ userId: allowedRequestObj.requesterId }).then(function(record) {
+    record.receivedProfiles.push(newReceivedProfile);
+    record.save();
+    console.log("New Received Profile saved successfully");    
+  });
+
+  //Removing newly added connection from requests sub document
   User.update(
     { userId: allowedRequestObj.uid },
     { $pull: { requests: { requesterId: allowedRequestObj.requesterId } } },
@@ -909,57 +922,69 @@ User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedU
         _profileId: "5abba10e440f840004dc52fb"
       }
     ];
-    //SULEKAS IDEA: Make a new array according to the above array and push that whole thing to sharedProfiles instead of adding and removing seperately using if blocks
 
-    var newConnectedUserObj = {
-      sharedProfiles: ["5abb7e9396f60300044034e4", "5abb7e9a96f60300044034e7"],
-      connectedUserId: "konnect123"
+    var allowedProfilesArray = [];
+
+    for (var i = 0; i < modifiedProfiles.length; i++) {
+      if (modifiedProfiles[i].grantedStatus == true) {
+        allowedProfilesArray.push(modifiedProfiles[i]._profileId);
+      }
     }
 
-    User.update(
-      { userId: "aaaaaaaaaa" },
-      { $pull: { connectedUsers: { connectedUserId: "konnect123" } } },
-      { safe: true },
-      function removeRequester(err, obj) {
-        if (err) {
-          console.log(err);
-        }
-        else {
-          console.log("Succesfully deleted connected user: " + obj);
-        }  
+    //New ConnectedUsers object to push to connectedUsers subdocument of user
+    var newConnectedUserObj = new ConnectedUsers({
+      sharedProfiles: allowedProfilesArray,
+      connectedUserId: "konnect123"
     });
+
+    //New ReceivedProfile object to push to receivedProfiles subdocument of connection
+    var newReceivedProfileObj = new ReceivedProfile({
+      connectionId: "aaaaaaaaaa",
+      receivedProfileId: allowedProfilesArray
+    });
+
+  //Delete current data from user's connectedUsers subdocument
+  User.update(
+    { userId: "aaaaaaaaaa" },
+    { $pull: { connectedUsers: { connectedUserId: "konnect123" } } },
+    { safe: true },
+    function removeConnectedUser(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Succesfully deleted connected user: " + obj);
+      }  
+  });
+
+  //Delete current data from connection's receivedProfiles subdocument
+  User.update(
+    { userId: "konnect123" },
+    { $pull: { receivedProfiles: { connectionId: "aaaaaaaaaa" } } },
+    { safe: true },
+    function removeReceivedProfile(err, obj) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Succesfully deleted received profile: " + obj);
+      }  
+  });
     
-    //Querying for the relevant user's document and pushing the updated connection to the connectedUser subdocument 
-  User.findOne({ userId: "aaaaaaaaaa" }).then(function (record) {
+  //Querying for the relevant user's document and pushing the updated connection to the connectedUser subdocument 
+  User.findOne({ userId: "aaaaaaaaaa" }).then(function(record) {
     record.connectedUsers.push(newConnectedUserObj);
     record.save();
     console.log("Updated Connection saved successfully");
+  });
+
+  //Querying for the relevant connetion's document and pushing the updated allowed profiles to the receivedProfiles subdocument 
+  User.findOne({ userId: "konnect123" }).then(function(record) {
+    record.receivedProfiles.push(newReceivedProfileObj);
+    record.save();
+    console.log("Updated Received Profile saved successfully");
     //res.json("New Connection saved successfully");
   });
 
-    // for (let currProf of currSharedProfiles) {
-    //   for (var i = 0; i < modifiedProfiles.length; i++) {
-    //     if ((modifiedProfiles[i]._profileId == currProf) && (modifiedProfiles[i].grantedStatus == true)) {
-    //       continue;
-    //     }
-    //     else if ((modifiedProfiles[i]._profileId == currProf) && (modifiedProfiles[i].grantedStatus == false)) {
-    //       User.update(
-    //         { userId: "aaaaaaaaaa" },
-    //         { $pull: { connectedUsers: [{ connectedUserId: "konnect123" }, {sharedProfiles: }] } },
-    //         { safe: true },
-    //         function removeSharedProfile(err, obj) {
-    //           if (err) {
-    //             console.log(err);
-    //           }
-    //           else {
-    //             console.log("Succesfully deleted shared profile: " + obj);
-    //             //res.json("Succesfully deleted shared profile");
-    //           }  
-    //       });    
-    //     }
-    //     else if ((modifiedProfiles[i]._profileId != currProf) && (modifiedProfiles[i].grantedStatus == true)) {
-
-    //     }
-    //   }
-    // }
+    
   });
