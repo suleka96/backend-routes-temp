@@ -792,6 +792,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
 app.post("/device/requests/store", function (req, res) {
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
+
   res.send(req.body);
   console.log(req.body);
 });
@@ -800,5 +801,14 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
+User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
+  if(err){
+    console.log("Error "+err);
+    return
+  }
+
+  console.log(result);
+
+});
 
