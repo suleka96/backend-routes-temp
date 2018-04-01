@@ -972,8 +972,10 @@ User.update(
   { $pull: { profiles: { _profileId: "5abb694e26b24d000480c93a" } } },
   { safe: true },
   function (err, obj) {
+
     if (err) {
       console.log(err);
+      return
     }
 
     var usersWithProfle = [];
@@ -982,6 +984,7 @@ User.update(
 
       if (err) {
         console.log(err);
+        return;
       }
 
      var elements = result1.connectedUsers
@@ -994,6 +997,7 @@ User.update(
             result1.connectedUsers[i].sharedProfiles.pull(result1.connectedUsers[i].sharedProfiles[j]);
             result1.save();
             console.log("profile getting pulled IN GIVEN PROF "+result1.connectedUsers[i].sharedProfiles[j]);
+            break;
           }
         }
       }
@@ -1003,6 +1007,7 @@ User.update(
 
           if (err) {
             console.log(err);
+            return;
           }
 
           for(var i=0; i< result.receivedProfiles.length; i++){
@@ -1015,14 +1020,18 @@ User.update(
                   result.receivedProfiles[i].receivedProfileId.pull(result.receivedProfiles[i].receivedProfileId[j]);
                   result.save();
                   console.log("profile getting pulled in RECIVED PROF "+result.receivedProfiles[i].receivedProfileId[j]);
+                  break;
                 }
               }  
             }
           }
+          return;
         });
       }
+      return;
     });
     console.log("success");
+    return;
 });
 //Testing handling granting revoking
 // User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
