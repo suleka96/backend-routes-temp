@@ -859,6 +859,8 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
+
+  console.log(grantRevokeObj);
  
     // var modifiedProfiles = [
     //   {
@@ -889,7 +891,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
     var allowedProfilesArray = [];
 
     for (var i = 0; i < modifiedProfiles.length; i++) {
-      if (modifiedProfiles[i].grantedStatus == "true") {
+      if (modifiedProfiles[i].grantedStatus == true) {
         allowedProfilesArray.push(modifiedProfiles[i]._profileId);
       }
     }
