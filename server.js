@@ -860,7 +860,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
 
-  console.log(grantRevokeObj);
+  console.log("Request Sent: " + grantRevokeObj);
  
     // var modifiedProfiles = [
     //   {
@@ -913,6 +913,9 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
     });
 
     console.log("New Received Profile: " + newReceivedProfileObj);
+
+    console.log("User ID: " + grantRevokeObj.uid);
+    console.log("Connected User ID: " + grantRevokeObj.connectedUserId);
 
   //Delete current data from user's connectedUsers subdocument
   User.update(
