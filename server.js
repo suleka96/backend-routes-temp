@@ -670,7 +670,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   });
 });
 
-//RANEESH
+//SULEKA
 //POST request handler for returning received connections complete profile
 app.post("/device/connections/received/profile", function (req, res) {
   console.log("inside return connection route");
