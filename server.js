@@ -423,7 +423,7 @@ app.post("/profiles/send", function (req, res) {
         var profiles = JSON.stringify(record.profiles);
         console.log(profiles);
         var encrypted = CryptoJS.Rabbit.encrypt(profiles, "hfdsahgdajshgjdsahgjfafsajhkgs");
-        res.json(encrypted);
+        res.send(encrypted);
       }
     });
 });
