@@ -323,6 +323,77 @@ app.post("/profile/delete", function (req, res) {
   //Request body is parsed to a JSON Object
   var delProfObj = JSON.parse(plaintext);
 
+  User.update(
+    { userId: delProfObj.uid },
+    { $pull: { profiles: { _profileId: delProfObj.profId } } },
+    { safe: true },
+    function (err, obj) {
+  
+      if (err) {
+        console.log(err);
+        return
+      }
+  
+      var usersWithProfle = [];
+  
+      User.findOne({ "userId": delProfObj.uid }, function (err,result1) {
+  
+        if (err) {
+          console.log(err);
+          return;
+        }
+  
+       var elements = result1.connectedUsers
+        for(var i=0; i< result1.connectedUsers.length; i++){
+  
+          for(var j=0; j< result1.connectedUsers[i].sharedProfiles.length; j++){
+  
+            if(result1.connectedUsers[i].sharedProfiles[j] == delProfObj.profId){
+              console.log("profile getting pulled IN GIVEN PROF "+result1.connectedUsers[i].sharedProfiles[j]);
+              usersWithProfle.push(result1.connectedUsers[i].connectedUserId);
+              result1.connectedUsers[i].sharedProfiles.pull(result1.connectedUsers[i].sharedProfiles[j]);
+              result1.save();
+              
+              break;
+            }
+          }
+        }
+  
+        for(let user of usersWithProfle){
+          User.findOne({ "userId": user }, function (err,result) {
+  
+            if (err) {
+              console.log(err);
+              return;
+            }
+  
+            for(var i=0; i< result.receivedProfiles.length; i++){
+  
+              if(result.receivedProfiles[i].connectionId == delProfObj.uid){
+  
+                for(var j=0; j< result.receivedProfiles[i].receivedProfileId.length; j++){
+  
+                  if(result.receivedProfiles[i].receivedProfileId[j] == delProfObj.profId){
+                    console.log("profile getting pulled in RECIVED PROF "+result.receivedProfiles[i].receivedProfileId[j]);
+                    result.receivedProfiles[i].receivedProfileId.pull(result.receivedProfiles[i].receivedProfileId[j]);
+                    result.save();
+                    
+                    break;
+                  }
+                }  
+              }
+            }
+  
+            return;
+          });
+        }
+        return;
+        console.log("success");
+        res.json("Success");
+      });
+      
+      return;
+  });
  
 });
 
@@ -967,76 +1038,7 @@ app.post("/device/requests/store", function (req, res) {
 /******************************************************************************************************************************/
 
 
-User.update(
-  { userId: "aaaaaaaaaa" },
-  { $pull: { profiles: { _profileId: "5abb694e26b24d000480c93a" } } },
-  { safe: true },
-  function (err, obj) {
 
-    if (err) {
-      console.log(err);
-      return
-    }
-
-    var usersWithProfle = [];
-
-    User.findOne({ "userId": "aaaaaaaaaa" }, function (err,result1) {
-
-      if (err) {
-        console.log(err);
-        return;
-      }
-
-     var elements = result1.connectedUsers
-      for(var i=0; i< result1.connectedUsers.length; i++){
-
-        for(var j=0; j< result1.connectedUsers[i].sharedProfiles.length; j++){
-
-          if(result1.connectedUsers[i].sharedProfiles[j] == "5abb694e26b24d000480c93a"){
-            console.log("profile getting pulled IN GIVEN PROF "+result1.connectedUsers[i].sharedProfiles[j]);
-            usersWithProfle.push(result1.connectedUsers[i].connectedUserId);
-            result1.connectedUsers[i].sharedProfiles.pull(result1.connectedUsers[i].sharedProfiles[j]);
-            result1.save();
-            
-            break;
-          }
-        }
-      }
-
-      for(let user of usersWithProfle){
-        User.findOne({ "userId": user }, function (err,result) {
-
-          if (err) {
-            console.log(err);
-            return;
-          }
-
-          for(var i=0; i< result.receivedProfiles.length; i++){
-
-            if(result.receivedProfiles[i].connectionId == "aaaaaaaaaa"){
-
-              for(var j=0; j< result.receivedProfiles[i].receivedProfileId.length; j++){
-
-                if(result.receivedProfiles[i].receivedProfileId[j] == "5abb694e26b24d000480c93a"){
-                  console.log("profile getting pulled in RECIVED PROF "+result.receivedProfiles[i].receivedProfileId[j]);
-                  result.receivedProfiles[i].receivedProfileId.pull(result.receivedProfiles[i].receivedProfileId[j]);
-                  result.save();
-                  
-                  break;
-                }
-              }  
-            }
-          }
-
-          return;
-        });
-      }
-      return;
-      console.log("success");
-    });
-    
-    return;
-});
 //Testing handling granting revoking
 // User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
 //     console.log(result);
