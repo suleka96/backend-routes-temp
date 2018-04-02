@@ -993,10 +993,11 @@ User.update(
         for(var j=0; j< result1.connectedUsers[i].sharedProfiles.length; j++){
 
           if(result1.connectedUsers[i].sharedProfiles[j] == "5abb694e26b24d000480c93a"){
+            console.log("profile getting pulled IN GIVEN PROF "+result1.connectedUsers[i].sharedProfiles[j]);
             usersWithProfle.push(result1.connectedUsers[i].connectedUserId);
             result1.connectedUsers[i].sharedProfiles.pull(result1.connectedUsers[i].sharedProfiles[j]);
             result1.save();
-            console.log("profile getting pulled IN GIVEN PROF "+result1.connectedUsers[i].sharedProfiles[j]);
+            
             break;
           }
         }
@@ -1017,20 +1018,23 @@ User.update(
               for(var j=0; j< result.receivedProfiles[i].receivedProfileId.length; j++){
 
                 if(result.receivedProfiles[i].receivedProfileId[j] == "5abb694e26b24d000480c93a"){
+                  console.log("profile getting pulled in RECIVED PROF "+result.receivedProfiles[i].receivedProfileId[j]);
                   result.receivedProfiles[i].receivedProfileId.pull(result.receivedProfiles[i].receivedProfileId[j]);
                   result.save();
-                  console.log("profile getting pulled in RECIVED PROF "+result.receivedProfiles[i].receivedProfileId[j]);
+                  
                   break;
                 }
               }  
             }
           }
+
           return;
         });
       }
       return;
+      console.log("success");
     });
-    console.log("success");
+    
     return;
 });
 //Testing handling granting revoking
