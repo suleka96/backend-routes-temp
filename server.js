@@ -297,6 +297,7 @@ app.post("/profile/edit", function (req, res) {
     }
     else {
       console.log(raw);
+      res.json("Profile edited successfully!");
     }
   });
 });
@@ -421,7 +422,8 @@ app.post("/profiles/send", function (req, res) {
         //JS object is turned into a JSON Object
         var profiles = JSON.stringify(record.profiles);
         console.log(profiles);
-        res.json(profiles);
+        var encrypted = CryptoJS.Rabbit.encrypt(profiles, "hfdsahgdajshgjdsahgjfafsajhkgs");
+        res.json(encrypted);
       }
     });
 });
@@ -451,7 +453,8 @@ app.post("/profile/send", function (req, res) {
     else {
       var profileSent = JSON.stringify(profile);
       console.log(profileSent);
-      res.json(profileSent);
+      var encrypted = CryptoJS.Rabbit.encrypt(profileSent, "hfdsahgdajshgjdsahgjfafsajhkgs");
+      res.json(encrypted);
     }
   });
 });
@@ -499,8 +502,10 @@ app.post("/device/requests/return", function (req, res) {
       }).then(function () {
         //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end
         if (Object.keys(array).length == parsedObj.requests.length) {
-          console.log("Requesters Public Profiles: " + JSON.stringify(array));
-          res.json(array);
+          var jsonArray = JSON.stringify(array);
+          console.log("Requesters Public Profiles: " + jsonArray);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }
       });
     }
@@ -644,7 +649,9 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
         //If the number of public profile objects is equal to the number of receivedProfiles, the array is returned to the front end
         if (Object.keys(array).length == Users.length) {
           console.log("ARRAY " + JSON.stringify(array));
-          res.json(JSON.stringify(array));
+          var jsonArray = JSON.stringify(array);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }  
         return;  
       });  
@@ -711,7 +718,9 @@ app.post("/device/connections/received/profile", function (req, res) {
   
         if (Object.keys(array).length == profiles.length) {
           console.log("ARRAY "+JSON.stringify(array));
-          res.json(JSON.stringify(array));
+          var jsonArray = JSON.stringify(array);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }
         
         return
@@ -760,9 +769,11 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
         console.log("RESULT" + record);
         array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });     
   
-        if (Object.keys(array).length == Users.length) {
-          console.log("ARRAY " + JSON.stringify(array));
-          res.json(JSON.stringify(array));
+        if (Object.keys(array).length == Users.length) {          
+          var jsonArray = JSON.stringify(array);
+          console.log("ARRAY " + jsonArray);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }  
         return;  
     });  
@@ -833,9 +844,10 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
           }        
        }
       }
-  
-      console.log("ARRAY "+JSON.stringify(array));
-      res.json(JSON.stringify(array));
+      var jsonArray = JSON.stringify(array);
+      console.log("ARRAY "+ jsonArray);
+      var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+      res.json(encrypted);
       return  
     });
     return  
@@ -936,7 +948,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
     connectionRecord.receivedProfiles.push(newReceivedProfileObj);
     connectionRecord.save();
     console.log("Updated Received Profile saved successfully");
-    //res.json("New Connection saved successfully");
+    res.json("New Connection saved successfully");
   });
 });
 
@@ -999,8 +1011,7 @@ app.post("/device/requests/store", function (req, res) {
       }
   
       console.log(receivedRequests);
-      res.send("success");
-  
+      res.send("success");  
     });    
   
   });
