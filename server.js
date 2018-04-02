@@ -733,17 +733,17 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
   console.log("inside return connections route");
   if (!req.body) return res.sendStatus(400);
 
-  //Received request body that is encrypted
-  var userConnections = req.body;
+  // //Received request body that is encrypted
+  // var userConnections = req.body;
 
-  //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  // //Request body is decrypted
+  // var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
 
-  //Decrypted request body is converted to plain text
-  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+  // //Decrypted request body is converted to plain text
+  // var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-  //Request body is parsed to a JSON Object
-  var requestConnectionObj = JSON.parse(plaintext);
+  // //Request body is parsed to a JSON Object
+  // var requestConnectionObj = JSON.parse(plaintext);
 
   User.findOne({ "userId": req.body.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result) {
 
