@@ -786,7 +786,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-  //Request body is parsed to a JSON Object
+  // Request body is parsed to a JSON Object
   var grantRevokeSelectObj = JSON.parse(plaintext);
 
   User.findOne({"userId": grantRevokeSelectObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeSelectObj.connectedUserId}}}, function(err, result){
