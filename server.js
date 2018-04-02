@@ -62,8 +62,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 *******************************************************
 */
 
-let URI =
-  "mongodb://heroku_24qgfjxh:5u7so4mv67fq7ahpjvcpacddgg@ds119489.mlab.com:19489/heroku_24qgfjxh"; //mLab Connection URI
+let URI = "mongodb://heroku_24qgfjxh:5u7so4mv67fq7ahpjvcpacddgg@ds119489.mlab.com:19489/heroku_24qgfjxh"; //mLab Connection URI
 mongoose.connect(URI); //Connecting to mLab Database
 
 /*******************************************************************************************************************************/
@@ -76,6 +75,7 @@ mongoose.connect(URI); //Connecting to mLab Database
 
 var Schema = mongoose.Schema;
 
+//Mongo Database schema for user profiles
 var profilesSchema = new Schema({
   _id: false,
   _profileId: Schema.Types.ObjectId,
@@ -99,23 +99,27 @@ var profilesSchema = new Schema({
   }
 });
 
+//Mongo Database schema for connected users (users we have shared our profiles with)
 var connectedUsersSchema = new Schema({
   _id: false,
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
+//Mongo Database schema for received profiles from users who have connected with us
 var receivedProfilesSchema = new Schema({
   _id: false,
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
 
+//Mongo Database schema for requests for connection
 var requestsSchema = new Schema({
   _id: false,
   requesterId: String
 });
 
+//Mongo Database schema for the user profile
 var usersSchema = new Schema({
   _id: false,
   userId: String,
@@ -129,6 +133,7 @@ var usersSchema = new Schema({
   receivedProfiles: [receivedProfilesSchema]
 });
 
+//Declaring models for database based on schemas made above
 var Profile = mongoose.model("profiles", profilesSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 var User = mongoose.model("users", usersSchema);
@@ -217,8 +222,7 @@ app.post("/register", function (req, res) {
 app.post("/profiles/create", function (req, res) {
   console.log("inside createProfile route");
 
-  if (!req.body)
-    return res.sendStatus(400);
+  if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
   var profileInfo = req.body;
@@ -259,22 +263,19 @@ app.post("/profiles/create", function (req, res) {
     }
   });
 
-  console.log(profile);
-
   //Querying for the relevant user's document and pushing the profie to the profiles feild 
   User.findOne({ userId: profObj.uid }).then(function (record) {
     record.profiles.push(profile);
     record.save();
-    console.log("profile saved successfully");
-    res.json("successful");
+    console.log("New Profile saved successfully");
+    res.json("New Profile saved successfully");
   });
 });
 
 //POST request handler for editing profiles
 app.post("/profile/edit", function (req, res) {
 
-  if (!req.body)
-    return res.sendStatus(400);
+  if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
   var editProfileInfo = req.body;
@@ -288,7 +289,7 @@ app.post("/profile/edit", function (req, res) {
   //Request body is parsed to a JSON Object
   var editProfObj = JSON.parse(plaintext);
 
-  console.log(editProfObj);
+  console.log("Updated Profile: " + editProfObj);
 
   User.update({ "profiles._profileId": editProfObj._profileId }, { "profiles.$": editProfObj }, function (err, raw) {
     if (err) {
@@ -308,8 +309,7 @@ app.post("/profile/delete", function (req, res) {
 
   console.log("Inside delete profile route");
 
-  if (!req.body)
-    return res.sendStatus(400);
+  if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
   var delProfileInfo = req.body;
@@ -414,7 +414,7 @@ app.post("/profiles/send", function (req, res) {
   //Decrypted request body is converted to plain text
   var uid = bytes.toString(CryptoJS.enc.Utf8);
 
-  //creating json object from mongoose document that contains information of profiles of a particular user
+  //Creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({ userId: uid })
     .populate('_profileId profileName')
     .lean().exec(
@@ -423,15 +423,10 @@ app.post("/profiles/send", function (req, res) {
         res.json("Error in retrieving");
         console.log("Error in sending profiles");
       }
-      else {
-        //console.log(record.profiles);
-
+      else {       
         //JS object is turned into a JSON Object
         var profiles = JSON.stringify(record.profiles);
         console.log(profiles);
-        //var gg = JSON.parse(profiles); 
-        //console.log(gg);
-
         res.json(profiles);
       }
     });
@@ -454,7 +449,7 @@ app.post("/profile/send", function (req, res) {
   //Request body is parsed to a JSON Object
   var infoObj = JSON.parse(plaintext);
 
-  //creating json object from mongoose document that contains information of profiles of a particular user
+  //Creating json object from mongoose document that contains information of profiles of a particular user
   User.findOne({ "profiles._profileId": infoObj._profileId }, { "profiles.$": 1, "_id": 0 }, function (err, profile) {
     if (err) {
       console.log(err);
@@ -463,7 +458,6 @@ app.post("/profile/send", function (req, res) {
       var profileSent = JSON.stringify(profile);
       console.log(profileSent);
       res.json(profileSent);
-
     }
   });
 });
@@ -486,7 +480,6 @@ app.post("/device/requests/return", function (req, res) {
   var requestInfoObj = JSON.parse(plaintext);
 
   User.findOne({ "userId": requestInfoObj.uid }, { "requests": 1, "_id": 0 }).then(function (result) {
-
     console.log(result);
 
     var myObj = JSON.stringify(result);
@@ -494,10 +487,12 @@ app.post("/device/requests/return", function (req, res) {
 
     var array = [];
 
+    //Iterate through each of the requesterIds
     for (var i = 0; i < parsedObj.requests.length; i++) {
 
       console.log("JS value " + i + ": " + parsedObj.requests[i].requesterId);
 
+      //Query each requesterId for their public profile and push it into an array which is then returned to the front end
       User.findOne({ userId: parsedObj.requests[i].requesterId }).then(function (record) {
         console.log("profile retrieved successfully");
         array.push({ 
@@ -508,6 +503,7 @@ app.post("/device/requests/return", function (req, res) {
         });
         console.log("resultttttttttttt" + JSON.stringify(array));
       }).then(function () {
+        //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end
         if (Object.keys(array).length == parsedObj.requests.length) {
           console.log("Requesters Public Profiles: " + JSON.stringify(array));
           res.json(array);
@@ -534,11 +530,13 @@ app.post("/device/requests/allowed", function (req, res) {
   //Request body is parsed to a JSON Object
   var allowedRequestObj = JSON.parse(plaintext);
 
+  //New connected user object is created to add the confirmed requester as a connection in the user's document
   var newConnectedUser = new ConnectedUsers({
     connectedUserId: allowedRequestObj.requesterId,
     sharedProfiles: allowedRequestObj.profileIds
   });
 
+  //New received profile object is created to store the profiles the user has sent them
   var newReceivedProfile = new ReceivedProfile({
     connectionId: allowedRequestObj.uid,
     receivedProfileId: allowedRequestObj.profileIds
@@ -594,6 +592,7 @@ app.post("/device/requests/declined", function (req, res) {
   console.log("DILLONS DECLINE UID: " + declinedRequestObj.uid);
   console.log("DILLONS DECLINE REQUESTER ID: " + declinedRequestObj.requesterId);
 
+  //Query for user's document and delete declined requesterId from requests array
   User.update(
     { userId: declinedRequestObj.uid },
     { $pull: { requests: { requesterId: declinedRequestObj.requesterId } } },
@@ -627,22 +626,19 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   var requestConnectionObj = JSON.parse(plaintext);
 
   User.findOne({ "userId": requestConnectionObj.uid}, { "receivedProfiles": 1, "_id": 0 }, function (err,result) {
-
     if(err){
       console.log("Error "+err);
       return
     }
   
-    var array = [];
-    
-    var Users = result.receivedProfiles
-  
+    var array = [];    
+    var Users = result.receivedProfiles;  
     console.log(result);
   
-    for (let profile of Users) {
-  
-      User.findOne({ userId: profile.connectionId }, function (err,record) {
-  
+    //Iterate through the receivedProfiles subdocument of the user
+    for (let profile of Users) {  
+      //Query for the receivedProfile of the specified connectionId and push their public profile to an array
+      User.findOne({ userId: profile.connectionId }, function (err,record) {  
         if(err){
           console.log("Error "+err);
           return
@@ -651,22 +647,19 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
         console.log("RESULT" + record);
         array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });     
   
+        //If the number of public profile objects is equal to the number of receivedProfiles, the array is returned to the front end
         if (Object.keys(array).length == Users.length) {
           console.log("ARRAY " + JSON.stringify(array));
           res.json(JSON.stringify(array));
-        }
-  
-        return;
-  
-    });
-  
+        }  
+        return;  
+      });  
     }
-    return; 
-  
+    return;   
   });
 });
 
-//POST request handler for returning recieved connections complete profile
+//POST request handler for returning received connections complete profile
 app.post("/device/connections/received/profile", function (req, res) {
   console.log("inside return connection route");
   if (!req.body) return res.sendStatus(400);
@@ -683,6 +676,7 @@ app.post("/device/connections/received/profile", function (req, res) {
   //Request body is parsed to a JSON Object
   var requestConnectionObj = JSON.parse(plaintext);
 
+  //Query user's document and retrieve receivedProfiles from sub document
   User.findOne({"userId": requestConnectionObj.uid}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
     if(err){
       console.log("Error "+err);
@@ -758,16 +752,12 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
       return
     }
   
-    var array = [];
-    
-    var Users = result.connectedUsers
-  
+    var array = [];    
+    var Users = result.connectedUsers;  
     console.log(result);
   
-    for (let profile of Users) {
-  
-      User.findOne({ userId: profile.connectedUserId }, function (err,record) {
-  
+    for (let profile of Users) {  
+      User.findOne({ userId: profile.connectedUserId }, function (err,record) {  
         if(err){
           console.log("Error "+err);
           return
@@ -779,12 +769,9 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
         if (Object.keys(array).length == Users.length) {
           console.log("ARRAY " + JSON.stringify(array));
           res.json(JSON.stringify(array));
-        }
-  
-        return;
-  
-    });
-  
+        }  
+        return;  
+    });  
     }
     return; 
   
