@@ -894,17 +894,23 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
       }
     }
 
+    console.log("Allowed Profiles Array: " + allowedProfilesArray);
+
     //New ConnectedUsers object to push to connectedUsers subdocument of user
     var newConnectedUserObj = new ConnectedUsers({
       sharedProfiles: allowedProfilesArray,
       connectedUserId: grantRevokeObj.connectedUserId
     });
 
+    console.log("New Connected User: " + newConnectedUserObj);
+
     //New ReceivedProfile object to push to receivedProfiles subdocument of connection
     var newReceivedProfileObj = new ReceivedProfile({
       connectionId: grantRevokeObj.uid,
       receivedProfileId: allowedProfilesArray
     });
+
+    console.log("New Received Profile: " + newReceivedProfileObj);
 
   //Delete current data from user's connectedUsers subdocument
   User.update(
