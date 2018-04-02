@@ -160,10 +160,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
-
+//RANEESH
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
+//RANEESH
 //POST request handler for register route
 app.post("/register", function (req, res) {
   console.log("Registration process has started...");
@@ -218,6 +219,7 @@ app.post("/register", function (req, res) {
     });
 });
 
+//SULEKA
 //POST request handler for creating profiles
 app.post("/profiles/create", function (req, res) {
   console.log("inside createProfile route");
@@ -272,6 +274,7 @@ app.post("/profiles/create", function (req, res) {
   });
 });
 
+//RANEESH
 //POST request handler for editing profiles
 app.post("/profile/edit", function (req, res) {
 
@@ -302,6 +305,7 @@ app.post("/profile/edit", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for deleting profiles
 app.post("/profile/delete", function (req, res) {
 
@@ -395,6 +399,7 @@ app.post("/profile/delete", function (req, res) {
  
 });
 
+//RANEESH
 //POST request handler for sending profiles
 app.post("/profiles/send", function (req, res) {
   console.log("inside sending profile ID route");
@@ -428,6 +433,7 @@ app.post("/profiles/send", function (req, res) {
     });
 });
 
+//SULEKA
 //POST request handler for sending information of a profile
 app.post("/profile/send", function (req, res) {
   console.log("inside sending individual profiles route");
@@ -459,6 +465,7 @@ app.post("/profile/send", function (req, res) {
   });
 });
 
+//RANEESH
 //POST request handler for returning public profile of requests
 app.post("/device/requests/return", function (req, res) {
   console.log("inside return request route");
@@ -512,6 +519,7 @@ app.post("/device/requests/return", function (req, res) {
   });
 });
 
+//RANEESH
 //POST request handler for allowed connection requests
 app.post("/device/requests/allowed", function (req, res) {
   console.log("inside allowed connection requests route");
@@ -571,6 +579,7 @@ app.post("/device/requests/allowed", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for declined connection requests
 app.post("/device/requests/declined", function (req, res) {
   console.log("inside declined connection requests route");
@@ -607,6 +616,7 @@ app.post("/device/requests/declined", function (req, res) {
     });  
 });
 
+//RANEESH
 //POST request handler for returning recieved connections basic profile
 app.post("/device/connections/received/publicprofiles", function (req, res) {
   console.log("inside return connections route");
@@ -660,6 +670,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   });
 });
 
+//RANEESH
 //POST request handler for returning received connections complete profile
 app.post("/device/connections/received/profile", function (req, res) {
   console.log("inside return connection route");
@@ -731,6 +742,7 @@ app.post("/device/connections/received/profile", function (req, res) {
 
 });
 
+//SULEKA
 //POST request handler for returning basic profiles of individuals with whome the user has shared profiles with
 app.post("/device/connections/sent/publicprofile", function (req, res) {
   console.log("inside return connections route");
@@ -783,6 +795,7 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for returning shared profile names to grant/revoke
 app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   console.log("inside return connection route");
@@ -854,6 +867,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   }); 
 });
 
+//RANEESH
 //POST request handler for handling granting/revoking of shared profiles to connected users
 app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   console.log("inside handling granting revoking route");
@@ -955,6 +969,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 //-------------------------------------REMAKE THE CODE TO RETRIEVE  DECODED JSON AND ASSIGN TO QUERY---------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------
 
+//SULEKA
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
 
