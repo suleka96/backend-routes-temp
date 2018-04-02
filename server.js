@@ -301,9 +301,6 @@ app.post("/profile/edit", function (req, res) {
   });
 });
 
-
-
-
 //POST request handler for deleting profiles
 app.post("/profile/delete", function (req, res) {
 
@@ -397,9 +394,6 @@ app.post("/profile/delete", function (req, res) {
  
 });
 
-
-
-
 //POST request handler for sending profiles
 app.post("/profiles/send", function (req, res) {
   console.log("inside sending profile ID route");
@@ -441,7 +435,7 @@ app.post("/profile/send", function (req, res) {
   var userProfileInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs3');
+  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -668,7 +662,7 @@ app.post("/device/connections/received/profile", function (req, res) {
   var userConnections = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -784,18 +778,18 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
-  var userConnections = req.body;
+  var grantRevokeSelect = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'hfdsahgdajshgjdsahgjfafsajhkgs');
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevokeSelect, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-  //Request body is parsed to a JSON Object
-  var requestConnectionObj = JSON.parse(plaintext);
+  // Request body is parsed to a JSON Object
+  var grantRevokeSelectObj = JSON.parse(plaintext);
 
-  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectedUserId}}}, function(err, result){
+  User.findOne({"userId": grantRevokeSelectObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeSelectObj.connectedUserId}}}, function(err, result){
     if(err){
       console.log("Error "+err);
       return
@@ -807,7 +801,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   
     console.log("shared profiles "+sharedProfiles);
   
-    User.findOne({"userId": requestConnectionObj.uid}, {"profiles":1 },function(err, resultProfiles){
+    User.findOne({"userId": grantRevokeSelectObj.uid}, {"profiles":1 },function(err, resultProfiles){
       if(err) {
         console.log("Error "+err);
         return
@@ -838,12 +832,11 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
             console.log("inside if "+JSON.stringify(array));                    
           }        
        }
-    }
+      }
   
       console.log("ARRAY "+JSON.stringify(array));
       res.json(JSON.stringify(array));
-      return
-  
+      return  
     });
     return  
   }); 
@@ -866,31 +859,13 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
- 
-    // var modifiedProfiles = [
-    //   {
-    //     profileName: "Sample", 
-    //     grantedStatus: false, 
-    //     _profileId: "5abb694e26b24d000480c93a"
-    //   }, 
-    //   {
-    //     profileName: "Sampe 2", 
-    //     grantedStatus: true, 
-    //     _profileId: "5abb7e9396f60300044034e4"
-    //   },
-    //   {
-    //     profileName: "red", 
-    //     grantedStatus: true, 
-    //     _profileId: "5abb7e9a96f60300044034e7"
-    //   },
-    //   {
-    //     profileName: "Red", 
-    //     grantedStatus: false, 
-    //     _profileId: "5abba10e440f840004dc52fb"
-    //   }
-    // ];
 
+  console.log("Request Sent: " + grantRevokeObj);
+ 
+    
+ 
     var modifiedProfiles = grantRevokeObj.modifiedProfiles;
+    console.log(modifiedProfiles);
 
     var allowedProfilesArray = [];
 
@@ -900,17 +875,26 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
       }
     }
 
+    console.log("Allowed Profiles Array: " + allowedProfilesArray);
+
     //New ConnectedUsers object to push to connectedUsers subdocument of user
     var newConnectedUserObj = new ConnectedUsers({
       sharedProfiles: allowedProfilesArray,
       connectedUserId: grantRevokeObj.connectedUserId
     });
 
+    console.log("New Connected User: " + newConnectedUserObj);
+
     //New ReceivedProfile object to push to receivedProfiles subdocument of connection
     var newReceivedProfileObj = new ReceivedProfile({
       connectionId: grantRevokeObj.uid,
       receivedProfileId: allowedProfilesArray
     });
+
+    console.log("New Received Profile: " + newReceivedProfileObj);
+
+    console.log("User ID: " + grantRevokeObj.uid);
+    console.log("Connected User ID: " + grantRevokeObj.connectedUserId);
 
   //Delete current data from user's connectedUsers subdocument
   User.update(
@@ -1043,6 +1027,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 //Testing handling granting revoking
+
 // User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
 //     console.log(result);
 
