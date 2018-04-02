@@ -301,9 +301,6 @@ app.post("/profile/edit", function (req, res) {
   });
 });
 
-
-
-
 //POST request handler for deleting profiles
 app.post("/profile/delete", function (req, res) {
 
@@ -396,9 +393,6 @@ app.post("/profile/delete", function (req, res) {
   });
  
 });
-
-
-
 
 //POST request handler for sending profiles
 app.post("/profiles/send", function (req, res) {
@@ -784,18 +778,18 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
-  var userConnections = req.body;
+  var grantRevokeSelect = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevokeSelect, 'my key is 123');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
   //Request body is parsed to a JSON Object
-  var requestConnectionObj = JSON.parse(plaintext);
+  var grantRevokeSelectObj = JSON.parse(plaintext);
 
-  User.findOne({"userId": requestConnectionObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: requestConnectionObj.connectedUserId}}}, function(err, result){
+  User.findOne({"userId": grantRevokeSelectObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeSelectObj.connectedUserId}}}, function(err, result){
     if(err){
       console.log("Error "+err);
       return
@@ -807,7 +801,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   
     console.log("shared profiles "+sharedProfiles);
   
-    User.findOne({"userId": requestConnectionObj.uid}, {"profiles":1 },function(err, resultProfiles){
+    User.findOne({"userId": grantRevokeSelectObj.uid}, {"profiles":1 },function(err, resultProfiles){
       if(err) {
         console.log("Error "+err);
         return
@@ -838,12 +832,11 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
             console.log("inside if "+JSON.stringify(array));                    
           }        
        }
-    }
+      }
   
       console.log("ARRAY "+JSON.stringify(array));
       res.json(JSON.stringify(array));
-      return
-  
+      return  
     });
     return  
   }); 
@@ -1027,6 +1020,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 //Testing handling granting revoking
+
 // User.findOne({"userId": "aaaaaaaaaa"}, {connectedUsers: {$elemMatch: {connectedUserId: "konnect123"}}}, function(err, result){
 //     console.log(result);
 
