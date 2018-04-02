@@ -860,7 +860,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   // //Request body is parsed to a JSON Object
   // var grantRevokeObj = JSON.parse(plaintext);
 
-  console.log(req.body);
+  console.log(req.body.uid);
   var parse = JSON.parse(req.body)
   console.log(parse);
   console.log(parse.uid);
