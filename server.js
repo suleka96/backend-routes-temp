@@ -882,8 +882,9 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
     //     _profileId: "5abba10e440f840004dc52fb"
     //   }
     // ];
-
+ 
     var modifiedProfiles = grantRevokeObj.modifiedProfiles;
+    console.log(modifiedProfiles);
 
     var allowedProfilesArray = [];
 
