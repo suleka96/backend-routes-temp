@@ -173,7 +173,7 @@ app.post("/register", function (req, res) {
   var registerInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(registerInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(registerInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -228,7 +228,7 @@ app.post("/profiles/create", function (req, res) {
   var profileInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -281,7 +281,7 @@ app.post("/profile/edit", function (req, res) {
   var editProfileInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(editProfileInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(editProfileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -315,7 +315,7 @@ app.post("/profile/delete", function (req, res) {
   var delProfileInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(delProfileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -409,7 +409,7 @@ app.post("/profiles/send", function (req, res) {
   var uidEncripted = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(uidEncripted, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var uid = bytes.toString(CryptoJS.enc.Utf8);
@@ -441,7 +441,7 @@ app.post("/profile/send", function (req, res) {
   var userProfileInfo = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userProfileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs3');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -471,7 +471,7 @@ app.post("/device/requests/return", function (req, res) {
   var userRequest = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userRequest, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userRequest, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -522,7 +522,7 @@ app.post("/device/requests/allowed", function (req, res) {
   var allowedRequest = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(allowedRequest, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(allowedRequest, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -581,7 +581,7 @@ app.post("/device/requests/declined", function (req, res) {
   var declinedRequest = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(declinedRequest, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(declinedRequest, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -617,7 +617,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   var userConnections = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -737,7 +737,7 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
   var userConnections = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -787,7 +787,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   var userConnections = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(userConnections, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -859,7 +859,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   var grantRevoke = req.body;
 
   //Request body is decrypted
-  var bytes = CryptoJS.Rabbit.decrypt(grantRevoke, 'my key is 123');
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -962,17 +962,32 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
 
+  if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var grantRevoke = req.body;
+
+  //Request body is decrypted
+  var bytes = CryptoJS.Rabbit.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var reqestObj = JSON.parse(plaintext);
+
+  received = reqestObj
+
   console.log("inside storeRequest route");
   if (!req.body) return res.sendStatus(400);
 
-  User.findOne({ "userId": "aaaaaaaaaa" }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
+  User.findOne({ "userId": received.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
     if(err){
       console.log("Error "+err);
       return
     }
   
-    received = { sharedProfiles: ["konnect123", "123456kon","duckyou123"], uid: "aaaaaaaaaa" }
     receivedRequests = received.sharedProfiles
     connectedUsers = result1.connectedUsers
   
@@ -985,7 +1000,7 @@ app.post("/device/requests/store", function (req, res) {
       }
     }
   
-    User.findOne({ "userId": "aaaaaaaaaa" }, function (err,result) {
+    User.findOne({ "userId":  received.uid }, function (err,result) {
   
       if(err){
         console.log("Error "+err);
@@ -1016,9 +1031,10 @@ app.post("/device/requests/store", function (req, res) {
   
       console.log(receivedRequests);
       res.send("success");
-  
+      return;
+
     });    
-  
+  return;
   });
 });
 
