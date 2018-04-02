@@ -21,7 +21,6 @@ var cors = require('cors');
 * INITIALIZE EXPRESS AND FIREBASE ADMIN SDK
 *******************************************************
 */
-
 const app = express();
 
 admin.initializeApp({
@@ -106,14 +105,14 @@ var connectedUsersSchema = new Schema({
   sharedProfiles: { type: Array, "default": [] }
 });
 
-//Mongo Database schema for received profiles from users who have connected with us
+//Mongo Database schema for received profiles from users who have connected with another perticular user
 var receivedProfilesSchema = new Schema({
   _id: false,
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
 
-//Mongo Database schema for requests for connection
+//Mongo Database schema for connection request
 var requestsSchema = new Schema({
   _id: false,
   requesterId: String
@@ -160,10 +159,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 *******************************************************
 */
 
-
+//RANEESH
 //GET request handler for index route
 app.get("/", (req, res) => res.render("pages/index"));
 
+//RANEESH
 //POST request handler for register route
 app.post("/register", function (req, res) {
   console.log("Registration process has started...");
@@ -218,16 +218,19 @@ app.post("/register", function (req, res) {
     });
 });
 
-//POST request handler for creating profiles
+//SULEKA
+//POST request handler for creating a profile
 app.post("/profiles/create", function (req, res) {
+
   console.log("inside createProfile route");
 
+  //send error status if request body is empty
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
   var profileInfo = req.body;
 
-  //Request body is decrypted
+  //Request body is decrypted using 
   var bytes = CryptoJS.Rabbit.decrypt(profileInfo, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
   //Decrypted request body is converted to plain text
@@ -272,6 +275,7 @@ app.post("/profiles/create", function (req, res) {
   });
 });
 
+//RANEESH
 //POST request handler for editing profiles
 app.post("/profile/edit", function (req, res) {
 
@@ -297,10 +301,12 @@ app.post("/profile/edit", function (req, res) {
     }
     else {
       console.log(raw);
+      res.json("Profile edited successfully!");
     }
   });
 });
 
+//SULEKA
 //POST request handler for deleting profiles
 app.post("/profile/delete", function (req, res) {
 
@@ -394,6 +400,7 @@ app.post("/profile/delete", function (req, res) {
  
 });
 
+//RANEESH
 //POST request handler for sending profiles
 app.post("/profiles/send", function (req, res) {
   console.log("inside sending profile ID route");
@@ -421,11 +428,13 @@ app.post("/profiles/send", function (req, res) {
         //JS object is turned into a JSON Object
         var profiles = JSON.stringify(record.profiles);
         console.log(profiles);
-        res.json(profiles);
+        var encrypted = CryptoJS.Rabbit.encrypt(profiles, "hfdsahgdajshgjdsahgjfafsajhkgs");
+        res.send(encrypted);
       }
     });
 });
 
+//SULEKA
 //POST request handler for sending information of a profile
 app.post("/profile/send", function (req, res) {
   console.log("inside sending individual profiles route");
@@ -451,11 +460,13 @@ app.post("/profile/send", function (req, res) {
     else {
       var profileSent = JSON.stringify(profile);
       console.log(profileSent);
-      res.json(profileSent);
+      var encrypted = CryptoJS.Rabbit.encrypt(profileSent, "hfdsahgdajshgjdsahgjfafsajhkgs");
+      res.json(encrypted);
     }
   });
 });
 
+//RANEESH
 //POST request handler for returning public profile of requests
 app.post("/device/requests/return", function (req, res) {
   console.log("inside return request route");
@@ -499,14 +510,17 @@ app.post("/device/requests/return", function (req, res) {
       }).then(function () {
         //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end
         if (Object.keys(array).length == parsedObj.requests.length) {
-          console.log("Requesters Public Profiles: " + JSON.stringify(array));
-          res.json(array);
+          var jsonArray = JSON.stringify(array);
+          console.log("Requesters Public Profiles: " + jsonArray);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }
       });
     }
   });
 });
 
+//RANEESH
 //POST request handler for allowed connection requests
 app.post("/device/requests/allowed", function (req, res) {
   console.log("inside allowed connection requests route");
@@ -566,6 +580,7 @@ app.post("/device/requests/allowed", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for declined connection requests
 app.post("/device/requests/declined", function (req, res) {
   console.log("inside declined connection requests route");
@@ -602,6 +617,7 @@ app.post("/device/requests/declined", function (req, res) {
     });  
 });
 
+//RANEESH
 //POST request handler for returning recieved connections basic profile
 app.post("/device/connections/received/publicprofiles", function (req, res) {
   console.log("inside return connections route");
@@ -644,7 +660,9 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
         //If the number of public profile objects is equal to the number of receivedProfiles, the array is returned to the front end
         if (Object.keys(array).length == Users.length) {
           console.log("ARRAY " + JSON.stringify(array));
-          res.json(JSON.stringify(array));
+          var jsonArray = JSON.stringify(array);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }  
         return;  
       });  
@@ -653,6 +671,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for returning received connections complete profile
 app.post("/device/connections/received/profile", function (req, res) {
   console.log("inside return connection route");
@@ -711,7 +730,9 @@ app.post("/device/connections/received/profile", function (req, res) {
   
         if (Object.keys(array).length == profiles.length) {
           console.log("ARRAY "+JSON.stringify(array));
-          res.json(JSON.stringify(array));
+          var jsonArray = JSON.stringify(array);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }
         
         return
@@ -722,6 +743,7 @@ app.post("/device/connections/received/profile", function (req, res) {
 
 });
 
+//SULEKA
 //POST request handler for returning basic profiles of individuals with whome the user has shared profiles with
 app.post("/device/connections/sent/publicprofile", function (req, res) {
   console.log("inside return connections route");
@@ -760,9 +782,11 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
         console.log("RESULT" + record);
         array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });     
   
-        if (Object.keys(array).length == Users.length) {
-          console.log("ARRAY " + JSON.stringify(array));
-          res.json(JSON.stringify(array));
+        if (Object.keys(array).length == Users.length) {          
+          var jsonArray = JSON.stringify(array);
+          console.log("ARRAY " + jsonArray);
+          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          res.json(encrypted);
         }  
         return;  
     });  
@@ -772,6 +796,7 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
   });
 });
 
+//SULEKA
 //POST request handler for returning shared profile names to grant/revoke
 app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
   console.log("inside return connection route");
@@ -833,15 +858,17 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
           }        
        }
       }
-  
-      console.log("ARRAY "+JSON.stringify(array));
-      res.json(JSON.stringify(array));
+      var jsonArray = JSON.stringify(array);
+      console.log("ARRAY "+ jsonArray);
+      var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+      res.json(encrypted);
       return  
     });
     return  
   }); 
 });
 
+//RANEESH
 //POST request handler for handling granting/revoking of shared profiles to connected users
 app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   console.log("inside handling granting revoking route");
@@ -936,11 +963,12 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
     connectionRecord.receivedProfiles.push(newReceivedProfileObj);
     connectionRecord.save();
     console.log("Updated Received Profile saved successfully");
-    //res.json("New Connection saved successfully");
+    res.json("New Connection saved successfully");
   });
 });
 
 
+//SULEKA
 //POST request handler for storing requests
 app.post("/device/requests/store", function (req, res) {
 
@@ -1013,13 +1041,11 @@ app.post("/device/requests/store", function (req, res) {
   
       console.log(receivedRequests);
       res.send("success");
-      return;
+      return
 
     });    
-  return;
+  return
   });
 });
 
 /******************************************************************************************************************************/
-
-
