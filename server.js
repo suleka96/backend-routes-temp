@@ -861,7 +861,9 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   // var grantRevokeObj = JSON.parse(plaintext);
 
   console.log(req.body);
-  console.log(JSON.parse(req.body).uid);
+  var parse = JSON.parse(req.body)
+  console.log(parse);
+  console.log(parse.uid);
  
     // var modifiedProfiles = [
     //   {
