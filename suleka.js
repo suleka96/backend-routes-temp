@@ -1,25 +1,4 @@
 /*
-Security:
-
-    risks:
-        data in motion, in memory and at rest is vulnerable to unauthorised access. 
-        Malicious 3rd party individuals or software can monitor, extract or tamper with the confidential data using variouse methods.
-
-
-    How it is addressed:
-
-        Only an encrypted objected of data is recived as a request and also sent as a response to ensure that data sent or recieved by 
-        the server cannot be altered or taken by a third party while being transmitted to the server
-
-        For the decryption and encryption process a secret key is required which is only known by the client and the server, this further
-        ensures the security of the data as even if a third party access the data while it is being transmitted, they
-        will not be able to decrypt the information without the key. 
-
-
-*/
-
-
-/*
 ******************************************************* 
 * IMPORT DEPENDENCIES
 *******************************************************
@@ -108,6 +87,33 @@ var Request = mongoose.model("requests", requestsSchema);
 var ReceivedProfile = mongoose.model("receivedProfiles", receivedProfilesSchema);
 
 
+
+/*
+below mentiond security measurs were applied on each of the routes
+Security:
+
+    risks:
+        data in motion and in memory is vulnerable to unauthorised access. 
+        Malicious 3rd party individuals or software can monitor, extract or tamper with the confidential data using variouse methods.
+
+
+    How it is addressed:
+
+        in motion: 
+        Only an encrypted objected of data is recived as a request and also sent as a response to ensure that data sent or recieved by 
+        the server cannot be altered or taken by a third party while being transmitted to the server
+
+        For the decryption and encryption process a secret key is required which is only known by the client and the server, this further
+        ensures the security of the data as even if a third party access the data while it is being transmitted, they
+        will not be able to decrypt the information without the key. 
+
+        in memory:
+        invoked garbage collection to decommission information in all the variables after the response of each route has been sent, to ensure that
+        the no one will be able to access the decripted data assigned to the variables.
+
+        Existing issues: measures to prevent corruption of data were not taken and denial of service was not addressed
+*/
+
 /*
 *************************************************************************************************************
 *                                           ROUTES
@@ -167,11 +173,22 @@ app.post("/profiles/create", function (req, res) {
     });
   
     //querying for the relevant user's document and pushing the profile to the profiles sub document  
-    User.findOne({ userId: profObj.uid }).then(function (record) {
+    User.findOne({ userId: profObj.uid },function (error,record) {
+        if (err) {
+            console.log(err);
+            return;
+          }
+         
         record.profiles.push(profile);
         record.save();
         console.log("New Profile saved successfully");
         res.json("New Profile saved successfully");// sending success message string back to the client
+        //invoking garbade collection to free memory 
+        if (global.gc) {
+            global.gc();
+        } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+        }
     });
 });
 
@@ -278,12 +295,18 @@ app.post("/profile/delete", function (req, res) {
           return;
           console.log("success");
           res.json("Success");//sending a success response to the client if profile was successfully deleted
+          //invoking garbade collection to free memory 
+          if (global.gc) {
+            global.gc();
+          } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+          }
         });
         
         return;
     });
    
-  });
+});
 
 
   /*
@@ -309,6 +332,14 @@ app.post("/profile/send", function (req, res) {
   
     //the request body string inside the information variable is parsed to a JSON Object
     var infoObj = JSON.parse(information);
+
+    /* HCI Issues:         
+    The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+    to render as they need information from the server to dynamically create those components.
+
+    Solutions: made the profile id globally unique so that it can be queried separately without getting a user document
+    and traversing through the elements to find a perticular profile, thus reducing the querying time
+    */
   
     //quering for a perticular profiles of a user
     User.findOne({ "profiles._profileId": infoObj._profileId }, { "profiles.$": 1, "_id": 0 }, function (err, profile) {
@@ -322,9 +353,15 @@ app.post("/profile/send", function (req, res) {
         var encryptedObj = CryptoJS.Rabbit.encrypt(profile, "hfdsahgdajshgjdsahgjfafsajhkgs");
         //sending the object as a response to the client
         res.json(encryptedObj);
+        //invoking garbade collection to free memory 
+        if (global.gc) {
+            global.gc();
+        } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+        }
       }
     });
-  });
+});
 
 
    /*
@@ -363,9 +400,15 @@ app.post("/device/requests/declined", function (req, res) {
         }
         else {
           res.json("Succesfully deleted request");//sending a success response to the client if request was successfully deleted
+          //invoking garbade collection to free memory 
+          if (global.gc) {
+            global.gc();
+          } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+          }
         }  
       });  
-  });
+});
 
 
      /*
@@ -402,6 +445,15 @@ app.post("/device/connections/received/profile", function (req, res) {
       var userInfo = [];//array to hold profile information of each recived profile
       
       var profiles = result.receivedProfiles[0].receivedProfileId;
+
+    /* HCI Issues:         
+    The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+    to render as they need information from the server to dynamically create those components.
+
+    Solutions: made the queries more efficient by querying only for a specific element in a subdocument rather than querying for the whole sub document and
+    traversing through each of those elemnts and searching each one of them to find the needed element. This was achived by using $elemMatch match function
+    given in the mongoose library.
+    */
       
       //iterating through the profile ids recived
       for (let profile of profiles) {
@@ -444,6 +496,12 @@ app.post("/device/connections/received/profile", function (req, res) {
             var encryptedObj = CryptoJS.Rabbit.encrypt(profilesArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
            //sending the object as a response to the client
             res.json(encryptedObj);
+            //invoking garbade collection to free memory 
+            if (global.gc) {
+                global.gc();
+            } else {
+                console.log("ERROR"+"garbade collection unavailable.");
+            }
           }
           
           return
@@ -508,6 +566,12 @@ app.post("/device/connections/sent/publicprofile", function (req, res) {
           var encryptedObj = CryptoJS.Rabbit.encrypt(basicInfoArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
           //sending the object as a response to the client
           res.json(encryptedObj);
+          //invoking garbade collection to free memory 
+          if (global.gc) {
+            global.gc();
+          } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+          }
         }  
         return;  
     });  
@@ -541,7 +605,16 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
 
   //the request body string inside the information variable is parsed to a JSON Object
   var grantRevokeSelectObj = JSON.parse(information);
-  
+
+/* HCI Issues:         
+    The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+    to render as they need information from the server to dynamically create those components.
+
+    Solutions: made the queries more efficient by querying only for a specific element in a subdocument rather than querying for the whole sub document and
+    traversing through each of those elemnts and searching each one of them to find the needed element. This was achived by using $elemMatch match function
+    given in the mongoose library.
+ */
+
   //quering for a specific element inside the connectedUsers sub documet
   User.findOne({"userId": grantRevokeSelectObj.uid}, {connectedUsers: {$elemMatch: {connectedUserId: grantRevokeSelectObj.connectedUserId}}}, function(err, result){
     if(err){
@@ -591,6 +664,12 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
       var encryptedObj = CryptoJS.Rabbit.encrypt(allProfArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
       //sending the object as a response to the client
       res.json(encryptedObj);
+      //invoking garbade collection to free memory 
+      if (global.gc) {
+        global.gc();
+      } else {
+        console.log("ERROR"+"garbade collection unavailable.");
+      }
       return  
     });
     return  
@@ -602,6 +681,11 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
 ***************************************************************************
 * //POST request handler for storing requests
 ***************************************************************************
+*/
+
+/* HCI Issues:
+        if a very large amount of requests hit the server at the same time the server can crash
+        as this issue was not addressed.
 */
 
 app.post("/device/requests/store", function (req, res) {
@@ -624,6 +708,14 @@ app.post("/device/requests/store", function (req, res) {
     var reqestObj = JSON.parse(information);
   
     received = reqestObj;
+
+    /* HCI Issues:
+        UI getting redundent reqests from the same user who is alreday connected thus causing confusing and misleading the user
+
+    Solutions: 
+        Queried for each of the places where the specific request Id can exist and compared with each entry and only entered the
+        recieved request from a user who the client has not connected with before.
+    */
     
     //quering for all elements in connectedUsers sub document
     User.findOne({ "userId": received.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
@@ -648,6 +740,16 @@ app.post("/device/requests/store", function (req, res) {
           }
         }
       }
+      /*
+    HCI issue:
+      The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+    to render as they need information from the server to dynamically create those components.
+
+    Solution:
+    improve the code logic to reduced the number of times the server has to 
+    call the database to retrive information. Thus reducing latency of 
+    acquiring data and sending them to the client
+    */
       
       //query for a perticular users document
       User.findOne({ "userId":  received.uid }, function (err,result) {
@@ -678,11 +780,17 @@ app.post("/device/requests/store", function (req, res) {
           result.save();
           console.log("saved "+ element);
         }
-    
+        
         res.send("success");//sending a success response to the client if request was successfully added
+        //invoking garbade collection to free memory 
+        if (global.gc) {
+            global.gc();
+        } else {
+            console.log("ERROR"+"garbade collection unavailable.");
+        }
         return
   
       });    
     return
     });
-  });
+});
