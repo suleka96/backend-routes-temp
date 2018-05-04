@@ -1433,12 +1433,10 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
                   global.gc();
                   } 
                   else {
-                      console.log("Error in Garbage Collection: " + ex);
+                      console.log("Error in Garbage Collection: ");
                   }
             }
-            else{
-              console.log("LENGTH OF ARRAY BABYYYYYYY"+Object.keys(array).length);
-            }
+            
 
       });
 
