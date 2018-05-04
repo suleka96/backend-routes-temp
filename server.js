@@ -399,7 +399,7 @@ app.post("/profile/edit", function (req, res) {
           global.gc();
       } 
       else {
-          console.log("Error in Garbage Collection: " + ex);
+          console.log("Error in Garbage Collection: " );
       }
     }
   });    
