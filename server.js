@@ -1418,25 +1418,31 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
           lName: profile.lName, 
           bio: profile.bio 
         });
+
+                //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end as a response
+                if (Object.keys(array).length == result.requests.length) {
+                  console.log("FINALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL result" + JSON.stringify(array));
+                  // var jsonArray = JSON.stringify(array);
+                  // console.log("Requesters Public Profiles: " + jsonArray);
+                  /* Here, the response object is encrypted using the same agreed upon key and sent back the client as JSON.*/
+                  // var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+                  // res.json(encrypted);
+        
+                  //Decommissioning of Data using Garbage Collection
+                  if (global.gc) {
+                  global.gc();
+                  } 
+                  else {
+                      console.log("Error in Garbage Collection: " + ex);
+                  }
+            }
+            else{
+              console.log("LENGTH OF ARRAY BABYYYYYYY"+Object.keys(array).length);
+            }
+
       });
 
-        //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end as a response
-        if (Object.keys(array).length == result.requests.length) {
-          console.log("FINALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL result" + JSON.stringify(array));
-          // var jsonArray = JSON.stringify(array);
-          // console.log("Requesters Public Profiles: " + jsonArray);
-          /* Here, the response object is encrypted using the same agreed upon key and sent back the client as JSON.*/
-          // var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
-          // res.json(encrypted);
 
-          //Decommissioning of Data using Garbage Collection
-          if (global.gc) {
-          global.gc();
-          } 
-          else {
-              console.log("Error in Garbage Collection: " + ex);
-          }
-    }
   }
-    console.log("FINAL result" + JSON.stringify(array));
+
   });
