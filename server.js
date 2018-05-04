@@ -889,7 +889,7 @@ app.post("/device/connections/received/publicprofiles", function (req, res) {
         array.push({ userId: record.userId, fName: record.fName, lName: record.lName, bio: record.bio });     
   
         //If the number of public profile objects is equal to the number of receivedProfiles, the array is returned to the front end
-        if (Object.keys(array).length == Users.length) {
+        if (Object.keys(array).length == receivedProfileUsers.length) {
           console.log("ARRAY " + JSON.stringify(array));
           var jsonArray = JSON.stringify(array);
           /* Here, the response object is encrypted using the same agreed upon key and sent back the client as JSON.*/
