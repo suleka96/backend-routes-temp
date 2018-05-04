@@ -940,7 +940,7 @@ app.post("/device/connections/received/profile", function (req, res) {
   var recievedConnectionObj = JSON.parse(information);
 
   //Query user's document and retrieve relevant element of receivedProfiles subdocument
-  User.findOne({"userId": recievedConnectionObj.uid}, {receivedProfiles: {$elemMatch: {connectionId: requestConnectionObj.connectionId}}}, function(err, result){
+  User.findOne({"userId": recievedConnectionObj.uid}, {receivedProfiles: {$elemMatch: {connectionId: recievedConnectionObj.connectionId}}}, function(err, result){
     if(err){
       console.log("Error "+err);
       return
