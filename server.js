@@ -631,6 +631,7 @@ app.post("/profile/send", function (req, res) {
 
 app.post("/device/requests/return", function (req, res) {
   console.log("inside return request route");
+
   if (!req.body) return res.sendStatus(400);
 
   //Received request body that is encrypted
@@ -645,54 +646,12 @@ app.post("/device/requests/return", function (req, res) {
   //Request body is parsed to a JS Object
   var requestInfoObj = JSON.parse(plaintext);
 
-  //User document is queried for the requests sub document
-  User.findOne({ "userId": requestInfoObj.uid }, { "requests": 1, "_id": 0 }).then(function (result) {
-    console.log("Retrieved Requests Object from DB: " + result);
+  var array = [];
 
-    //Retrieved object is converted to a JSON String from the retrieved BSON
-    var BSONObj = JSON.stringify(result);
-    //JSON String is converted to JS Object for internal use
-    var parsedJSObj = JSON.parse(BSONObj);
 
-    var array = [];
+  });
 
-    //Iterate through each of the requesterIds
-    for (var i = 0; i < parsedJSObj.requests.length; i++) {
 
-      console.log("Requester ID: " + i + ": " + parsedJSObj.requests[i].requesterId);
-
-      //Query each requesterId for their public profile and push it into an array which is then returned to the front end
-      User.findOne({ userId: parsedJSObj.requests[i].requesterId }).then(function (record) {
-        console.log("profile retrieved successfully");
-        //Each requester's public profile is pushed to an array
-        array.push({ 
-          userId: record.userId, 
-          fName: record.fName, 
-          lName: record.lName, 
-          bio: record.bio 
-        });
-        console.log("resultttttttttttt" + JSON.stringify(array));
-      }).then(function () {
-        //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end as a response
-        if (Object.keys(array).length == parsedJSObj.requests.length) {
-          var jsonArray = JSON.stringify(array);
-          console.log("Requesters Public Profiles: " + jsonArray);
-          /* Here, the response object is encrypted using the same agreed upon key and sent back the client as JSON.*/
-          var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
-          res.json(encrypted);
-
-          //Decommissioning of Data using Garbage Collection
-          if (global.gc) {
-          global.gc();
-          } 
-          else {
-              console.log("Error in Garbage Collection: " + ex);
-          }
-        }
-      });
-    }
-  });  
-});
 
   /*
 ***************************************************************************
@@ -1418,3 +1377,64 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 //   return
 //   });
 // });
+
+
+
+
+
+  //User document is queried for the requests sub document
+  User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 },function (err,result) {
+
+    if(err){
+      console.log("Error "+err);
+      return
+    }
+
+    console.log("Retrieved Requests Object from DB: " + result);
+    // //Retrieved object is converted to a JSON String from the retrieved BSON
+    // var BSONObj = JSON.stringify(result);
+    // //JSON String is converted to JS Object for internal use
+    // var parsedJSObj = JSON.parse(BSONObj);    
+
+    //Iterate through each of the requesterIds
+    for (var i = 0; i < result.requests.length; i++) {
+
+      console.log("Requester ID: " + i + ": " + result.requests[i].requesterId);
+
+      //Query each requesterId for their public profile and push it into an array which is then returned to the front end
+      User.findOne({ userId: result.requests[i].requesterId },function(err, profile){   
+        if(err){
+                console.log("Error "+err);
+                return
+              }       
+
+        console.log("profile retrieved successfully");
+        //Each requester's public profile is pushed to an array
+        array.push({ 
+          userId: profile.userId, 
+          fName: profile.fName, 
+          lName: profile.lName, 
+          bio: profile.bio 
+        });
+      });
+
+        //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end as a response
+        if (Object.keys(array).length == result.requests.length) {
+          console.log("FINALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL result" + JSON.stringify(array));
+          // var jsonArray = JSON.stringify(array);
+          // console.log("Requesters Public Profiles: " + jsonArray);
+          /* Here, the response object is encrypted using the same agreed upon key and sent back the client as JSON.*/
+          // var encrypted = CryptoJS.Rabbit.encrypt(jsonArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
+          // res.json(encrypted);
+
+          //Decommissioning of Data using Garbage Collection
+          if (global.gc) {
+          global.gc();
+          } 
+          else {
+              console.log("Error in Garbage Collection: " + ex);
+          }
+    }
+  }
+    console.log("FINAL result" + JSON.stringify(array));
+  });
