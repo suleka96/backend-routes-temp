@@ -1385,6 +1385,8 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   //User document is queried for the requests sub document
   User.findOne({ "userId": "aaaaaaaaaa" }, { "requests": 1, "_id": 0 },function (err,result) {
 
+    var array = [];
+
     if(err){
       console.log("Error "+err);
       return
