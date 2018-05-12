@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, "public"))); //Define path for stati
 app.set("views", path.join(__dirname, "views")); //Define path for views
 app.set("view engine", "ejs"); //Define view engine as EJS
 app.use(cors());
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise; //Declare mongoose promises globally
 
 /*******************************************************************************************************************************/
 
