@@ -1430,9 +1430,9 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 
 
 
-grantRevokeObject = { "uid" : "aaaaaaaaaa", "connectedUserId" : "konnect123",  "modifiedProfiles" : [{ "profileName" : " Sampe 2", "grantedStatus" : true, "_profileId" : "5abb7e9396f60300044034e4"},{ "profileName" : "red", "grantedStatus" : true,"_profileId" : "5abb7e9a96f60300044034e7"},{ "profileName" : "Red","grantedStatus" : true, "_profileId" : "5abba10e440f840004dc52fb"}]};
+var grantRevokeObject = { "uid" : "aaaaaaaaaa", "connectedUserId" : "konnect123",  "modifiedProfiles" : [{ "profileName" : " Sampe 2", "grantedStatus" : true, "_profileId" : "5abb7e9396f60300044034e4"},{ "profileName" : "red", "grantedStatus" : true,"_profileId" : "5abb7e9a96f60300044034e7"},{ "profileName" : "Red","grantedStatus" : true, "_profileId" : "5abba10e440f840004dc52fb"}]};
 
-grantRevokeObj = JSON.parse(grantRevokeObject);
+var grantRevokeObj = JSON.parse(grantRevokeObject);
 
 var modifiedProfiles = grantRevokeObj.modifiedProfiles;    
 
