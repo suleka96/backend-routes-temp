@@ -1131,8 +1131,6 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
     var profArray = []; //array that holds information of all the profiles of the user
     
     var sharedProfiles = result.connectedUsers[0].sharedProfiles;
-
-    console.log("FUCK"+result.connectedUsers[0].sharedProfiles);
     
     //quering for all the profiles of the uer inside the profiles sub document
     User.findOne({"userId": grantRevokeSelectObj.uid}, {"profiles":1 },function(err, resultProfiles){
@@ -1162,7 +1160,9 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
                profileName: profArray[i].profileName, 
                grantedStatus: true, 
                _profileId: profArray[i]._profileId     
-            };                   
+            };          
+            
+            console.log("FUKING SHIT "+i+" "+profArray[i]._profileId +"AND "+ sharedProf);
           }        
        }
       }
