@@ -1210,10 +1210,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
 
-  var id=grantRevokeObj.connectedUserId;
-
-  console.log("Request Sent: " + grantRevokeObj);  
-  console.log(grantRevokeObj.uid + " " +id );   
+  console.log(grantRevokeObj.uid + " " + grantRevokeObj.connectedUserId );   
  
   var modifiedProfiles = grantRevokeObj.modifiedProfiles;    
 
@@ -1224,7 +1221,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
         allowedProfilesArray.push(modifiedProfiles[i]._profileId);
       }
   }
-
+  
   console.log("Allowed Profiles Array: " + allowedProfilesArray);
 
   /*
