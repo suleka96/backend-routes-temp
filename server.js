@@ -1159,7 +1159,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
            to true */
           console.log("FUKING SHIT "+i+" "+profArray[i]._profileId +" AND "+ sharedProf);
            
-          if("5abb7e9a96f60300044034e7" == "5abb7e9a96f60300044034e7" ){
+          if(profArray[i]._profileId == sharedProf ){
             profArray[i] = {
                profileName: profArray[i].profileName, 
                grantedStatus: true, 
@@ -1171,6 +1171,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
       }
       //making the array into a JSON object
       var allProfArray = JSON.stringify(profArray);
+      console.log("FUKING SENT"); 
       //encrypting the object using the secret key
       var encryptedObj = CryptoJS.Rabbit.encrypt(allProfArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
       //sending the object as a response to the client
