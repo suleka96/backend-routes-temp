@@ -1164,8 +1164,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
                grantedStatus: true, 
                _profileId: profArray[i]._profileId     
             };          
-            
-            
+            console.log("FUKING CHANGED"+i+" "+profArray[i]._profileId +" AND "+ sharedProf);             
           }        
        }
       }
