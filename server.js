@@ -1158,8 +1158,10 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
            /* if an id of a profile is found in the shared profile array the granted stats will be set 
            to true */
           console.log("FUKING SHIT "+i+" "+profArray[i]._profileId +" AND "+ sharedProf);
+
+          var profileId = profArray[i]._profileId;
            
-          if(String(profArray[i]._profileId) === String(sharedProf) ){
+          if(String(profileId) === String(sharedProf) ){
             profArray[i] = {
                profileName: profArray[i].profileName, 
                grantedStatus: true, 
