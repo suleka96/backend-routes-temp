@@ -1131,6 +1131,8 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
     var profArray = []; //array that holds information of all the profiles of the user
     
     var sharedProfiles = result.connectedUsers[0].sharedProfiles;
+
+    console.log("FUCK"+result.connectedUsers[0].sharedProfiles);
     
     //quering for all the profiles of the uer inside the profiles sub document
     User.findOne({"userId": grantRevokeSelectObj.uid}, {"profiles":1 },function(err, resultProfiles){
@@ -1239,7 +1241,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   //New ConnectedUsers object to push to connectedUsers subdocument of user
   var newConnectedUserObj = new ConnectedUsers({
       sharedProfiles: allowedProfilesArray,
-      connectedUserId: grantRevokeObj.connectedUserId
+      connectedUserId: grantRevokeObj.connectedUserId 
   });
 
   console.log("New Connected User: " + newConnectedUserObj);
