@@ -1149,23 +1149,31 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
           _profileId: prof._profileId     
        });
       }
+
+      console.log("FUKING SHARED PROF "+sharedProfiles); 
       
       //iterating through the profiles that were shared
      for(let sharedProf of sharedProfiles){
        for(var i=0; i < profArray.length; i++){
            /* if an id of a profile is found in the shared profile array the granted stats will be set 
            to true */
-          if(profArray[i]._profileId == sharedProf ){
+          console.log("FUKING SHIT "+i+" "+profArray[i]._profileId +" AND "+ sharedProf);
+
+          var profileId = profArray[i]._profileId;
+           
+          if(String(profileId) === String(sharedProf) ){
             profArray[i] = {
                profileName: profArray[i].profileName, 
                grantedStatus: true, 
                _profileId: profArray[i]._profileId     
-            };                   
+            };          
+            console.log("FUKING CHANGED"+i+" "+profArray[i]._profileId +" AND "+ sharedProf);             
           }        
        }
       }
       //making the array into a JSON object
       var allProfArray = JSON.stringify(profArray);
+      console.log("FUKING SENT"); 
       //encrypting the object using the secret key
       var encryptedObj = CryptoJS.Rabbit.encrypt(allProfArray, "hfdsahgdajshgjdsahgjfafsajhkgs");
       //sending the object as a response to the client
@@ -1242,7 +1250,7 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
   //New ConnectedUsers object to push to connectedUsers subdocument of user
   var newConnectedUserObj = new ConnectedUsers({
       sharedProfiles: allowedProfilesArray,
-      connectedUserId: grantRevokeObj.connectedUserId
+      connectedUserId: grantRevokeObj.connectedUserId 
   });
 
   console.log("New Connected User: " + newConnectedUserObj);
