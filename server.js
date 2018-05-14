@@ -1191,7 +1191,7 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
 */
 
 app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
-  
+
   console.log("inside handling granting revoking route");
 
   if (!req.body) return res.sendStatus(400);
@@ -1204,6 +1204,8 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 
   //Decrypted request body is converted to plain text
   var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  console.log(plaintext);
 
   //Request body is parsed to a JSON Object
   var grantRevokeObj = JSON.parse(plaintext);
