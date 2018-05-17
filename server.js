@@ -1345,7 +1345,7 @@ app.post("/device/requests/store", function (req, res) {
 
   received = req.body;
 
-  console.log("RECEIVED BITCH "+received);
+  console.log("RECEIVED BITCH "+received.KONNECT_UID);
 
 
 //   /* HCI Issues:
