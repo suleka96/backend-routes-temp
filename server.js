@@ -1344,9 +1344,10 @@ app.post("/device/requests/store", function (req, res) {
   // var reqestObj = JSON.parse(information);
 
   received = req.body;
-  
+  var reqestObj = JSON.parse(received);
+
   console.log("RECEIVED BITCH 01 "+ req.body);
-  console.log("RECEIVED BITCH "+received.KONNECT_UID);
+  console.log("RECEIVED BITCH "+reqestObj.KONNECT_UID);
 
   res.send("success");
 
