@@ -1344,7 +1344,7 @@ app.post("/device/requests/store", function (req, res) {
   // var reqestObj = JSON.parse(information);
 
   received = req.body;
-
+  console.log("RECEIVED BITCH 01 "+ req.body);
   console.log("RECEIVED BITCH "+received.KONNECT_UID);
 
 
