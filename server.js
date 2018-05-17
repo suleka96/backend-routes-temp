@@ -1324,26 +1324,29 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
         as this issue was not addressed.
 */
 
-// app.post("/device/requests/store", function (req, res) {
+app.post("/device/requests/store", function (req, res) {
 
-//   console.log("inside store request route");
+  console.log("inside store request route");
 
-//   //send error status if request body is empty
-//   if (!req.body) return res.sendStatus(400);
+  //send error status if request body is empty
+  if (!req.body) return res.sendStatus(400);
 
-//   //received encrypted request body is assigned to a variable  
-//   var grantRevoke = req.body;
+  //received encrypted request body is assigned to a variable  
+  // var grantRevoke = 
 
-//   //request body inside the variable profileInfo is decrypted using the crypto.js library's base 64 encryption algorithem 
-//   var byteString = CryptoJS.Base64.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
+  // //request body inside the variable profileInfo is decrypted using the crypto.js library's base 64 encryption algorithem 
+  // var byteString = CryptoJS.Base64.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
 
-//   //decrypted request body inside the variable byteString is converted to a string
-//   var information = byteString.toString(CryptoJS.enc.Utf8);
+  // //decrypted request body inside the variable byteString is converted to a string
+  // var information = byteString.toString(CryptoJS.enc.Utf8);
 
-//   //the request body string inside the information variable is parsed to a JSON Objectt
-//   var reqestObj = JSON.parse(information);
+  // //the request body string inside the information variable is parsed to a JSON Objectt
+  // var reqestObj = JSON.parse(information);
 
-//   received = reqestObj;
+  received = req.body;
+
+  console.log("RECEIVED BITCH "+received);
+
 
 //   /* HCI Issues:
 //       UI getting redundent reqests from the same user who is alreday connected thus causing confusing and misleading the user
@@ -1354,84 +1357,84 @@ app.post("/device/connections/sent/grantrevoke/handle", function (req, res) {
 //   */
   
 //   //quering for all elements in connectedUsers sub document
-//   User.findOne({ "userId": received.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
+  User.findOne({ "userId": received.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
-//     if(err){
-//       console.log("Error "+err);
-//       return
-//     }
+    if(err){
+      console.log("Error "+err);
+      return
+    }
   
-//     receivedRequests = received.sharedProfiles
-//     connectedUsers = result1.connectedUsers
-//     receivedProfiles = result1.receivedProfiles
+    receivedRequests = received.sharedProfiles
+    connectedUsers = result1.connectedUsers
+    receivedProfiles = result1.receivedProfiles
   
-//     //iteratig through elements in connectedUsers sub document
-//     for(let connecterUser of connectedUsers){
-//         //iterating through recived requests array
-//       for(let i=0; i < receivedRequests.length; i++){
-//         if(connecterUser.connectedUserId == receivedRequests[i] ){
-//             /*if a recived id is equal to the connected user id remove that id from the 
-//             receivedRequests array*/
-//           receivedRequests.splice(i, 1);
-//           break;
-//         }
-//       }
-//     }
+    //iteratig through elements in connectedUsers sub document
+    for(let connecterUser of connectedUsers){
+        //iterating through recived requests array
+      for(let i=0; i < receivedRequests.length; i++){
+        if(connecterUser.connectedUserId == receivedRequests[i] ){
+            /*if a recived id is equal to the connected user id remove that id from the 
+            receivedRequests array*/
+          receivedRequests.splice(i, 1);
+          break;
+        }
+      }
+    }
 
-//     /*
-//   HCI issue:
-//     The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
-//   to render as they need information from the server to dynamically create those components.
+    /*
+  HCI issue:
+    The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+  to render as they need information from the server to dynamically create those components.
 
-//   Solution:
-//   improve the code logic to reduced the number of times the server has to 
-//   call the database to retrive information. Thus reducing latency of 
-//   acquiring data and sending them to the client
-//   */
+  Solution:
+  improve the code logic to reduced the number of times the server has to 
+  call the database to retrive information. Thus reducing latency of 
+  acquiring data and sending them to the client
+  */
     
-//     //query for a perticular users document
-//     User.findOne({ "userId":  received.uid }, function (err,result) {
+    //query for a perticular users document
+    User.findOne({ "userId":  received.uid }, function (err,result) {
   
-//       if(err){
-//         console.log("Error "+err);
-//         return
-//       }
+      if(err){
+        console.log("Error "+err);
+        return
+      }
 
-//       currentReqests = result.requests
+      currentReqests = result.requests
       
-//       //iterating through the reqests cueently in the requests sub document
-//       for(let request of currentReqests){
-//         for(let i=0; i < receivedRequests.length; i++){
-//           if(request.requesterId == receivedRequests[i] ){
-//               /*if a recived id is equal to a request id that is already there remove that id from the 
-//             receivedRequests array*/
-//             receivedRequests.splice(i, 1);
-//           }
+      //iterating through the reqests cueently in the requests sub document
+      for(let request of currentReqests){
+        for(let i=0; i < receivedRequests.length; i++){
+          if(request.requesterId == receivedRequests[i] ){
+              /*if a recived id is equal to a request id that is already there remove that id from the 
+            receivedRequests array*/
+            receivedRequests.splice(i, 1);
+          }
           
-//         }
-//       }
+        }
+      }
       
-//       //iterate through the receivedRequests array
-//       for(let newRequest of receivedRequests){
-//         var element={requesterId: newRequest};
-//         result.requests.push(element);//adding request to the requests sub document
-//         result.save();
-//         console.log("saved "+ element);
-//       }
+      //iterate through the receivedRequests array
+      for(let newRequest of receivedRequests){
+        var element={requesterId: newRequest};
+        result.requests.push(element);//adding request to the requests sub document
+        result.save();
+        console.log("saved "+ element);
+      }
       
-//       res.send("success");//sending a success response to the client if request was successfully added
-//       //invoking garbade collection to free memory 
-//       if (global.gc) {
-//           global.gc();
-//       } else {
-//           console.log("ERROR"+"garbade collection unavailable.");
-//       }
-//       return
+      res.send("success");//sending a success response to the client if request was successfully added
+      //invoking garbade collection to free memory 
+      if (global.gc) {
+          global.gc();
+      } else {
+          console.log("ERROR"+"garbade collection unavailable.");
+      }
+      return
 
-//     });    
-//   return
-//   });
-// });
+    });    
+  return
+  });
+});
 
 
 
