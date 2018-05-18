@@ -1348,6 +1348,8 @@ app.post("/device/requests/store", function (req, res) {
   console.log( req.body);
   console.log(received.KONNECT_UID);
 
+  var receivedRequests = received.KONNECT_UID
+
   for(let i=0; i < receivedRequests.length; i++){
     var output = receivedRequests[i].split(",");
     receivedRequests[i] = output[0];
