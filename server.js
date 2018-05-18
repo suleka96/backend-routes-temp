@@ -1400,7 +1400,7 @@ app.post("/device/requests/store", function (req, res) {
   */
     
     //query for a perticular users document
-    User.findOne({ "userId":  received.uid }, function (err,result) {
+    User.findOne({ "userId":  received.Device_ID }, function (err,result) {
   
       if(err){
         console.log("Error "+err);
