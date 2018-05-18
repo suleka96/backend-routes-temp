@@ -1419,7 +1419,7 @@ app.post("/device/requests/store", function (req, res) {
       
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
-        var element= new Request({
+        var element = new Request({
           requesterId: newRequest
         });
         result.requests.push(element);        
@@ -1429,15 +1429,8 @@ app.post("/device/requests/store", function (req, res) {
         console.log("saved "+ element);
       }
       
-      res.send("success"); //sending a success response to the client if request was successfully added
-      //invoking garbade collection to free memory 
-      if (global.gc) {
-          global.gc();
-      } else {
-          console.log("ERROR"+"garbade collection unavailable.");
-      }
+      res.send("success"); //sending a success response to the client if request was successfully added      
       return
-
     });    
   return
   });
