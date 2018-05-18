@@ -1348,95 +1348,108 @@ app.post("/device/requests/store", function (req, res) {
   console.log( req.body);
   console.log(received.KONNECT_UID);
 
-  res.send("success");
-
-
-// //   /* HCI Issues:
-// //       UI getting redundent reqests from the same user who is alreday connected thus causing confusing and misleading the user
-
-// //   Solutions: 
-// //       Queried for each of the places where the specific request Id can exist and compared with each entry and only entered the
-// //       recieved request from a user who the client has not connected with before.
-// //   */
+  for(let i=0; i < receivedRequests.length; i++){
+    var output = receivedRequests[i].split(",");
+    receivedRequests[i] = output[0];
   
-// //   //quering for all elements in connectedUsers sub document
-//   User.findOne({ "userId": received.uid }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
+}
 
-//     if(err){
-//       console.log("Error "+err);
-//       return
-//     }
-  
-//     receivedRequests = received.sharedProfiles
-//     connectedUsers = result1.connectedUsers
-//     receivedProfiles = result1.receivedProfiles
-  
-//     //iteratig through elements in connectedUsers sub document
-//     for(let connecterUser of connectedUsers){
-//         //iterating through recived requests array
-//       for(let i=0; i < receivedRequests.length; i++){
-//         if(connecterUser.connectedUserId == receivedRequests[i] ){
-//             /*if a recived id is equal to the connected user id remove that id from the 
-//             receivedRequests array*/
-//           receivedRequests.splice(i, 1);
-//           break;
-//         }
-//       }
-//     }
+console.log(receivedRequests);
 
-//     /*
-//   HCI issue:
-//     The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
-//   to render as they need information from the server to dynamically create those components.
+res.send("Dilum sux! ");
 
-//   Solution:
-//   improve the code logic to reduced the number of times the server has to 
-//   call the database to retrive information. Thus reducing latency of 
-//   acquiring data and sending them to the client
+//   /* HCI Issues:
+//       UI getting redundent reqests from the same user who is alreday connected thus causing confusing and misleading the user
+
+//   Solutions: 
+//       Queried for each of the places where the specific request Id can exist and compared with each entry and only entered the
+//       recieved request from a user who the client has not connected with before.
 //   */
-    
-//     //query for a perticular users document
-//     User.findOne({ "userId":  received.uid }, function (err,result) {
   
-//       if(err){
-//         console.log("Error "+err);
-//         return
-//       }
+//   //quering for all elements in connectedUsers sub document
+  // User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
-//       currentReqests = result.requests
+  //   if(err){
+  //     console.log("Error "+err);
+  //     return
+  //   }
+  
+  //   receivedRequests = received.KONNECT_UID
+  //   connectedUsers = result1.connectedUsers
+  //   receivedProfiles = result1.receivedProfiles
+
+  //   for(let i=0; i < receivedRequests.length; i++){
+  //       var output = receivedRequests[i].split(",");
+  //       receivedRequests[i] = output[0];
       
-//       //iterating through the reqests cueently in the requests sub document
-//       for(let request of currentReqests){
-//         for(let i=0; i < receivedRequests.length; i++){
-//           if(request.requesterId == receivedRequests[i] ){
-//               /*if a recived id is equal to a request id that is already there remove that id from the 
-//             receivedRequests array*/
-//             receivedRequests.splice(i, 1);
-//           }
+  //   }
+  
+  //   //iteratig through elements in connectedUsers sub document
+  //   for(let connecterUser of connectedUsers){
+  //       //iterating through recived requests array
+  //     for(let i=0; i < receivedRequests.length; i++){
+  //       if(connecterUser.connectedUserId == receivedRequests[i] ){
+  //           /*if a recived id is equal to the connected user id remove that id from the 
+  //           receivedRequests array*/
+  //         receivedRequests.splice(i, 1);
+  //         break;
+  //       }
+  //     }
+  //   }
+
+  //   /*
+  // HCI issue:
+  //   The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+  // to render as they need information from the server to dynamically create those components.
+
+  // Solution:
+  // improve the code logic to reduced the number of times the server has to 
+  // call the database to retrive information. Thus reducing latency of 
+  // acquiring data and sending them to the client
+  // */
+    
+  //   //query for a perticular users document
+  //   User.findOne({ "userId":  received.uid }, function (err,result) {
+  
+  //     if(err){
+  //       console.log("Error "+err);
+  //       return
+  //     }
+
+  //     currentReqests = result.requests
+      
+  //     //iterating through the reqests cueently in the requests sub document
+  //     for(let request of currentReqests){
+  //       for(let i=0; i < receivedRequests.length; i++){
+  //         if(request.requesterId == receivedRequests[i] ){
+  //             /*if a recived id is equal to a request id that is already there remove that id from the 
+  //           receivedRequests array*/
+  //           receivedRequests.splice(i, 1);
+  //         }
           
-//         }
-//       }
+  //       }
+  //     }
       
-//       //iterate through the receivedRequests array
-//       for(let newRequest of receivedRequests){
-//         var element={requesterId: newRequest};
-//         result.requests.push(element);//adding request to the requests sub document
-//         result.save();
-//         console.log("saved "+ element);
-//       }
+  //     //iterate through the receivedRequests array
+  //     for(let newRequest of receivedRequests){
+  //       var element={requesterId: newRequest};
+  //       result.requests.push(element);//adding request to the requests sub document
+  //       result.save();
+  //       console.log("saved "+ element);
+  //     }
       
-//       res.send("success");//sending a success response to the client if request was successfully added
-//       //invoking garbade collection to free memory 
-//       if (global.gc) {
-//           global.gc();
-//       } else {
-//           console.log("ERROR"+"garbade collection unavailable.");
-//       }
-//       return
+  //     res.send("success");//sending a success response to the client if request was successfully added
+  //     //invoking garbade collection to free memory 
+  //     if (global.gc) {
+  //         global.gc();
+  //     } else {
+  //         console.log("ERROR"+"garbade collection unavailable.");
+  //     }
+  //     return
 
-//     });    
-//   return
-//   });
+  //   });    
+  // return
+  // });
 });
 
 
