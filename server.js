@@ -1329,18 +1329,6 @@ app.post("/device/requests/store", function (req, res) {
   //send error status if request body is empty
   if (!req.body) return res.sendStatus(400);
 
-  //received encrypted request body is assigned to a variable  
-  // var grantRevoke = 
-
-  // //request body inside the variable profileInfo is decrypted using the crypto.js library's base 64 encryption algorithem 
-  // var byteString = CryptoJS.Base64.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
-
-  // //decrypted request body inside the variable byteString is converted to a string
-  // var information = byteString.toString(CryptoJS.enc.Utf8);
-
-  // //the request body string inside the information variable is parsed to a JSON Objectt
-  // var reqestObj = JSON.parse(information);
-
   received = req.body;
 
   console.log( req.body);
@@ -1433,11 +1421,13 @@ app.post("/device/requests/store", function (req, res) {
       
       res.send("success");//sending a success response to the client if request was successfully added
       //invoking garbade collection to free memory 
+
       if (global.gc) {
           global.gc();
       } else {
           console.log("ERROR"+"garbade collection unavailable.");
       }
+      
       return
 
     });    
