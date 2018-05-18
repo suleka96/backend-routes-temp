@@ -1375,7 +1375,7 @@ app.post("/device/requests/store", function (req, res) {
     }
   
     //iteratig through elements in connectedUsers sub document
-    if(connecterUser != null){
+    if(connectedUsers != null){
       for(let connecterUser of connectedUsers){
           //iterating through recived requests array
         for(let i=0; i < receivedRequests.length; i++){
