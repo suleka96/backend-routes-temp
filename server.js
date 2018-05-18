@@ -97,6 +97,7 @@ var Schema = mongoose.Schema;
 
 //Mongo Database schema for user profiles
 var profilesSchema = new Schema({  
+  _id: false,
   _profileId: Schema.Types.ObjectId,
   profileName: String,
   mobileNo: String,
@@ -120,12 +121,14 @@ var profilesSchema = new Schema({
 
 //Mongo Database schema for connected users (users we have shared our profiles with)
 var connectedUsersSchema = new Schema({  
+  _id: false,
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
 //Mongo Database schema for received profiles from users who have connected with another perticular user
 var receivedProfilesSchema = new Schema({  
+  _id: false,
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
