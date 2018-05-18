@@ -1420,6 +1420,7 @@ app.post("/device/requests/store", function (req, res) {
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
         var element= new Request({requesterId: newRequest});
+        result.requests.push(element);
         element.save(function (err) {
           if (err) console.log('Database Error: ' + err);
         }); 
