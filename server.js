@@ -339,8 +339,8 @@ app.post("/profiles/create", function (req, res) {
 
   //querying for the relevant user's document and pushing the profile to the profiles sub document  
   User.findOne({ userId: profObj.uid },function (error,record) {
-      if (err) {
-          console.log(err);
+      if (error) {
+          console.log(error);
           return;
         }
        
