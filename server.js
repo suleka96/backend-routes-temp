@@ -1411,8 +1411,7 @@ app.post("/device/requests/store", function (req, res) {
               /*if a recived id is equal to a request id that is already there remove that id from the 
             receivedRequests array*/
             receivedRequests.splice(i, 1);
-          }
-          
+          }          
         }
       }
     }
@@ -1423,12 +1422,12 @@ app.post("/device/requests/store", function (req, res) {
           requesterId: newRequest
         });
         result.requests.push(element);        
-        element.save(function (err) {
-          if (err) console.log('Database Error: ' + err);
-        }); 
-        result.save();
-        //result.requests.push(element);//adding request to the requests sub document
-        //result.save();
+        // element.save(function (err) {
+        //   if (err) console.log('Database Error: ' + err);
+        // }); 
+        result.save(function(err) {
+          if (err) console.log("REQUEST DID NOT GET SAVED!");
+        });       
         console.log("saved "+ element);
       }
       
