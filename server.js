@@ -1373,7 +1373,7 @@ app.post("/device/requests/store", function (req, res) {
     }
   
     //iteratig through elements in connectedUsers sub document
-    if(connecterUsers != null){
+    if(connectedUsers != null){
       for(let connecterUser of connectedUsers){
           //iterating through recived requests array
         for(let i=0; i < receivedRequests.length; i++){
@@ -1399,7 +1399,7 @@ app.post("/device/requests/store", function (req, res) {
   */
     
     //query for a perticular users document
-    User.findOne({ "userId":  received.uid }, function (err,result) {
+    User.findOne({ "userId":  received.Device_ID }, function (err,result) {
   
       if(err){
         console.log("Error "+err);
