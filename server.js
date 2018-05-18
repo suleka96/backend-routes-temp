@@ -120,15 +120,13 @@ var profilesSchema = new Schema({
 });
 
 //Mongo Database schema for connected users (users we have shared our profiles with)
-var connectedUsersSchema = new Schema({  
-  _id: false,
+var connectedUsersSchema = new Schema({    
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
 //Mongo Database schema for received profiles from users who have connected with another perticular user
-var receivedProfilesSchema = new Schema({  
-  _id: false,
+var receivedProfilesSchema = new Schema({    
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
@@ -1352,7 +1350,7 @@ app.post("/device/requests/store", function (req, res) {
   
     var receivedRequests = received.KONNECT_UID
     var connectedUsers = result1.connectedUsers
-    var receivedProfiles = result1.receivedProfiles
+    // var receivedProfiles = result1.receivedProfiles
 
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
@@ -1360,7 +1358,6 @@ app.post("/device/requests/store", function (req, res) {
     }
   
     //iteratig through elements in connectedUsers sub document
-    if(connectedUsers != null){
       for(let connecterUser of connectedUsers){
           //iterating through recived requests array
         for(let i=0; i < receivedRequests.length; i++){
@@ -1372,7 +1369,6 @@ app.post("/device/requests/store", function (req, res) {
           }
         }
       }
-    }
 
     /*
   HCI issue:
@@ -1394,7 +1390,7 @@ app.post("/device/requests/store", function (req, res) {
 
       currentReqests = result.requests
       
-      if(currentReqests != null){
+
       //iterating through the reqests cueently in the requests sub document
       for(let request of currentReqests){
         for(let i=0; i < receivedRequests.length; i++){
@@ -1405,11 +1401,11 @@ app.post("/device/requests/store", function (req, res) {
           }          
         }
       }
-    }
+    
       
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
-        var element= new Request({
+        var element = new Request({
           requesterId: newRequest
         });
         result.requests.push(element);        
@@ -1419,17 +1415,8 @@ app.post("/device/requests/store", function (req, res) {
         console.log("saved "+ element);
       }
       
-      res.send("success");//sending a success response to the client if request was successfully added
-      //invoking garbade collection to free memory 
-
-      if (global.gc) {
-          global.gc();
-      } else {
-          console.log("ERROR"+"garbade collection unavailable.");
-      }
-      
+      res.send("success"); //sending a success response to the client if request was successfully added      
       return
-
     });    
   return
   });
