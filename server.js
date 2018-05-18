@@ -120,15 +120,13 @@ var profilesSchema = new Schema({
 });
 
 //Mongo Database schema for connected users (users we have shared our profiles with)
-var connectedUsersSchema = new Schema({  
-  _id: false,
+var connectedUsersSchema = new Schema({    
   connectedUserId: String,
   sharedProfiles: { type: Array, "default": [] }
 });
 
 //Mongo Database schema for received profiles from users who have connected with another perticular user
-var receivedProfilesSchema = new Schema({  
-  _id: false,
+var receivedProfilesSchema = new Schema({    
   connectionId: String, //Requesters ID
   receivedProfileId: { type: Array, "default": [] }
 });
