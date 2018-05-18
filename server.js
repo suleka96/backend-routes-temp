@@ -1431,7 +1431,7 @@ app.post("/device/requests/store", function (req, res) {
         console.log("saved "+ element);
       }
       
-      res.send("success");//sending a success response to the client if request was successfully added
+      res.send("success"); //sending a success response to the client if request was successfully added
       //invoking garbade collection to free memory 
       if (global.gc) {
           global.gc();
