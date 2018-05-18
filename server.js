@@ -1369,12 +1369,11 @@ app.post("/device/requests/store", function (req, res) {
 
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
-        receivedRequests[i] = output[0];
-      
+        receivedRequests[i] = output[0];      
     }
   
     //iteratig through elements in connectedUsers sub document
-    if(connecterUser != null){
+    if(connecterUsers != null){
       for(let connecterUser of connectedUsers){
           //iterating through recived requests array
         for(let i=0; i < receivedRequests.length; i++){
