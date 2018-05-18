@@ -141,7 +141,6 @@ var requestsSchema = new Schema({
 
 //Mongo Database schema for the user profile
 var usersSchema = new Schema({
-  _id: false,
   userId: String,
   fName: String,
   lName: String,
