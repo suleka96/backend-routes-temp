@@ -1375,14 +1375,16 @@ app.post("/device/requests/store", function (req, res) {
     }
   
     //iteratig through elements in connectedUsers sub document
-    for(let connecterUser of connectedUsers){
-        //iterating through recived requests array
-      for(let i=0; i < receivedRequests.length; i++){
-        if(connecterUser.connectedUserId == receivedRequests[i] ){
-            /*if a recived id is equal to the connected user id remove that id from the 
-            receivedRequests array*/
-          receivedRequests.splice(i, 1);
-          break;
+    if(connecterUser != null){
+      for(let connecterUser of connectedUsers){
+          //iterating through recived requests array
+        for(let i=0; i < receivedRequests.length; i++){
+          if(connecterUser.connectedUserId == receivedRequests[i] ){
+              /*if a recived id is equal to the connected user id remove that id from the 
+              receivedRequests array*/
+            receivedRequests.splice(i, 1);
+            break;
+          }
         }
       }
     }
@@ -1408,6 +1410,7 @@ app.post("/device/requests/store", function (req, res) {
 
       currentReqests = result.requests
       
+      if(currentReqests != null){
       //iterating through the reqests cueently in the requests sub document
       for(let request of currentReqests){
         for(let i=0; i < receivedRequests.length; i++){
@@ -1419,6 +1422,7 @@ app.post("/device/requests/store", function (req, res) {
           
         }
       }
+    }
       
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
