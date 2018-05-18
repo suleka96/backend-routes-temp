@@ -1425,9 +1425,6 @@ app.post("/device/requests/store", function (req, res) {
           requesterId: newRequest
         });
         result.requests.push(element);        
-        // element.save(function (err) {
-        //   if (err) console.log('Database Error: ' + err);
-        // }); 
         result.save(function(err) {
           if (err) console.log("REQUEST DID NOT GET SAVED!");
         });       
