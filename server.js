@@ -1399,8 +1399,7 @@ app.post("/device/requests/store", function (req, res) {
   */
     
     //query for a perticular users document
-    User.findOne({ "userId":  received.Device_ID }, function (err,result) {
-  
+    User.findOne({ "userId":  received.Device_ID }, function (err,result) {  
       if(err){
         console.log("Error "+err);
         return
@@ -1424,9 +1423,12 @@ app.post("/device/requests/store", function (req, res) {
       
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
-        var element={requesterId: newRequest};
-        result.requests.push(element);//adding request to the requests sub document
-        result.save();
+        var element= new Request({requesterId: newRequest});
+        element.save(function (err) {
+          if (err) console.log('Database Error: ' + err);
+        }); 
+        //result.requests.push(element);//adding request to the requests sub document
+        //result.save();
         console.log("saved "+ element);
       }
       
