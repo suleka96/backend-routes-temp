@@ -1511,7 +1511,7 @@ acquiring data and sending them to the client
 
       User.update(
         { userId: received.Device_ID },
-        { $set: { requests: { requesterId: newRequest } } },
+        { $set: { requests: { element } } },
         { safe: true },
         function(err, obj) {
           if (err) {
