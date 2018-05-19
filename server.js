@@ -1517,6 +1517,16 @@ acquiring data and sending them to the client
       });
       schemizedRequests.push(element);
     }
+
+    User.update(
+      {userId: received.Device_ID},
+      { $pull: {requests} },
+      { safe: true},
+      function(err, obj) {
+        if (err) {
+          console.log("EXISTING REQUESTS DID NOT GET DELETED! - " + err);
+        }
+    });
     
     User.update(
       { userId: received.Device_ID },
