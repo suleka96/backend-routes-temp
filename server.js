@@ -1356,6 +1356,7 @@ app.post("/device/requests/store", function (req, res) {
       receivedRequests.push(requests);
     }
 
+    console.log(receivedRequests);
   
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
