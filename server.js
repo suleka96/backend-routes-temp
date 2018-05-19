@@ -1435,7 +1435,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n', Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
+var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf842,\n'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
 
 
 User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
@@ -1490,16 +1490,16 @@ acquiring data and sending them to the client
     currentReqests = result.requests
     
 
-    //iterating through the reqests cueently in the requests sub document
-    for(let request of currentReqests){
-      for(let i=0; i < receivedRequests.length; i++){
-        if(request.requesterId == receivedRequests[i] ){
-            /*if a recived id is equal to a request id that is already there remove that id from the 
-          receivedRequests array*/
-          receivedRequests.splice(i, 1);
-        }          
-      }
-    }
+    // //iterating through the reqests cueently in the requests sub document
+    // for(let request of currentReqests){
+    //   for(let i=0; i < receivedRequests.length; i++){
+    //     if(request.requesterId == receivedRequests[i] ){
+    //         /*if a recived id is equal to a request id that is already there remove that id from the 
+    //       receivedRequests array*/
+    //       receivedRequests.splice(i, 1);
+    //     }          
+    //   }
+    // }
   
     //iterate through the receivedRequests arrayc
     for(let newRequest of receivedRequests){
