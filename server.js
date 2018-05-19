@@ -1172,9 +1172,9 @@ app.post("/device/connections/sent/grantrevoke/select", function (req, res) {
       } else {
         console.log("ERROR"+"garbade collection unavailable.");
       }
-      return  
+      return;  
     });
-    return  
+    return;  
   }); 
 });
 
@@ -1440,6 +1440,8 @@ app.post("/device/requests/store", function (req, res) {
           if (err) {
             console.log("REQUEST DID NOT GET SAVED! - " + err);
           }
+
+          res.send("Requests stored in database successfully!");
         });
       
       return
