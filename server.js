@@ -1350,9 +1350,11 @@ app.post("/device/requests/store", function (req, res) {
     
     var receivedRequests = [];
 
-    requestString = String(received.KONNECT_UID);
+    // received.KONNECT_UID.map(String);
 
-    console.log("STRING"+ requestString);
+    var requestString = String(received.KONNECT_UID);
+
+    console.log(JSON.parse(requestString));
 
     for(let i=0; i < received.KONNECT_UID.length; i++){
       receivedRequests.push(received.KONNECT_UID[i]);
