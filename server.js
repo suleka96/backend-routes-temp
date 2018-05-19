@@ -1452,6 +1452,8 @@ User.findOne({ "userId": received.Device_ID },  function (err,result1) {
       receivedRequests = output[0];      
   
 console.log(receivedRequests);
+console.log(connectedUsers);
+console.log(connectedUsers[0].connectedUserId);
 
   //iteratig through elements in connectedUsers sub document
     for(let connecterUser of connectedUsers){
