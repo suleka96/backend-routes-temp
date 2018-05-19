@@ -149,10 +149,6 @@ var usersSchema = new Schema({
   receivedProfiles: [receivedProfilesSchema]
 });
 
-var validIDSchema = new Schema({  
-  uids: { type: Array, "default": [] }
-});
-
 
 /*
 ****************************************************************
@@ -171,7 +167,6 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 //model for the request subdocument
 var Request = mongoose.model("requests", requestsSchema);
 
-var UID = mongoose.model("validID", validIDSchema);
 
 /*
 ******************************************************* 
@@ -1473,33 +1468,6 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-UID.find({ }, function (err,result) {  
-
-      if(err){
-        console.log("Error "+err);
-        return
-      }
-
-      console.log(result);
-
-      var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
-      var uids = result.uids;
-      var status;
-      
-      for(let uid of uids){
-          if( uid == receivedID ){
-            status = "true";
-          } 
-          else{
-            status = "false";
-          }
-      }
-      
-      console.log(status);
-      // res.send(status);
-    
-      return
-});    
 
 
 
