@@ -1516,6 +1516,8 @@ acquiring data and sending them to the client
         requesterId: request.requesterId
       });
       schemizedRequests.push(element);
+      console.log("REQUEST IN ALLREQUESTS " + request);
+      console.log("ELEMENT IN ALLREQUESTS " + element);
     }
 
     User.update(
