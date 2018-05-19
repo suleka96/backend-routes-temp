@@ -1501,8 +1501,6 @@ acquiring data and sending them to the client
       }
     }
   
-    console.log(receivedRequests[0]);
-    
     //iterate through the receivedRequests arrayc
     for(let newRequest of receivedRequests){
       var element = new Request({
