@@ -1350,6 +1350,10 @@ app.post("/device/requests/store", function (req, res) {
     
     var receivedRequests = [];
 
+    requestString = String(received.KONNECT_UID);
+
+    console.log("STRING"+ requestString);
+
     for(let i=0; i < received.KONNECT_UID.length; i++){
       receivedRequests.push(received.KONNECT_UID[i]);
       console.log("COUNTER"+i);
