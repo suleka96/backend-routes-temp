@@ -1513,7 +1513,7 @@ acquiring data and sending them to the client
 
     for (let request of allRequests) {
       var element = new Request({
-        requesterId: newRequest
+        requesterId: request
       });
       schemizedRequests.push(element);
     }
