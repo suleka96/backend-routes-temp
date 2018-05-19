@@ -1507,11 +1507,13 @@ acquiring data and sending them to the client
       result.requests.push(element);        
       result.save(function(err) {
         if (err) console.log("REQUEST DID NOT GET SAVED!");
+
+        console.log("saved "+ element);
       });       
-      console.log("saved "+ element);
+      
     }
     
-    res.send("success"); //sending a success response to the client if request was successfully added      
+    //sending a success response to the client if request was successfully added      
     return
   });    
 return
