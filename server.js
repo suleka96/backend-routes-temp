@@ -149,8 +149,8 @@ var usersSchema = new Schema({
   receivedProfiles: [receivedProfilesSchema]
 });
 
-var uidSchema = new Schema({  
-  deviceId: String
+var validIDSchema = new Schema({  
+  uids: { type: Array, "default": [] }
 });
 
 
@@ -171,7 +171,7 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 //model for the request subdocument
 var Request = mongoose.model("requests", requestsSchema);
 
-var UID = mongoose.model("uids", uidSchema);
+var UID = mongoose.model("validID", validIDSchema);
 
 /*
 ******************************************************* 
@@ -1473,7 +1473,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-UID.findOne({ "_id":  "5b004003734d1d0aaaac8c73" }, function (err,result) {  
+UID.find({ }, function (err,result) {  
 
       if(err){
         console.log("Error "+err);
@@ -1487,7 +1487,7 @@ UID.findOne({ "_id":  "5b004003734d1d0aaaac8c73" }, function (err,result) {
       // var status;
       
       // for(let uid of uids){
-      //     if( uid.deviceId == receivedID ){
+      //     if( uid == receivedID ){
       //       status = "true";
       //     } 
       //     else{
