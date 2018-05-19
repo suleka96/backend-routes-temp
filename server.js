@@ -1419,7 +1419,7 @@ app.post("/device/requests/store", function (req, res) {
         }
       } 
       
-      console.log("RECEIVED REQUESTS " + receivedRequests);
+      console.log("RECEIVED REQUESTS" + receivedRequests);
     
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
