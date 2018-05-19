@@ -1431,10 +1431,14 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n',
-   Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' }
 
-User.findOne({ "userId": received.Device_ID },  function (err,result1) {
+
+
+
+var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n', Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
+
+
+User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
   if(err){
     console.log("Error "+err);
@@ -1445,125 +1449,353 @@ User.findOne({ "userId": received.Device_ID },  function (err,result1) {
   var connectedUsers = result1.connectedUsers
   // var receivedProfiles = result1.receivedProfiles
 
-  console.log(result1.fName);
-  
-      var output = receivedRequests.split(",");
-      receivedRequests = output[0];      
-  
-console.log(receivedRequests);
-console.log(connectedUsers);
-
-if(!(connectedUsers == [])){
+  for(let i=0; i < receivedRequests.length; i++){
+      var output = receivedRequests[i].split(",");
+      receivedRequests[i] = output[0];      
+  }
 
   //iteratig through elements in connectedUsers sub document
     for(let connecterUser of connectedUsers){
-
-      console.length("inside outer for loop");
-        if(!(connecterUser.connectedUserId == receivedRequests) ){
+        //iterating through recived requests array
+      for(let i=0; i < receivedRequests.length; i++){
+        if(connecterUser.connectedUserId == receivedRequests[i] ){
             /*if a recived id is equal to the connected user id remove that id from the 
             receivedRequests array*/
-            console.log("first if");
-
-            currentReqests = result1.requests
-
-            console.log(currentReqests);
-
-            if(!(currentReqests == [])){
-
-            for(let request of currentReqests){
-
-              console.log("Inner for");
-              
-              console.log(request);
-
-              if(!(request.requesterId == receivedRequests)){
-
-                console.log("Inner for");
-
-                var element = new Request({
-                  requesterId: receivedRequests
-                });
-
-                result.requests.push(element);    
-                console.log("PUSHED");
-                result.save(function(err) {
-                  if (err) console.log("REQUEST DID NOT GET SAVED!");
-          
-                  console.log("saved "+ element);
-                });       
-                break;
-              }          
-          
-           }}
-           else{
-            var element = new Request({
-              requesterId: receivedRequests
-            });
-    
-            result.requests.push(element);    
-            console.log("PUSHED");
-            result.save(function(err) {
-              if (err) console.log("REQUEST DID NOT GET SAVED!");
-      
-              console.log("saved "+ element);
-            });
-           }
-
+          receivedRequests.splice(i, 1);
           break;
         }
       }
     }
-    else{
-      if(currentReqests == []){
 
-        console.log("RUNNING BITCH");
-        
-        var element = new Request({
-          requesterId: receivedRequests
-        });
+  /*
+HCI issue:
+  The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+to render as they need information from the server to dynamically create those components.
 
-        result.requests.push(element);    
-        console.log("PUSHED");
-        result.save(function(err) {
-          if (err) console.log("REQUEST DID NOT GET SAVED!");
+Solution:
+improve the code logic to reduced the number of times the server has to 
+call the database to retrive information. Thus reducing latency of 
+acquiring data and sending them to the client
+*/
   
-          console.log("saved "+ element);
-        });
-      }
-      else{
-        for(let request of currentReqests){
-
-          console.log("Inner for");
-          
-          console.log(request);
-
-          if(!(request.requesterId == receivedRequests)){
-
-            console.log("Inner for");
-
-            var element = new Request({
-              requesterId: receivedRequests
-            });
-
-            result.requests.push(element);    
-            console.log("PUSHED");
-            result.save(function(err) {
-              if (err) console.log("REQUEST DID NOT GET SAVED!");
-      
-              console.log("saved "+ element);
-            });       
-            break;
-          }          
-      
-       }
-      }
-
-
+  //query for a perticular users document
+  User.findOne({ "userId":  received.Device_ID }, function (err,result) {  
+    if(err){
+      console.log("Error "+err);
+      return
     }
 
-   
+    currentReqests = result.requests
+    
+
+    //iterating through the reqests cueently in the requests sub document
+    for(let request of currentReqests){
+      for(let i=0; i < receivedRequests.length; i++){
+        if(request.requesterId == receivedRequests[i] ){
+            /*if a recived id is equal to a request id that is already there remove that id from the 
+          receivedRequests array*/
+          receivedRequests.splice(i, 1);
+        }          
+      }
+    }
+  
+    
+    //iterate through the receivedRequests arrayc
+    for(let newRequest of receivedRequests){
+      var element = new Request({
+        requesterId: newRequest
+      });
+
+      User.update(
+        { userId: received.Device_ID },
+        { $set: { requests: { requesterId: newRequest } } },
+        { safe: true },
+        function(err, obj) {
+          if (err) {
+            console.log("REQUEST DID NOT GET SAVED! - " + err);
+          }
+        });
+      // result.requests.push(element);        
+      // result.save(function(err) {
+      //   if (err) console.log("REQUEST DID NOT GET SAVED!");
+      // });       
+      console.log("saved " + element);
+    }
+    
+    return
+  });    
 return
 });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n',
+//    Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' }
+
+// User.findOne({ "userId": received.Device_ID },  function (err,result1) {
+
+//   if(err){
+//     console.log("Error "+err);
+//     return
+//   }
+
+//   var receivedRequests = received.KONNECT_UID
+//   var connectedUsers = result1.connectedUsers
+//   // var receivedProfiles = result1.receivedProfiles
+
+//   console.log(result1.fName);
+  
+//       var output = receivedRequests.split(",");
+//       receivedRequests = output[0];      
+  
+// console.log(receivedRequests);
+// console.log(connectedUsers);
+
+// if(!(connectedUsers == [])){
+
+//   //iteratig through elements in connectedUsers sub document
+//     for(let connecterUser of connectedUsers){
+
+//       console.length("inside outer for loop");
+//         if(!(connecterUser.connectedUserId == receivedRequests) ){
+//             /*if a recived id is equal to the connected user id remove that id from the 
+//             receivedRequests array*/
+//             console.log("first if");
+
+//             currentReqests = result1.requests
+
+//             console.log(currentReqests);
+
+//             if(!(currentReqests == [])){
+
+//             for(let request of currentReqests){
+
+//               console.log("Inner for");
+              
+//               console.log(request);
+
+//               if(!(request.requesterId == receivedRequests)){
+
+//                 console.log("Inner for");
+
+//                 var element = new Request({
+//                   requesterId: receivedRequests
+//                 });
+
+//                 result.requests.push(element);    
+//                 console.log("PUSHED");
+//                 result.save(function(err) {
+//                   if (err) console.log("REQUEST DID NOT GET SAVED!");
+          
+//                   console.log("saved "+ element);
+//                 });       
+//                 break;
+//               }          
+          
+//            }}
+//            else{
+//             var element = new Request({
+//               requesterId: receivedRequests
+//             });
+    
+//             result.requests.push(element);    
+//             console.log("PUSHED");
+//             result.save(function(err) {
+//               if (err) console.log("REQUEST DID NOT GET SAVED!");
+      
+//               console.log("saved "+ element);
+//             });
+//            }
+
+//           break;
+//         }
+//       }
+//     }
+//     else{
+//       if(currentReqests == []){
+
+//         console.log("RUNNING BITCH");
+        
+//         var element = new Request({
+//           requesterId: receivedRequests
+//         });
+
+//         result.requests.push(element);    
+//         console.log("PUSHED");
+//         result.save(function(err) {
+//           if (err) console.log("REQUEST DID NOT GET SAVED!");
+  
+//           console.log("saved "+ element);
+//         });
+//       }
+//       else{
+//         for(let request of currentReqests){
+
+//           console.log("Inner for");
+          
+//           console.log(request);
+
+//           if(!(request.requesterId == receivedRequests)){
+
+//             console.log("Inner for");
+
+//             var element = new Request({
+//               requesterId: receivedRequests
+//             });
+
+//             result.requests.push(element);    
+//             console.log("PUSHED");
+//             result.save(function(err) {
+//               if (err) console.log("REQUEST DID NOT GET SAVED!");
+      
+//               console.log("saved "+ element);
+//             });       
+//             break;
+//           }          
+      
+//        }
+//       }
+
+
+//     }
+
+   
+// return
+// });
 
 
 
