@@ -1358,7 +1358,7 @@ app.post("/device/requests/store", function (req, res) {
 
     // console.log(JSON.parse(requestString));
 
-    for(let i=0; i < output.length; i++){
+    for(let i=0; i < output.length-1; i++){
       receivedRequests.push(output[i]);
     }
 
