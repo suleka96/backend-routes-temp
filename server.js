@@ -149,6 +149,10 @@ var usersSchema = new Schema({
   receivedProfiles: [receivedProfilesSchema]
 });
 
+var validIDSchema = new Schema({  
+  uids: { type: Array, "default": [] }
+});
+
 
 /*
 ****************************************************************
@@ -167,6 +171,7 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 //model for the request subdocument
 var Request = mongoose.model("requests", requestsSchema);
 
+var UID = mongoose.model("validID", validIDSchema);
 
 /*
 ******************************************************* 
@@ -1466,8 +1471,56 @@ app.post("/device/requests/store", function (req, res) {
 });
 
 
+   /*
+***************************************************************************
+* //POST request handler for validting UID
+***************************************************************************
+*/
 
+app.post("/device/uid/validate", function (req, res) {
 
+   //send error status if request body is empty
+   if (!req.body) return res.sendStatus(400);
+
+  //Received request body that is encrypted
+  var validateUID = req.body;
+
+  //Request body is decrypted with the agreen upon key
+  var bytes = CryptoJS.Rabbit.decrypt(validateUID, 'hfdsahgdajshgjdsahgjfafsajhkgs');
+
+  //Decrypted request body is converted to plain text
+  var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+  //Request body is parsed to a JSON Object
+  var validateUidObj = JSON.parse(plaintext);
+
+  var receivedID = validateUidObj.uid; 
+
+  //quering for valid uids
+  UID.find({ }, function (err,result) {  
+
+        if(err){
+          console.log("Error "+err);
+          return
+        }
+ 
+        var uids = result.uids; //available uids
+        var status;//satatus of uid availability
+        
+        for(let uid of uids){
+            if( uid == receivedID ){
+              status = "true";
+            } 
+            else{
+              status = "false";
+            }
+        }
+        
+        res.send(status);//sending status to client
+      
+        return
+  }); 
+});    
 
 
 
