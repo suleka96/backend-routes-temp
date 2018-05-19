@@ -1354,20 +1354,21 @@ app.post("/device/requests/store", function (req, res) {
 
     var requestString = String(received.KONNECT_UID);
 
-    console.log(JSON.parse(requestString));
+    var output = requestString.split(",");
 
-    for(let i=0; i < received.KONNECT_UID.length; i++){
-      receivedRequests.push(received.KONNECT_UID[i]);
-      console.log("COUNTER"+i);
+    // console.log(JSON.parse(requestString));
+
+    for(let i=0; i < output.length; i++){
+      receivedRequests.push(output[i]);
     }
 
-    console.log(receivedRequests);
+    // console.log(receivedRequests);
   
-    for(let i=0; i < receivedRequests.length; i++){
-        var output = receivedRequests[i].split(",");
-        receivedRequests[i] = output[0];      
-    }
-  
+    // for(let i=0; i < receivedRequests.length; i++){
+    //     var output = receivedRequests[i].split(",");
+    //     receivedRequests[i] = output[0];      
+    // }
+    console.log("****************************************************************");
     console.log(receivedRequests);
   
     //iteratig through elements in connectedUsers sub document
