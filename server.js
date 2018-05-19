@@ -509,7 +509,6 @@ app.post("/profile/delete", function (req, res) {
           console.log("ERROR"+"garbade collection unavailable.");
         }
       });
-      
       return;
   });
  
@@ -1326,18 +1325,6 @@ app.post("/device/requests/store", function (req, res) {
   //send error status if request body is empty
   if (!req.body) return res.sendStatus(400);
 
-  //received encrypted request body is assigned to a variable  
-  // var grantRevoke = 
-
-  // //request body inside the variable profileInfo is decrypted using the crypto.js library's base 64 encryption algorithem 
-  // var byteString = CryptoJS.Base64.decrypt(grantRevoke, 'hfdsahgdajshgjdsahgjfafsajhkgs');
-
-  // //decrypted request body inside the variable byteString is converted to a string
-  // var information = byteString.toString(CryptoJS.enc.Utf8);
-
-  // //the request body string inside the information variable is parsed to a JSON Objectt
-  // var reqestObj = JSON.parse(information);
-
   received = req.body;
 
   console.log( req.body);
@@ -1361,7 +1348,7 @@ app.post("/device/requests/store", function (req, res) {
   
     var receivedRequests = received.KONNECT_UID
     var connectedUsers = result1.connectedUsers
-    var receivedProfiles = result1.receivedProfiles
+    // var receivedProfiles = result1.receivedProfiles
 
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
@@ -1369,7 +1356,6 @@ app.post("/device/requests/store", function (req, res) {
     }
   
     //iteratig through elements in connectedUsers sub document
-    if(connectedUsers != null){
       for(let connecterUser of connectedUsers){
           //iterating through recived requests array
         for(let i=0; i < receivedRequests.length; i++){
@@ -1381,7 +1367,6 @@ app.post("/device/requests/store", function (req, res) {
           }
         }
       }
-    }
 
     /*
   HCI issue:
@@ -1403,7 +1388,7 @@ app.post("/device/requests/store", function (req, res) {
 
       currentReqests = result.requests
       
-      if(currentReqests != null){
+
       //iterating through the reqests cueently in the requests sub document
       for(let request of currentReqests){
         for(let i=0; i < receivedRequests.length; i++){
@@ -1414,9 +1399,9 @@ app.post("/device/requests/store", function (req, res) {
           }          
         }
       }
-    }
+    
       
-      //iterate through the receivedRequests array
+      //iterate through the receivedRequests arrayc
       for(let newRequest of receivedRequests){
         var element = new Request({
           requesterId: newRequest
@@ -1434,3 +1419,92 @@ app.post("/device/requests/store", function (req, res) {
   return
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+// var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n',
+//    Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' }
+
+// User.findOne({ "userId": received.Device_ID },  function (err,result1) {
+
+//   if(err){
+//     console.log("Error "+err);
+//     return
+//   }
+
+//   var receivedRequests = received.KONNECT_UID
+//   var connectedUsers = result1.connectedUsers
+//   // var receivedProfiles = result1.receivedProfiles
+
+//   console.log(result1.fName);
+  
+//       var output = receivedRequests.split(",");
+//       receivedRequests = output[0];      
+  
+// console.log(receivedRequests);
+// console.log(connectedUsers);
+// console.log(connectedUsers[0].connectedUserId);
+
+//   //iteratig through elements in connectedUsers sub document
+//     for(let connecterUser of connectedUsers){
+
+//       console.length("inside outer for loop");
+//         if(!(connecterUser.connectedUserId == receivedRequests) ){
+//             /*if a recived id is equal to the connected user id remove that id from the 
+//             receivedRequests array*/
+//             console.log("first if");
+
+//             currentReqests = result1.requests
+
+//             console.log(currentReqests);
+
+//             for(let request of currentReqests){
+
+//               console.log("Inner for");
+              
+//               console.log(request);
+
+//               if(!(request.requesterId == receivedRequests)){
+
+//                 console.log("Inner for");
+
+//                 var element = new Request({
+//                   requesterId: newRequest
+//                 });
+
+//                 result.requests.push(element);    
+// console.log("PUSHED");
+//                 result.save(function(err) {
+//                   if (err) console.log("REQUEST DID NOT GET SAVED!");
+          
+//                   console.log("saved "+ element);
+//                 });       
+//                 break;
+//               }          
+//           }
+
+//           break;
+//         }
+//       }
+
+   
+// return
+// });
+
+
+
+
+
+
+
+
+
