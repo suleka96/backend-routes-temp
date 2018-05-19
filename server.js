@@ -1345,15 +1345,14 @@ app.post("/device/requests/store", function (req, res) {
       console.log("Error "+err);
       return;
     }
-    
  
     var connectedUsers = result1.connectedUsers;
     
-
     var receivedRequests = [];
 
-    for(let requests of received.KONNECT_UID){
-      receivedRequests.push(requests);
+    for(let i=0; i < received.KONNECT_UID.length; i++){
+      receivedRequests.push(received.KONNECT_UID[i]);
+      console.log("COUNTER"+i);
     }
 
     console.log(receivedRequests);
