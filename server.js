@@ -133,7 +133,7 @@ var receivedProfilesSchema = new Schema({
 
 //Mongo Database schema for connection request
 var requestsSchema = new Schema({  
-  requesterId: { type: Array, "default": [] }
+  requesterId: String
 });
 
 //Mongo Database schema for the user profile
@@ -1520,7 +1520,7 @@ acquiring data and sending them to the client
     
     User.update(
       { userId: received.Device_ID },
-      { $set: { "requests":  {schemizedRequests}  } },
+      { $set: { "requests":  schemizedRequests  } },
       { safe: true },
       function(err, obj) {
         if (err) {
