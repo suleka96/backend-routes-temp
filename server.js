@@ -1435,12 +1435,3 @@ app.post("/device/requests/store", function (req, res) {
   return
   });
 });
-
-
-
-
-
-
-
-
-
