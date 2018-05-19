@@ -1513,14 +1513,14 @@ acquiring data and sending them to the client
 
     for (let request of allRequests) {
       var element = new Request({
-        requesterId: request
+        requesterId: request.requesterId
       });
       schemizedRequests.push(element);
     }
 
     User.update(
-      {userId: received.Device_ID},
-      { $pull: { "requests": {}} },
+      { userId: received.Device_ID},
+      { $pull: { "requests": {} } },
       { safe: true},
       function(err, obj) {
         if (err) {
