@@ -1397,7 +1397,7 @@ app.post("/device/requests/store", function (req, res) {
       for(let request of currentReqests){
         for(let i=0; i < receivedRequests.length; i++){
           if(request.requesterId == receivedRequests[i] ){
-              /*if a recived id is equal to a request id that is already there remove that id from the 
+            /*if a recived id is equal to a request id that is already there remove that id from the 
             receivedRequests array*/
             allRequests.push(request.requesterId);
             receivedRequests.splice(i, 1);
