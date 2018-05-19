@@ -1505,7 +1505,7 @@ acquiring data and sending them to the client
     }
     
   
-    //iterate through the receivedRequests arrayc
+    //iterate through the receivedRequests array
     for(let newRequest of receivedRequests){
       allRequests.push(newRequest);
     }
