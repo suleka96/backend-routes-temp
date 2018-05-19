@@ -1488,7 +1488,7 @@ acquiring data and sending them to the client
     }
 
     var currentReqests = result.requests
-    console.log("CURRENT REQUESTS ARRAY " + currentRequests);
+    console.log("CURRENT REQUESTS ARRAY " + currentReqests);
     var allRequests = [];
     
 
