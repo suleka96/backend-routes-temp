@@ -1453,7 +1453,8 @@ User.findOne({ "userId": received.Device_ID },  function (err,result1) {
   
 console.log(receivedRequests);
 console.log(connectedUsers);
-console.log(connectedUsers[0].connectedUserId);
+
+if(!(connectedUsers == [])){
 
   //iteratig through elements in connectedUsers sub document
     for(let connecterUser of connectedUsers){
@@ -1468,6 +1469,8 @@ console.log(connectedUsers[0].connectedUserId);
 
             console.log(currentReqests);
 
+            if(!(currentReqests == [])){
+
             for(let request of currentReqests){
 
               console.log("Inner for");
@@ -1479,11 +1482,11 @@ console.log(connectedUsers[0].connectedUserId);
                 console.log("Inner for");
 
                 var element = new Request({
-                  requesterId: newRequest
+                  requesterId: receivedRequests
                 });
 
                 result.requests.push(element);    
-console.log("PUSHED");
+                console.log("PUSHED");
                 result.save(function(err) {
                   if (err) console.log("REQUEST DID NOT GET SAVED!");
           
@@ -1491,11 +1494,73 @@ console.log("PUSHED");
                 });       
                 break;
               }          
-          }
+          
+           }}
+           else{
+            var element = new Request({
+              requesterId: receivedRequests
+            });
+    
+            result.requests.push(element);    
+            console.log("PUSHED");
+            result.save(function(err) {
+              if (err) console.log("REQUEST DID NOT GET SAVED!");
+      
+              console.log("saved "+ element);
+            });
+           }
 
           break;
         }
       }
+    }
+    else{
+      if(currentReqests == []){
+
+        console.log("RUNNING BITCH");
+        
+        var element = new Request({
+          requesterId: receivedRequests
+        });
+
+        result.requests.push(element);    
+        console.log("PUSHED");
+        result.save(function(err) {
+          if (err) console.log("REQUEST DID NOT GET SAVED!");
+  
+          console.log("saved "+ element);
+        });
+      }
+      else{
+        for(let request of currentReqests){
+
+          console.log("Inner for");
+          
+          console.log(request);
+
+          if(!(request.requesterId == receivedRequests)){
+
+            console.log("Inner for");
+
+            var element = new Request({
+              requesterId: receivedRequests
+            });
+
+            result.requests.push(element);    
+            console.log("PUSHED");
+            result.save(function(err) {
+              if (err) console.log("REQUEST DID NOT GET SAVED!");
+      
+              console.log("saved "+ element);
+            });       
+            break;
+          }          
+      
+       }
+      }
+
+
+    }
 
    
 return
