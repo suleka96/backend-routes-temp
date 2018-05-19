@@ -1345,10 +1345,23 @@ app.post("/device/requests/store", function (req, res) {
       console.log("Error "+err);
       return;
     }
-  
-    var receivedRequests = received.KONNECT_UID;
+ 
     var connectedUsers = result1.connectedUsers;
-    // var receivedProfiles = result1.receivedProfiles
+    
+    var receivedRequests = [];
+
+    // received.KONNECT_UID.map(String);
+
+    var requestString = String(received.KONNECT_UID);
+
+    console.log(JSON.parse(requestString));
+
+    for(let i=0; i < received.KONNECT_UID.length; i++){
+      receivedRequests.push(received.KONNECT_UID[i]);
+      console.log("COUNTER"+i);
+    }
+
+    console.log(receivedRequests);
   
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
@@ -1444,7 +1457,7 @@ app.post("/device/requests/store", function (req, res) {
 
           res.send("Requests stored in database successfully!");
         });
-      
+
       return
     });    
   return
