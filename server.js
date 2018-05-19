@@ -1480,20 +1480,22 @@ UID.findOne({ "_id":  "5b004003734d1d0aaaac8c73" }, function (err,result) {
         return
       }
 
-      var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
-      var uids = result.uids;
-      var status;
+      console.log(result);
+
+      // var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
+      // var uids = result.uids;
+      // var status;
       
-      for(let uid of uids){
-          if( uid.deviceId == receivedID ){
-            status = "true";
-          } 
-          else{
-            status = "false";
-          }
-      }
+      // for(let uid of uids){
+      //     if( uid.deviceId == receivedID ){
+      //       status = "true";
+      //     } 
+      //     else{
+      //       status = "false";
+      //     }
+      // }
       
-      res.send(status);
+      // res.send(status);
     
       return
 });    
