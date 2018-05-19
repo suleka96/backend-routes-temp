@@ -674,7 +674,7 @@ app.post("/device/requests/return", function (req, res) {
             bio: profile.bio 
           });
   
-          //If the number of public profile objects are equal to the number of requesterIds, the array is sent to the front end as a response
+          //If the number of public profile objects are equal to the number of requesterIds,the array is sent to the front end as a response
           if (Object.keys(array).length == result.requests.length) {
             var jsonArray = JSON.stringify(array);
             console.log("Requesters Public Profiles: " + jsonArray);
