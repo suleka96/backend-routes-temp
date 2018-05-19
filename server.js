@@ -1520,7 +1520,7 @@ acquiring data and sending them to the client
 
     User.update(
       {userId: received.Device_ID},
-      { $pull: { "requests.$": {}} },
+      { $pull: { "requests": {}} },
       { safe: true},
       function(err, obj) {
         if (err) {
