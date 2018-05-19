@@ -1435,7 +1435,7 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf842,\n'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
+var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf843,\n'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
 
 
 User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
