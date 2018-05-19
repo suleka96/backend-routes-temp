@@ -133,7 +133,7 @@ var receivedProfilesSchema = new Schema({
 
 //Mongo Database schema for connection request
 var requestsSchema = new Schema({  
-  requesterId: String
+  requesterId: { type: Array, "default": [] }
 });
 
 //Mongo Database schema for the user profile
