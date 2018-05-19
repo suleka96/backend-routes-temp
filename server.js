@@ -1526,7 +1526,6 @@ acquiring data and sending them to the client
   });    
 return
 });
-});
 
 
 
