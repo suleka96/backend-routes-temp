@@ -1446,22 +1446,35 @@ User.findOne({ "userId": received.Device_ID },  function (err,result1) {
   var connectedUsers = result1.connectedUsers
   // var receivedProfiles = result1.receivedProfiles
 
+  console.log(result1.fName);
   
       var output = receivedRequests.split(",");
       receivedRequests = output[0];      
   
+console.log(receivedRequests);
 
   //iteratig through elements in connectedUsers sub document
     for(let connecterUser of connectedUsers){
+
+      console.length("inside outer for loop");
         if(!(connecterUser.connectedUserId == receivedRequests) ){
             /*if a recived id is equal to the connected user id remove that id from the 
             receivedRequests array*/
+            console.log("first if");
 
             currentReqests = result1.requests
 
+            console.log(currentReqests);
+
             for(let request of currentReqests){
 
+              console.log("Inner for");
+              
+              console.log(request);
+
               if(!(request.requesterId == receivedRequests)){
+
+                console.log("Inner for");
 
                 var element = new Request({
                   requesterId: newRequest
