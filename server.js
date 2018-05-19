@@ -1468,7 +1468,7 @@ User.findOne({ "userId": received.Device_ID },  function (err,result1) {
                 });
 
                 result.requests.push(element);    
-
+console.log("PUSHED");
                 result.save(function(err) {
                   if (err) console.log("REQUEST DID NOT GET SAVED!");
           
