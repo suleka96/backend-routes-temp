@@ -1489,6 +1489,8 @@ acquiring data and sending them to the client
 
     var currentReqests = result.requests
     var allRequests = [];
+
+    
     
 
     //iterating through the reqests cueently in the requests sub document
