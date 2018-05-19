@@ -1364,7 +1364,7 @@ app.post("/device/requests/store", function (req, res) {
           if(connecterUser.connectedUserId == receivedRequests[i] ){
               /*if a recived id is equal to the connected user id remove that id from the 
               receivedRequests array*/
-            receivedRequests.splice(i);
+            receivedRequests.splice(i, 1);
             break;
           }
         }
@@ -1400,10 +1400,12 @@ app.post("/device/requests/store", function (req, res) {
             /*if a recived id is equal to a request id that is already there remove that id from the 
             receivedRequests array*/
             allRequests.push(request.requesterId);
-            receivedRequests.splice(i);
+            receivedRequests.splice(i, 1);
           }          
         }
-      }      
+      } 
+      
+      console.log("RECEIVED REQUESTS " + receivedRequests);
     
       //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
