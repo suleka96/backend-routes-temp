@@ -149,6 +149,10 @@ var usersSchema = new Schema({
   receivedProfiles: [receivedProfilesSchema]
 });
 
+var uidSchema = new Schema({  
+  deviceId: String
+});
+
 
 /*
 ****************************************************************
@@ -167,6 +171,7 @@ var ConnectedUsers = mongoose.model("connectedUsers", connectedUsersSchema);
 //model for the request subdocument
 var Request = mongoose.model("requests", requestsSchema);
 
+var UID = mongoose.model("uids", uidSchema);
 
 /*
 ******************************************************* 
@@ -1468,125 +1473,38 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
+UID.findOne({ "_id":  "5b004003734d1d0aaaac8c73" }, function (err,result) {  
 
+      if(err){
+        console.log("Error "+err);
+        return
+      }
 
-
-
-
-
-
-
-
-
-
-
-// var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf843,\n','6b1e2fa4096b4a55a9626af2598bf842,\n', '6b1e2fa4096b4a55a9626af2598bf841,\n', '6b1e2fa4096b4a55a9626af2598bf840'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
-
-
-// User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
-
-//   if(err){
-//     console.log("Error "+err);
-//     return
-//   }
-
-//   var receivedRequests = received.KONNECT_UID
-//   var connectedUsers = result1.connectedUsers
-//   // var receivedProfiles = result1.receivedProfiles
-
-//   for(let i=0; i < receivedRequests.length; i++){
-//       var output = receivedRequests[i].split(",");
-//       receivedRequests[i] = output[0];      
-//   }
-
-//   console.log(receivedRequests);
-
-//   //iteratig through elements in connectedUsers sub document
-//     for(let connecterUser of connectedUsers){
-//         //iterating through recived requests array
-//       for(let i=0; i < receivedRequests.length; i++){
-//         if(connecterUser.connectedUserId == receivedRequests[i] ){
-//             /*if a recived id is equal to the connected user id remove that id from the 
-//             receivedRequests array*/
-//           receivedRequests.splice(i, 1);
-//           break;
-//         }
-//       }
-//     }
-
-//   /*
-// HCI issue:
-//   The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
-// to render as they need information from the server to dynamically create those components.
-
-// Solution:
-// improve the code logic to reduced the number of times the server has to 
-// call the database to retrive information. Thus reducing latency of 
-// acquiring data and sending them to the client
-// */
-  
-//   //query for a perticular users document
-//   User.findOne({ "userId":  received.Device_ID }, function (err,result) {  
-//     if(err){
-//       console.log("Error "+err);
-//       return
-//     }
-
-//     var currentReqests = result.requests
-//     console.log("CURRENT REQUESTS ARRAY " + currentReqests);
-//     var allRequests = [];
+      var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
+      var uids = result.uids;
+      var status;
+      
+      for(let uid of uids){
+          if( uid.deviceId == receivedID ){
+            status = "true";
+          } 
+          else{
+            status = "false";
+          }
+      }
+      
+      res.send(status);
     
+      return
+});    
 
-//     //iterating through the reqests cueently in the requests sub document
-//     for(let request of currentReqests){
-//       for(let i=0; i < receivedRequests.length; i++){
-//         if(request.requesterId == receivedRequests[i] ){
-//             /*if a recived id is equal to a request id that is already there remove that id from the 
-//           receivedRequests array*/
-//           allRequests.push(request.requesterId);
-//           receivedRequests.splice(i, 1);
-//         }          
-//       }
-//     }
-    
-  
-//     //iterate through the receivedRequests array
-//     for(let newRequest of receivedRequests){
-//       allRequests.push(newRequest);
-//     }
 
-//     var schemizedRequests = [];
 
-//     for (let request of allRequests) {
-//       var element = new Request({
-//         requesterId: request
-//       });
-//       schemizedRequests.push(element);
-//       console.log("REQUEST IN ALLREQUESTS " + request);
-//       console.log("ELEMENT IN ALLREQUESTS " + element);
-//     }
 
-//     User.update(
-//       { userId: received.Device_ID},
-//       { $pull: { "requests": {} } },
-//       { safe: true},
-//       function(err, obj) {
-//         if (err) {
-//           console.log("EXISTING REQUESTS DID NOT GET DELETED! - " + err);
-//         }
-//     });
-    
-//     User.update(
-//       { userId: received.Device_ID },
-//       { $set: { "requests":  schemizedRequests  } },
-//       { safe: true },
-//       function(err, obj) {
-//         if (err) {
-//           console.log("REQUEST DID NOT GET SAVED! - " + err);
-//         }
-//       });
-    
-//     return
-//   });    
-// return
-// });
+
+
+
+
+
+
+
