@@ -1343,17 +1343,19 @@ app.post("/device/requests/store", function (req, res) {
 
     if(err){
       console.log("Error "+err);
-      return
+      return;
     }
   
-    var receivedRequests = received.KONNECT_UID
-    var connectedUsers = result1.connectedUsers
+    var receivedRequests = received.KONNECT_UID;
+    var connectedUsers = result1.connectedUsers;
     // var receivedProfiles = result1.receivedProfiles
-
+  
     for(let i=0; i < receivedRequests.length; i++){
         var output = receivedRequests[i].split(",");
         receivedRequests[i] = output[0];      
     }
+  
+    console.log(receivedRequests);
   
     //iteratig through elements in connectedUsers sub document
       for(let connecterUser of connectedUsers){
@@ -1367,12 +1369,12 @@ app.post("/device/requests/store", function (req, res) {
           }
         }
       }
-
+  
     /*
   HCI issue:
     The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
   to render as they need information from the server to dynamically create those components.
-
+  
   Solution:
   improve the code logic to reduced the number of times the server has to 
   call the database to retrive information. Thus reducing latency of 
@@ -1385,35 +1387,61 @@ app.post("/device/requests/store", function (req, res) {
         console.log("Error "+err);
         return
       }
-
-      currentReqests = result.requests
+  
+      var currentReqests = result.requests
+      console.log("CURRENT REQUESTS ARRAY " + currentReqests);
+      var allRequests = [];
       
-
+  
       //iterating through the reqests cueently in the requests sub document
       for(let request of currentReqests){
         for(let i=0; i < receivedRequests.length; i++){
           if(request.requesterId == receivedRequests[i] ){
               /*if a recived id is equal to a request id that is already there remove that id from the 
             receivedRequests array*/
+            allRequests.push(request.requesterId);
             receivedRequests.splice(i, 1);
           }          
         }
       }
+      
     
-      
-      //iterate through the receivedRequests arrayc
+      //iterate through the receivedRequests array
       for(let newRequest of receivedRequests){
-        var element = new Request({
-          requesterId: newRequest
-        });
-        result.requests.push(element);        
-        result.save(function(err) {
-          if (err) console.log("REQUEST DID NOT GET SAVED!");
-        });       
-        console.log("saved " + element);
+        allRequests.push(newRequest);
       }
+  
+      var schemizedRequests = [];
+  
+      for (let request of allRequests) {
+        var element = new Request({
+          requesterId: request
+        });
+        schemizedRequests.push(element);
+        console.log("REQUEST IN ALLREQUESTS " + request);
+        console.log("ELEMENT IN ALLREQUESTS " + element);
+      }
+  
+      User.update(
+        { userId: received.Device_ID},
+        { $pull: { "requests": {} } },
+        { safe: true},
+        function(err, obj) {
+          if (err) {
+            console.log("EXISTING REQUESTS DID NOT GET DELETED! - " + err);
+          }
+      });
       
-      res.send("success"); //sending a success response to the client if request was successfully added      
+      User.update(
+        { userId: received.Device_ID },
+        { $set: { "requests":  schemizedRequests  } },
+        { safe: true },
+        function(err, obj) {
+          if (err) {
+            console.log("REQUEST DID NOT GET SAVED! - " + err);
+          }
+        });
+      
       return
     });    
   return
@@ -1435,256 +1463,10 @@ app.post("/device/requests/store", function (req, res) {
 
 
 
-var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf843,\n','6b1e2fa4096b4a55a9626af2598bf842,\n', '6b1e2fa4096b4a55a9626af2598bf841,\n', '6b1e2fa4096b4a55a9626af2598bf840'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
+// var received = { KONNECT_UID: ['6b1e2fa4096b4a55a9626af2598bf843,\n','6b1e2fa4096b4a55a9626af2598bf842,\n', '6b1e2fa4096b4a55a9626af2598bf841,\n', '6b1e2fa4096b4a55a9626af2598bf840'], Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' };
 
 
-User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
-
-  if(err){
-    console.log("Error "+err);
-    return
-  }
-
-  var receivedRequests = received.KONNECT_UID
-  var connectedUsers = result1.connectedUsers
-  // var receivedProfiles = result1.receivedProfiles
-
-  for(let i=0; i < receivedRequests.length; i++){
-      var output = receivedRequests[i].split(",");
-      receivedRequests[i] = output[0];      
-  }
-
-  console.log(receivedRequests);
-
-  //iteratig through elements in connectedUsers sub document
-    for(let connecterUser of connectedUsers){
-        //iterating through recived requests array
-      for(let i=0; i < receivedRequests.length; i++){
-        if(connecterUser.connectedUserId == receivedRequests[i] ){
-            /*if a recived id is equal to the connected user id remove that id from the 
-            receivedRequests array*/
-          receivedRequests.splice(i, 1);
-          break;
-        }
-      }
-    }
-
-  /*
-HCI issue:
-  The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
-to render as they need information from the server to dynamically create those components.
-
-Solution:
-improve the code logic to reduced the number of times the server has to 
-call the database to retrive information. Thus reducing latency of 
-acquiring data and sending them to the client
-*/
-  
-  //query for a perticular users document
-  User.findOne({ "userId":  received.Device_ID }, function (err,result) {  
-    if(err){
-      console.log("Error "+err);
-      return
-    }
-
-    var currentReqests = result.requests
-    console.log("CURRENT REQUESTS ARRAY " + currentReqests);
-    var allRequests = [];
-    
-
-    //iterating through the reqests cueently in the requests sub document
-    for(let request of currentReqests){
-      for(let i=0; i < receivedRequests.length; i++){
-        if(request.requesterId == receivedRequests[i] ){
-            /*if a recived id is equal to a request id that is already there remove that id from the 
-          receivedRequests array*/
-          allRequests.push(request.requesterId);
-          receivedRequests.splice(i, 1);
-        }          
-      }
-    }
-    
-  
-    //iterate through the receivedRequests array
-    for(let newRequest of receivedRequests){
-      allRequests.push(newRequest);
-    }
-
-    var schemizedRequests = [];
-
-    for (let request of allRequests) {
-      var element = new Request({
-        requesterId: request
-      });
-      schemizedRequests.push(element);
-      console.log("REQUEST IN ALLREQUESTS " + request);
-      console.log("ELEMENT IN ALLREQUESTS " + element);
-    }
-
-    User.update(
-      { userId: received.Device_ID},
-      { $pull: { "requests": {} } },
-      { safe: true},
-      function(err, obj) {
-        if (err) {
-          console.log("EXISTING REQUESTS DID NOT GET DELETED! - " + err);
-        }
-    });
-    
-    User.update(
-      { userId: received.Device_ID },
-      { $set: { "requests":  schemizedRequests  } },
-      { safe: true },
-      function(err, obj) {
-        if (err) {
-          console.log("REQUEST DID NOT GET SAVED! - " + err);
-        }
-      });
-    
-    return
-  });    
-return
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var received = { KONNECT_UID: '6b1e2fa4096b4a55a9626af2598bf842,\n',
-//    Device_ID: 'eb38b3e831b944108e7d4db6f6d16298' }
-
-// User.findOne({ "userId": received.Device_ID },  function (err,result1) {
+// User.findOne({ "userId": received.Device_ID }, { "connectedUsers": 1, "_id": 0 }, function (err,result1) {
 
 //   if(err){
 //     console.log("Error "+err);
@@ -1695,131 +1477,99 @@ return
 //   var connectedUsers = result1.connectedUsers
 //   // var receivedProfiles = result1.receivedProfiles
 
-//   console.log(result1.fName);
-  
-//       var output = receivedRequests.split(",");
-//       receivedRequests = output[0];      
-  
-// console.log(receivedRequests);
-// console.log(connectedUsers);
+//   for(let i=0; i < receivedRequests.length; i++){
+//       var output = receivedRequests[i].split(",");
+//       receivedRequests[i] = output[0];      
+//   }
 
-// if(!(connectedUsers == [])){
+//   console.log(receivedRequests);
 
 //   //iteratig through elements in connectedUsers sub document
 //     for(let connecterUser of connectedUsers){
-
-//       console.length("inside outer for loop");
-//         if(!(connecterUser.connectedUserId == receivedRequests) ){
+//         //iterating through recived requests array
+//       for(let i=0; i < receivedRequests.length; i++){
+//         if(connecterUser.connectedUserId == receivedRequests[i] ){
 //             /*if a recived id is equal to the connected user id remove that id from the 
 //             receivedRequests array*/
-//             console.log("first if");
-
-//             currentReqests = result1.requests
-
-//             console.log(currentReqests);
-
-//             if(!(currentReqests == [])){
-
-//             for(let request of currentReqests){
-
-//               console.log("Inner for");
-              
-//               console.log(request);
-
-//               if(!(request.requesterId == receivedRequests)){
-
-//                 console.log("Inner for");
-
-//                 var element = new Request({
-//                   requesterId: receivedRequests
-//                 });
-
-//                 result.requests.push(element);    
-//                 console.log("PUSHED");
-//                 result.save(function(err) {
-//                   if (err) console.log("REQUEST DID NOT GET SAVED!");
-          
-//                   console.log("saved "+ element);
-//                 });       
-//                 break;
-//               }          
-          
-//            }}
-//            else{
-//             var element = new Request({
-//               requesterId: receivedRequests
-//             });
-    
-//             result.requests.push(element);    
-//             console.log("PUSHED");
-//             result.save(function(err) {
-//               if (err) console.log("REQUEST DID NOT GET SAVED!");
-      
-//               console.log("saved "+ element);
-//             });
-//            }
-
+//           receivedRequests.splice(i, 1);
 //           break;
 //         }
 //       }
 //     }
-//     else{
-//       if(currentReqests == []){
 
-//         console.log("RUNNING BITCH");
-        
-//         var element = new Request({
-//           requesterId: receivedRequests
-//         });
+//   /*
+// HCI issue:
+//   The time gap between the request and the response is noticibly high. Due to this reason the front-end UI components take time 
+// to render as they need information from the server to dynamically create those components.
 
-//         result.requests.push(element);    
-//         console.log("PUSHED");
-//         result.save(function(err) {
-//           if (err) console.log("REQUEST DID NOT GET SAVED!");
+// Solution:
+// improve the code logic to reduced the number of times the server has to 
+// call the database to retrive information. Thus reducing latency of 
+// acquiring data and sending them to the client
+// */
   
-//           console.log("saved "+ element);
-//         });
-//       }
-//       else{
-//         for(let request of currentReqests){
-
-//           console.log("Inner for");
-          
-//           console.log(request);
-
-//           if(!(request.requesterId == receivedRequests)){
-
-//             console.log("Inner for");
-
-//             var element = new Request({
-//               requesterId: receivedRequests
-//             });
-
-//             result.requests.push(element);    
-//             console.log("PUSHED");
-//             result.save(function(err) {
-//               if (err) console.log("REQUEST DID NOT GET SAVED!");
-      
-//               console.log("saved "+ element);
-//             });       
-//             break;
-//           }          
-      
-//        }
-//       }
-
-
+//   //query for a perticular users document
+//   User.findOne({ "userId":  received.Device_ID }, function (err,result) {  
+//     if(err){
+//       console.log("Error "+err);
+//       return
 //     }
 
-   
+//     var currentReqests = result.requests
+//     console.log("CURRENT REQUESTS ARRAY " + currentReqests);
+//     var allRequests = [];
+    
+
+//     //iterating through the reqests cueently in the requests sub document
+//     for(let request of currentReqests){
+//       for(let i=0; i < receivedRequests.length; i++){
+//         if(request.requesterId == receivedRequests[i] ){
+//             /*if a recived id is equal to a request id that is already there remove that id from the 
+//           receivedRequests array*/
+//           allRequests.push(request.requesterId);
+//           receivedRequests.splice(i, 1);
+//         }          
+//       }
+//     }
+    
+  
+//     //iterate through the receivedRequests array
+//     for(let newRequest of receivedRequests){
+//       allRequests.push(newRequest);
+//     }
+
+//     var schemizedRequests = [];
+
+//     for (let request of allRequests) {
+//       var element = new Request({
+//         requesterId: request
+//       });
+//       schemizedRequests.push(element);
+//       console.log("REQUEST IN ALLREQUESTS " + request);
+//       console.log("ELEMENT IN ALLREQUESTS " + element);
+//     }
+
+//     User.update(
+//       { userId: received.Device_ID},
+//       { $pull: { "requests": {} } },
+//       { safe: true},
+//       function(err, obj) {
+//         if (err) {
+//           console.log("EXISTING REQUESTS DID NOT GET DELETED! - " + err);
+//         }
+//     });
+    
+//     User.update(
+//       { userId: received.Device_ID },
+//       { $set: { "requests":  schemizedRequests  } },
+//       { safe: true },
+//       function(err, obj) {
+//         if (err) {
+//           console.log("REQUEST DID NOT GET SAVED! - " + err);
+//         }
+//       });
+    
+//     return
+//   });    
 // return
 // });
-
-
-
-
-
-
-
-
-
