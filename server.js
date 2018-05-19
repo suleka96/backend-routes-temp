@@ -429,10 +429,9 @@ app.post("/profile/delete", function (req, res) {
   //querying for the relevant user's profiles sub document and deleting the relevant profile from it
   User.update(
     { userId: delProfObj.uid },
-    { $pull: { profiles: { _profileId: delProfObj.profId } } },
+    { $pull: { profiles: { _profileId: delProfObj._profileId } } },
     { safe: true },
-    function (err, obj) {
-  
+    function (err, obj) {  
       if (err) {
         console.log(err);
         return
@@ -1426,7 +1425,7 @@ app.post("/device/requests/store", function (req, res) {
         result.save(function(err) {
           if (err) console.log("REQUEST DID NOT GET SAVED!");
         });       
-        console.log("saved "+ element);
+        console.log("saved " + element);
       }
       
       res.send("success"); //sending a success response to the client if request was successfully added      
