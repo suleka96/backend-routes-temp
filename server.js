@@ -1509,13 +1509,18 @@ acquiring data and sending them to the client
       allRequests.push(newRequest);
     }
 
-    // var element = new Request({
-    //   requesterId: newRequest
-    // },);
+    var schemizedRequests = [];
 
+    for (let request of allRequests) {
+      var element = new Request({
+        requesterId: newRequest
+      });
+      schemizedRequests.push(element);
+    }
+    
     User.update(
       { userId: received.Device_ID },
-      { $set: { "requests":  allRequests  } },
+      { $set: { "requests":  {schemizedRequests}  } },
       { safe: true },
       function(err, obj) {
         if (err) {
