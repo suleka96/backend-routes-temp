@@ -1482,19 +1482,20 @@ UID.find({ }, function (err,result) {
 
       console.log(result);
 
-      // var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
-      // var uids = result.uids;
-      // var status;
+      var receivedID = "6b1e2fa4096b4a55a9626af2598bf842";  
+      var uids = result.uids;
+      var status;
       
-      // for(let uid of uids){
-      //     if( uid == receivedID ){
-      //       status = "true";
-      //     } 
-      //     else{
-      //       status = "false";
-      //     }
-      // }
+      for(let uid of uids){
+          if( uid == receivedID ){
+            status = "true";
+          } 
+          else{
+            status = "false";
+          }
+      }
       
+      console.log(status);
       // res.send(status);
     
       return
