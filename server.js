@@ -1487,41 +1487,46 @@ acquiring data and sending them to the client
       return
     }
 
-    currentReqests = result.requests
+    var currentReqests = result.requests
+    var allRequests = [];
     
 
-    // //iterating through the reqests cueently in the requests sub document
-    // for(let request of currentReqests){
-    //   for(let i=0; i < receivedRequests.length; i++){
-    //     if(request.requesterId == receivedRequests[i] ){
-    //         /*if a recived id is equal to a request id that is already there remove that id from the 
-    //       receivedRequests array*/
-    //       receivedRequests.splice(i, 1);
-    //     }          
-    //   }
-    // }
+    //iterating through the reqests cueently in the requests sub document
+    for(let request of currentReqests){
+      for(let i=0; i < receivedRequests.length; i++){
+        if(request.requesterId == receivedRequests[i] ){
+            /*if a recived id is equal to a request id that is already there remove that id from the 
+          receivedRequests array*/
+          allRequests.push(request);
+          receivedRequests.splice(i, 1);
+        }          
+      }
+    }
+    
   
     //iterate through the receivedRequests arrayc
     for(let newRequest of receivedRequests){
-      var element = new Request({
-        requesterId: newRequest
-      });
-
-      User.update(
-        { userId: received.Device_ID },
-        { $set: { "requests":  element  } },
-        { safe: true },
-        function(err, obj) {
-          if (err) {
-            console.log("REQUEST DID NOT GET SAVED! - " + err);
-          }
-        });
-      // result.requests.push(element);        
-      // result.save(function(err) {
-      //   if (err) console.log("REQUEST DID NOT GET SAVED!");
-      // });       
-      console.log("saved " + element);
+      allRequests.push(newRequest);
     }
+
+    var schemizedRequests = [];
+
+    for (let request of allRequests) {
+      var element = new Request({
+        requesterId: request
+      });
+      schemizedRequests.push(element);
+    }
+    
+    User.update(
+      { userId: received.Device_ID },
+      { $set: { "requests":  schemizedRequests  } },
+      { safe: true },
+      function(err, obj) {
+        if (err) {
+          console.log("REQUEST DID NOT GET SAVED! - " + err);
+        }
+      });
     
     return
   });    
