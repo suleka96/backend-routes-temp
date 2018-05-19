@@ -1498,7 +1498,7 @@ acquiring data and sending them to the client
         if(request.requesterId == receivedRequests[i] ){
             /*if a recived id is equal to a request id that is already there remove that id from the 
           receivedRequests array*/
-          allRequests.push(request);
+          allRequests.push(request.requesterId);
           receivedRequests.splice(i, 1);
         }          
       }
@@ -1514,7 +1514,7 @@ acquiring data and sending them to the client
 
     for (let request of allRequests) {
       var element = new Request({
-        requesterId: request.requesterId
+        requesterId: request
       });
       schemizedRequests.push(element);
       console.log("REQUEST IN ALLREQUESTS " + request);
